@@ -1,0 +1,18 @@
+Open Api Sepicification (OAS) - Former Swagger specification
+=============================
+Standard format for metadata used to define RESTful services
+
+Used to describe or define RESTful web services
+
+The metadata is machine readable.
+
+Swagger
+=======
+A toolset and structured approach for creating API, designs, documentation and code throuhout the API lifecycle
+
+Can produce OAS compliant API definition
+
+Open source tools:
+Swagger editor
+Swagger UI
+Swagger codegen
