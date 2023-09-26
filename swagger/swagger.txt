@@ -6,6 +6,81 @@ Used to describe or define RESTful web services
 
 The metadata is machine readable.
 
+https://github.com/OIA/OpenAPI-Secification/blob/master/versions/3.0.0,md
+
+Go to the schema section:
+openapi: REQUIRED
+info: REQUIRED
+paths: REQUIRED (CAPABILITIES)
+
+
+
+openapi: 3.0.0
+info:
+  title: H Sports Plus API   
+  version: 1.0.0
+paths:
+  /product:
+    get:
+      responses:	
+        200:
+          description: This is a list of the products
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  properties:
+                    id:
+                      type: integer
+                      example: 400
+                    name:
+                      type: string
+                      example: Lemon Water
+				    
+
+Example 1
+=========
+openapi: 3.0.0
+info:
+  title: H Sports Plus API   
+  version: 1.0.0
+paths:
+  /product:
+    get:
+      responses:	
+        200:
+          description: This is a list of the products
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  properties:
+                    id:
+                      type: integer
+                      example: 400
+                    created:
+                      type: string
+                      example: 2023-09-26
+                    tagline:
+                      type: string
+                      example: Lemon Water
+                    content:
+                      type: string
+                      example: Bla bla
+                    category:
+                      type: string
+                      example: My category
+                    taglist:
+                        type: array
+                        items:
+                          type: string
+                          example: 1. tag, 2 tag
+				 
+
+yaml (2 space indentions)
+
 Swagger
 =======
 A toolset and structured approach for creating API, designs, documentation and code throuhout the API lifecycle
@@ -16,3 +91,10 @@ Open source tools:
 Swagger editor
 Swagger UI
 Swagger codegen
+
+https://github.com/swagger-api
+
+nodejs
+======
+Install local http server.
+npm install -g http-server
