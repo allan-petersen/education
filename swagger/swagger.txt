@@ -1,5 +1,7 @@
 Open Api Sepicification (OAS) - Former Swagger specification
 =============================
+See: https://github.com/OAI
+
 Standard format for metadata used to define RESTful services
 
 Used to describe or define RESTful web services
@@ -45,9 +47,14 @@ openapi: 3.0.0
 info:
   title: H Sports Plus API   
   version: 1.0.0
+tags:
+  - name: Article
+    description: Articles for the H Plus Sport Blog
 paths:
   /product:
     get:
+	  tags:
+	    - Article
       responses:	
         200:
           description: This is a list of the products
@@ -56,12 +63,14 @@ paths:
               schema:
                 type: array
                 items: 
+				  type: object
                   properties:
                     id:
                       type: integer
                       example: 400
                     created:
                       type: string
+					  format: date
                       example: 2023-09-26
                     tagline:
                       type: string
@@ -77,8 +86,21 @@ paths:
                         items:
                           type: string
                           example: 1. tag, 2 tag
-				 
+			
+OpenAPI 3.0			
 
+info
+servers	security (API keys, OWA flows, or security cookies)
+paths
+tags (used to group API operations)	external docs (link to external resources about the API)
+components: (common schema objects, parameters, request bodies, that may be used througout the API). Reuse components
+			
+OAS definitions can be build with either YAML or JSON			
+
+The schema object allows the definition of input and output data types.
+
+yaml
+====
 yaml (2 space indentions)
 
 Swagger
