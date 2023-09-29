@@ -86,6 +86,71 @@ paths:
                         items:
                           type: string
                           example: 1. tag, 2 tag
+
+
+Paramters:						  
+get:
+  paramters:
+    - in: query
+      name. pagenumber 
+	  description: Page number to return
+	  required: false
+	  schema: 
+	    type:integer  
+        example: 1	
+    - in: header		
+	  namer: customer-security-header 
+	  required: false
+	  sechma:
+	    type: false.
+		
+POST (or PUT) request (create, update)
+
+   post:
+     description: Add aprocut to the catalog
+	 requestBody:
+	   content:
+	     application/json
+		   sehema
+		     type: object
+			 properties:
+			 ...
+	 responses:		
+       200:
+         description: The product has been created	   
+		
+	
+			
+Template parameters in paths: Path varuiables
+
+get /product/{productId}
+
+
+paths:
+  /product/{productId}
+    get:
+      paramters:
+        - in: paths
+          nmae: productId 
+          required: true
+          schema: 
+            type: integer		  
+            exmple: 12345
+      reponses:	
+        200	  
+
+Reuse objects:
+==============
+components:
+  schemas:
+    Product:
+	  type:
+	  required:
+	    -name
+	  
+$ref: '#/components/schemas/Product'  // Haah m,eans current file
+			
+
 			
 OpenAPI 3.0			
 
