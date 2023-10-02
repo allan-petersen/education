@@ -149,6 +149,40 @@ components:
 	    -name
 	  
 $ref: '#/components/schemas/Product'  // Haah m,eans current file
+
+
+responses:
+  500ApiError:
+    description: This is an unexpected error
+	content.
+	  applicatin/json
+	  schema:
+	  type: object
+	  properties:
+	    statusCode:
+		  type: string
+		  example: 500
+		message:
+		  type: string
+		  example: This is an error
+		  
+// Reference to common response:
+
+500:
+  $ref; '#/components/responses/500ApiError'		  
+		 
+Reuse query paramters:
+
+parameters:
+  PageNumber:
+  ....
+  
+  - $ref: '#/components/parameters/PageNumber'
+  - $ref: '#/components/parameters/PageSize'
+  
+Content Negatiation
+===================
+		
 			
 
 			
