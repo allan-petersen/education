@@ -148,7 +148,7 @@ components:
 	  required:
 	    -name
 	  
-$ref: '#/components/schemas/Product'  // Haah m,eans current file
+$ref: '#/components/schemas/Product'  // Hash means current file
 
 
 responses:
@@ -182,7 +182,10 @@ parameters:
   
 Content Negatiation
 ===================
-		
+
+apllication/xml
+  schema:
+     $ref: '#/components/schemas/Product'  // Hash means current file
 			
 
 			
@@ -219,3 +222,28 @@ nodejs
 ======
 Install local http server.
 npm install -g http-server
+
+Swagger editor
+==============
+Save as yaml
+
+Swagger UI
+==========
+Paste the definitio file into the dist folder of Swagger UI
+
+Copy the dist catalog to your own workspace and rename it
+
+Correct the URL in the index:
+
+url: "hsports-api.yaml"
+
+Start the http server to serve the apidocs directory
+
+http_server api-docs -a 127.0.0.1 -p 8081
+
+
+
+
+
+
+
