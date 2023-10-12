@@ -8,17 +8,17 @@ tags:
 paths:
   /product:
     get:
-    tags:
-      - Article
-    responses:
-     200:
-       description: This is a list of the products
-       content:
-         application/json:
-           schema:
-             type: array
-             items:
-               $ref: '#/components/schemas/Product'          
+      tags:
+        - Article
+      responses:
+       200:
+         description: This is a list of the products
+         content:
+           application/json:
+             schema:
+               type: array
+               items:
+                 $ref: '#/components/schemas/Product'          
     post:
       tags:
         - Article
@@ -38,7 +38,7 @@ paths:
           content:
             application/json:
               schema:
-              $ref: '#/components/schemas/Pet'          
+                $ref: '#/components/schemas/Product'          
         '405':
           description: Invalid input
 components:
@@ -49,21 +49,21 @@ components:
         id:
           type: integer
           example: 400
-      created:
-        type: string
-        format: date
-        example: 2023-09-26
-      tagline:
-        type: string
-        example: Lemon Water
-      content:
-        type: string
-        example: Bla bla
-      category:
-        type: string
-        example: My category
-      taglist:
-        type: array
-        items:
+        created:
           type: string
-          example: 1. tag, 2 tag
+          format: date
+          example: 2023-09-26
+        tagline:
+          type: string
+          example: Lemon Water
+        content:
+          type: string
+          example: Bla bla
+        category:
+          type: string
+          example: My category
+        taglist:
+          type: array
+          items:
+            type: string
+            example: 1. tag, 2 tag
