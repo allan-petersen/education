@@ -18,7 +18,7 @@ paths:
              schema:
                type: array
                items:
-                 $ref: '#/components/schemas/Product'          
+                 $ref: '#/components/schemas/product'          
     post:
       tags:
         - Article
@@ -30,7 +30,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/product'
         required: true
       responses:
         '200':
@@ -38,12 +38,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'          
+                $ref: '#/components/schemas/product'          
         '405':
           description: Invalid input
 components:
   schemas:
-    Product:
+    product:
       type: object
       properties:
         id:
