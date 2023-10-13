@@ -254,6 +254,11 @@ Templates
 tags:
   - name: customer
     description: customer releated calls  
+	
+	schema:
+	  type: array
+	  items:
+	    $ref: '#/components/schemas/Customer'
 
 
 
