@@ -1,0 +1,90 @@
+https://www.docker.com/products/docker-desktop
+
+Contains details for building an image
+Allows for consistent builds
+Required for all custom actions
+
+Docker file format
+==================
+
+Docker files are text files
+
+# Comment INSTRUCTION arguments
+
+FROM
+
+The FROM instruction sets the base image that becomes the starting point for a new image.
+The FROM instruction sets the base image that becomes the starting point for a new image.
+Sets the base imange
+Example: FROM ubuntu: 18.04
+
+Docker official images are recmmended: https://hub.docker.com/products/docker-desktop
+
+Includes operating systems and programmng languages
+
+
+RUN:
+Executes command in a new layer on top of the current image
+Once a command is complete the result is an image, that is used for the next instruction in the Dockerfile
+
+Installs OS packages and software
+Example: RUN apt install gcc
+
+Install programming language libraries
+Example: RUN pip install pylint
+
+COPY: 
+Copies files into the container image
+The COPY command tkes files from the local environment and copies them into the container image
+Example: Copy entrypoint.sh /usr/local/bin/entrypoint.sh
+
+
+ENTRYPOINT:
+The ENTRYPOINT instruction specifies the command a container will run when its executed.
+Configures a container to run as an executable
+Typically uses to call an entrypoint script
+Example: ENTRYPOINT ["entrypoint.sh"]
+
+Basicly it turns the container into an executable, that gets run, when out custom action is used.
+
+ENTRYPOINT arguments are passes in as an array.
+
+Only the last ENTRYPOINT instruction is used, and might not privide the intended result.
+
+Custom actions will typically pass the name of a script as a single argument to ENTRYPOINT
+
+The ENTRYPOINT can be used multiple times in a Docker file, but only the last ENTRYPOINT instruction will be used.
+
+
+
+
+docker build --tag keyword-release .
+-- tag the image whith the name keyword-release
+-- use the files where the command is being run
+
+
+
+Example:
+
+FROM alpine
+
+RUN APK ADD --no-cache \
+            bash \
+			httpie
+			jq && \
+			which bash && \
+			which http && \
+			which jq		
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Copy the sample data into the image, when running locally. The root of the file system will be the working directory, when the script is run inside the container
+COPY sample_push_event.json /sample_push_event.json
+
+ENTRYPOINT ["entrypoint.sh]
+
+
+
+
+
+			

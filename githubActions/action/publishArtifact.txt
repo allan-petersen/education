@@ -1,0 +1,17 @@
+https://github.com/marketplace
+
+2. factor;
+
+When we log in:
+
+1. Provide a token from another application
+2. Code from an SMS message
+
+1. Dockerfile with build instructions
+2. action.yml with metadata
+3. Entrypoint script with logic and commands
+4. README file with additional information and examples
+
+
+Creta a release
+

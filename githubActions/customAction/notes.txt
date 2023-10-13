@@ -1,0 +1,5 @@
+Actions, that need to access the webhook payload of the event that triggered the Workflow,
+ should read the payload from the file defined by the environment variable GITHUB_EVENT_PATH.
+ 
+Docker:
+The ENTRYPOINT instruction specifies the command a container will run when its executed.
