@@ -241,6 +241,20 @@ Start the http server to serve the apidocs directory
 
 http_server api-docs -a 127.0.0.1 -p 8081
 
+Swagger Hub
+===========
+Domians: Allows object definitions to be reused across API definitions
+
+3.0.0
+
+Template: Simpe API
+
+Templates
+
+tags:
+  - name: customer
+    description: customer releated calls  
+
 
 
 
