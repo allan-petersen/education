@@ -259,6 +259,33 @@ tags:
 	  type: array
 	  items:
 	    $ref: '#/components/schemas/Customer'
+		
+Versioning:
+		
+Importing:
+
+# Group operations
+get:
+   tags: 
+     - product
+
+Security schemes:
+
+Template  
+  Security schemes:
+    Example. OAuth 2.0 Password
+	
+	securitySchemes:
+	
+	     # An API consumer can receive an access token from the tokenUrl, once providing the appropriate parwmters.
+	     tokenUrl:
+		 scope
+    
+	ecrity:
+	  - password: [write]
+	  
+		
+		
 
 
 
