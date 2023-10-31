@@ -283,13 +283,60 @@ Template
     
 	ecrity:
 	  - password: [write]
-	  
+
+
+Domains
+=======
+Across multiple API definitions
+
+Select OpenAPI version 3.0.0	  
+
+Reference domain from API:
+
+$ref: 'https://api.swaggerhub.com/domains/hplussport1/hplus/1.0.0#/components/schemas/Customer'	
+
+Nesting schemas into domains:	
+
+format: date-time
+example: 2023-0101T16:37:30-08:00  -- Difference from UTC
+
+Reference locally:
+$ref: "#/xcomponents/schemas/Customer'
 		
+In API definition
+
+  /order
+    post 
+	  tags:
+	    - order # specify an array of tags that apply to this operations
+	  security
+	    - password [write]
+	  requestBody
+        content:
+		  application/json
+		    schema: 
+			  $ref: 'https://api.swaggerhub.com/domains/hplussport1/hplus/2.0.0#/components/schemas/Order'	
+    responses:
+	  200:
+	    description: This is a successful response
+		content:
+		  application/json
+		    schema: 
+			  $ref: 'https://api.swaggerhub.com/domains/hplussport1/hplus/2.0.0#/components/schemas/Order'	
 		
+Enforcing API standards
+=======================
+
+"Gear" button.
+
+Standardization tab
+
+Example:
+
+Operation must have one and only one tag
 
 
-
-
-
-
+tags:
+  - name: order
+  - description: This is an order related operation
 
