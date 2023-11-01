@@ -339,4 +339,30 @@ Operation must have one and only one tag
 tags:
   - name: order
   - description: This is an order related operation
+  
+
+Auto Mocking APIs
+
+
+servers:
+   - description: SwaggerHub APÅI Auto MOCKING  
+   url: https://virtserver.swaggerhub.com/hplussport1/catalog/1.0.0
+   
+   Try it out button
+  
+Adding Organization members
+
+
+
+Inviting individual collaborators - work on specific API
+
+Challenge
+=========
+Import the blog API definition to SwaggerHub and publish it
+Create a new version
+Update the POST operation to include API key security
+Publish the API
+
+
+
 
