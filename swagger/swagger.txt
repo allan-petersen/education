@@ -363,6 +363,29 @@ Create a new version
 Update the POST operation to include API key security
 Publish the API
 
+Import excercise file 03_14_begin.yaml
+
+securitySchemes:
+  spiKey:
+    type: apiKey
+	name: api-key
+	in: header  # Where to find the api-key 
+
+
+post:
+  security:
+    - apiKey []
+
+Capstone Project
+================
+In the couse prject, we will create an API solution centeres around our OAS API definition file for the H+ Sports catalog API. 
+The solution will create an API implementation and integrate in with several cloud-based products to provide an end-to-end API solution.
+
+TypeScript.
+Generated Client
+
+Spring.
+Generated server
 
 
 
