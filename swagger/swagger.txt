@@ -381,6 +381,57 @@ Capstone Project
 In the couse prject, we will create an API solution centeres around our OAS API definition file for the H+ Sports catalog API. 
 The solution will create an API implementation and integrate in with several cloud-based products to provide an end-to-end API solution.
 
+We wlll build:
+A virual server, that can mock API calls (runs an SwaggerHub)
+An angular clientSDK for calling that Api
+A Spring based server stub, that provedes the beginnings of an API implemtation
+
+We will thrn integrate the ckient SDK into a small Angular Application
+
+The jar will hosted on a Linux Server running in Azure.
+
+We will replace theSwagger Hub virtual server wih an API gateway named Apigee
+Apigee proxies traffic to our API implementation on Azure
+
+API Gateway like Apigee can manage an orgaization's API catalog in a sinelge platform,
+solving commin API concerns, like throtteling and securiy in a sensual location.
+
+1. Generating server stubs and client SDKs
+=======================================
+Export option
+Server-stub: Spring
+Client: typescript-agular-client-generated
+
+2. Building an API client
+=========================
+Angular application
+Node.js, Angular and Visial Studioo Code shoul be installed
+
+hsprts-client-app (couse file - not generated from swagger)
+Paste teh generated client code into the REST catalog.
+
+in Visual Studio.
+npm install 
+All of out npm packges have been loaded
+
+serve
+
+localhost:4200
+
+Cliemnt SDK Internal
+
+
+
+
+
+
+
+
+
+
+
+
+
 TypeScript.
 Generated Client
 
