@@ -418,9 +418,10 @@ serve
 
 localhost:4200
 
-Cliemnt SDK Internal
-
-
+3. Client SDK Internals
+=======================
+typescript
+product.service.ts
 
 
 
