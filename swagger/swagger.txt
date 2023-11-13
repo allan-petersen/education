@@ -423,21 +423,92 @@ localhost:4200
 typescript
 product.service.ts
 
+4. API Implementation
+=====================
+hsport-catalog-server
+
+build the code that provides our data and capabilities
+
+ProductService.java
+Modify the ProductApiController - to access the model
+
+http://localhost:8080/hplussport1/catalog/1.0.0
+
+http://localhost:8080/hplussport1/catalog/1.0.0/product
+
+http://localhost:8080/hplussport1/catalog/1.0.0/product/524
+
+5. Packaging the API Implementation
+===================================
+maven clean package
+
+swagger-spring-1.0.0.jar 
+
+6. Hosting APIs in Azure
+========================
+Microsoft cloud service
+
+7 .API Server setup
+===================
+Setup DNS name resolution
+WinSCP
+
+Azure. Serial console
+
+" Java
+apt install default-jre
+nohup java -jr -Dserver.port 80 swagger-spring-1.0
+
+DNS name: 
+
+8 Publishing public APIs
+========================
+SwaggerHub: 
+servers
+  - description: Production Instance
+    url: 
+
+9 API Management i APIgee
+=========================
+API Gateway in front of our API implementation
+
+Security
+Throtteling
+Monetization ?
+Monitoring
+Air handling
+
+Create a new API spec - Import from Swagger Hub
+
+https://app.swaggerhub.com/&apis/hplussport1/catelog/1.0.0
+
+Change app to api
+Add swagger.yaml suffix
+
+https://api.swaggerhub.com/&apis/hplussport1/catelog/1.0.0/swagger.yaml
+
+Copy url for production
+
+Setup a proxy. Pass traffic from Apigee back to out API implementation running on Azure
+
+Reverse proxy
+
+Name: hsports-ctalog
+Exiting api. Pass in production URL
+Pass throuh - just for now.
+Add CORS headers: ?
+
+Copy Apigee url.
+
+10 Monitoring API Usage
+=======================
+
+11 Client modifications
+=======================
 
 
 
 
-
-
-
-
-
-
-TypeScript.
-Generated Client
-
-Spring.
-Generated server
 
 
 
