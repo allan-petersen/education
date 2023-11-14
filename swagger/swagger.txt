@@ -503,8 +503,32 @@ Copy Apigee url.
 10 Monitoring API Usage
 =======================
 
+
 11 Client modifications
 =======================
+Setup Angular application to use the Apigee proxy URL, só thaat the application accesses the production instance of out API
+
+src/app/rest/api/product.service.ts
+
+Use mock to develop, before the API is ready. Contract first approach
+
+
+12 Conclusion
+=============
+The OAS API definition file that we built with Swagger
+
+Documentation, a client SDK, a server-side stub, a mock API server, 
+and i supported integration with a cloud based API management platform
+
+Blog: http://tothought.com
+kevin-bowersox on Stack Overflow
+
+
+
+
+
+
+
 
 
 
