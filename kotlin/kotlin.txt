@@ -1,3 +1,34 @@
 Online playground: try.kotlinglang.org
 See koans
 Advent of code
+
+Type System
+===========
+Val-  creates in immutable declaration
+Var - is used for a mutable declaration
+
+The only type we nedd to specify the type a variable is when the compiler is unable to determine it.
+
+When we do not give the variable a definition,we must give it a type
+
+var myLong = 123456L
+var myShort: Short = 12
+var myByte: Byte = 127
+
+val anInt: Int = 1
+val aLong: Long = anInt.toLong()
+
+Control flow - if
+=================
+If is an expression in Kotlin, not a statement (as it is in Java).
+
+Statement:Program instructions that return no value; can't be on the right side of on equasl sign.
+Expression: Program instructions that return values; can be on the right side of on equasl sign.
+
+// int lowest = (a<b) ? a : b;    // Java
+
+val lowest = if (myInt < anInt) myInt else anInt;
+println("The lowest value is $lowest");
+
+Control flow - when
+===================
