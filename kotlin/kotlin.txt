@@ -32,3 +32,42 @@ println("The lowest value is $lowest");
 
 Control flow - when
 ===================
+case -> when
+
+Control flow - loops
+====================
+Kotlinns for statement works in conjunctuin with any type, that has an iterator
+
+for (item in 1..10) = {
+   println ("$item, ")
+}
+
+for (ch in "busquit") = {
+ }
+
+Control flow - - advanced loops
+===============================
+vard ndx = 0
+
+for (item in 10.rangeTo(20).step(2)) {
+   println("${++ndx}) $item, ")
+}
+println
+
+
+for ((index, item) in 10.rangeTo(20).step(2).withIndex()) {
+   println("${index+1}) $item, ")
+}
+println
+
+val myArray = arrayOf()10,20,30)
+for (item in myArray.indces) {
+   println("At index $Item is ${myArray[item]}")
+}
+println
+
+
+Functions
+=========
+TODO
+
