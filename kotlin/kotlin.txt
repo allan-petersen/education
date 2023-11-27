@@ -69,5 +69,20 @@ println
 
 Functions
 =========
-TODO
+
+Expression fuunction:
+fun pplus(param1: Int, param2: Int): Int = param1 + pramm2
+
+fun pplus(param1: Int, param2: Int) = param1 + pramm2
+
+named arguments
+
+Packages
+========
+
+Challange
+=========
+
+
+
 
