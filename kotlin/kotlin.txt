@@ -77,11 +77,51 @@ fun pplus(param1: Int, param2: Int) = param1 + pramm2
 
 named arguments
 
-Packages
-========
+Objects
+=======
+val location object {
+var xPosistion = 200
 
-Challange
-=========
+fun printIt(
+}
+
+}
+
+object type, see above
+
+object declaration: is a statement not an expression
+
+object MySingleton {
+   var temperatures = arrafOf(80, 76, 90)
+   fuc getLatTemperature = temperatures.last()
+   
+}   
+
+val temperatures = MySingleton.getLatTemperature()
+
+Interfaces
+==========
+interface Vehicle {
+   val MakeName: String
+   fun go() {}
+}
+
+Generics
+========
+Put an upper bound on our functions type parameter
+fuc <T: Coparable<T>> max(param1: T, param2: T): T {
+   val result = param1.compareTo(param2)
+   return if(results >0) param1 else param2   
+}
+
+
+val maxInt: Int = max(42, 99)
+
+TODO: return the smaller of two values. Open getSmaller.kt
+./kotlin/Ex_Files_Kotlin_Java_Devs_Upd/Exercise Files/Ch04/04_05_end/src/main/kotlin/getSmaller.kt
+
+
+
 
 
 
