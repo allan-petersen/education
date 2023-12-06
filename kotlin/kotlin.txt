@@ -109,16 +109,63 @@ interface Vehicle {
 Generics
 ========
 Put an upper bound on our functions type parameter
-fuc <T: Coparable<T>> max(param1: T, param2: T): T {
-   val result = param1.compareTo(param2)
-   return if(results >0) param1 else param2   
+
+package com.tekadept.demo
+
+// Add your solution here
+fun <T: Comparable<T>> getSmaller(param1: T, param2: T): T {
+    val result = param1.compareTo(param2)
+    return if(result >0) param2 else param1
+}
+
+fun main(args: Array<String>) {
+    println("getSmaller")
+
+    // Please add the getSmaller function above the main function
+    val minInt: Int = getSmaller(42, 99)
+    val minDouble: Double = getSmaller(9.807, 3.14159)
+    val minString: String = getSmaller("kitten", "kittens")
+
+    println("The min Int = $minInt")
+    println("The min Double = $minDouble")
+    println("The min String = $minString")
 }
 
 
 val maxInt: Int = max(42, 99)
 
-TODO: return the smaller of two values. Open getSmaller.kt
-./kotlin/Ex_Files_Kotlin_Java_Devs_Upd/Exercise Files/Ch04/04_05_end/src/main/kotlin/getSmaller.kt
+Use Java from Kotlin
+====================
+fun JavaIterop() {
+   val Frisky = Animal("Frisky", "cat", 10)
+   println(Frisky.Show())
+   Frisky.weight = 15
+}
+
+Use Kotlin from Java
+====================
+
+public class HelloWorld {
+   public static void main(String [] args) {
+   
+   }
+   
+   Person Bog = new Person ("Robert", "Smith")
+   System.out.println(Bob.getFirstName())
+   
+   Bob.setFirstName("Bob");
+ 
+   // Name of the Kotlin file 
+   Integer maxInt = MaxKt.max(2001, 2010)
+}
+
+Operator overloading
+====================
+Operators are functions, that use symbolic names
+
+TODO
+
+
 
 
 
