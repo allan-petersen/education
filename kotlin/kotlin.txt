@@ -163,6 +163,37 @@ Operator overloading
 ====================
 Operators are functions, that use symbolic names
 
+We can create our own functions for symbols in classes.
+This is called oprator overloading.
+
+data class Position(var x: Int, var y: Int) {
+   operator fun plus(other: Position) : Position {
+      return Position(x + other x), y + other.y)
+   }
+}
+
+Annotations
+===========
+Annotation are a way to attach metadata to code
+
+Reflection
+==========
+Reflections allows us to access programmatic information dynamicly at runtime.
+
+val Joe = Person("Joe", "Smith")
+val kClass = Joe.javaClass.kotlin
+println("Simple name = ${kClass.simplename}")
+
+//  Add kotin-reflect.jar to the classpath
+/// Simple name = person
+
+for  (name in kClass.memberproperties) {
+   println("Property name = $name)
+    println("Property name = {$name.name )}
+}
+
+DSL
+===
 TODO
 
 
