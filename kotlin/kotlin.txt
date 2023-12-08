@@ -77,6 +77,11 @@ fun pplus(param1: Int, param2: Int) = param1 + pramm2
 
 named arguments
 
+Unit is Kotlins version of a Java void
+
+infix keyword: It allows us to move the function in between its paramters (like +)
+
+
 Objects
 =======
 val location object {
@@ -194,7 +199,77 @@ for  (name in kClass.memberproperties) {
 
 DSL
 ===
-TODO
+is a computer language which is focuesed on a very narrow problem set.
+
+
+interface Matcher<T> {
+   fun test(lhs: T): Unit
+   
+   infix fun or(other: Matcher<T>) Matcher<T> = object : Matcher<T> {
+      override fun test(lhs: T) {
+	     try {
+	        this$Matcher.test(lhs)
+		 } catch(e: RuntimeException) {
+		    other.test(lhs)
+		 }
+	  }
+   }   
+}
+
+// Should for a single object
+infix fun <T> T.should(matcher: Matcher<T>) {
+   // Test the current object
+   matcher.test(this)
+}
+
+// Should for a collection
+// fn for function
+infix fun <T> Collection<T>.should(fn: CollectionMatchers<T>.()-> Unit) {
+   val matchers = CollectionMatchers(this)
+   // Call the function that got passed into us
+   matchers.fn()
+}
+
+// CollectionMatcher class. This class holds the clause , which comes after the word should
+class CollectionMatcher<T> (val collection: Collection<T>) {
+   fun contains(rhs: T) : Unit {
+      if (!collection.contains(rhs))
+	     throw RuntimException("Collection did not contain $rhs")
+   }
+   
+   fun notContain(rhs: T) : Unit {
+      if (collection.contains(rhs))
+	     throw RuntimException("Collection should not contain $rhs")
+   }
+   
+   fun haveSizeLessThan(size: Int) : Unit {
+      if (collection.size >= size)
+	     throw RuntimException("Collection should have size less than $size")
+   }
+}
+
+func unitTest() {
+   val listOfNames = listOf¨("April", "May", "June")
+   // There are several ways to obtain an instance of a function type:
+   // Use a code block within a function literal, in one of the following forms:
+   // a lambda expression: { a, b -> a + b },
+   // ... See https://kotlinlang.org/docs/lambdas.html#instantiating-a-function-type
+   listOfNames should { notContain("Portia") }
+   
+}
+
+
+
+
+
+ 
+
+
+
+
+
+
+
 
 
 
