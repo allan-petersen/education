@@ -258,23 +258,54 @@ func unitTest() {
    
 }
 
+Destructing
+===========
+Pull just the variables, taht we want from a more complicated object.
 
+class Point(val x: Int, val y: Int, val z: Int) {
+   operator fun component(): Int = x
+   operator fun component(): Int = y
+   operator fun component(): Int = z
+    
+}
 
+fun showComponents()
+   val myPoint = Point(5000, 500, 60000)
+   // Destructuring
+   val (myX, myY, myZ) = myPoint
+   println ("myX = $myX, myY = $myY, myZ = $myZ") 
+}   
 
+showComponents();
 
- 
+// 06_06_end challenge
+package com.tekadept.demo
 
+// Add your solution here
 
+data class Cubic(var x: Int, var y: Int, var z: Int){
+    operator fun plus(other: Cubic): Cubic {
+        return Cubic(x + other.x, y + other.y, z + other.z)
+    }
+    operator fun minus(other: Cubic): Cubic {
+        return Cubic(x - other.x, y - other.y, z - other.z)
+    }
+}
 
+fun main(args: Array<String>) {
+    println("operator")
 
+    val pt1 = Cubic(100, 200, 300)
+    val pt2 = Cubic(10, 20, 30)
 
+    println("pt1 = $pt1")
+    println("pt2 = $pt2")
+    println("pt1 + pt2 = ${pt1 + pt2}")
+    println("pt1 - pt2 = ${pt1 - pt2}")
+}
 
-
-
-
-
-
-
+Functtional programming
+=======================
 
 
 
