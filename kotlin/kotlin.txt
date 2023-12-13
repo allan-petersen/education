@@ -306,6 +306,24 @@ fun main(args: Array<String>) {
 
 Functtional programming
 =======================
+State is not stored
+Only immutable objects
+No loops - depends on recursion instead
+
+Lambdas
+=======
+
+val combos = students.map{ a -> a.name + " : " + a.age }
+println("Combos: " + combos)
+
+println("The oldest student : ${studetns.maxBy{it.age}}")
+
+val studentsWithLongNames = studetns.ffilter{it.name .length > 5}
+
+}
+
+When there is only one parameter, use the default it. It does not need to be passed in.
+
 
 
 
