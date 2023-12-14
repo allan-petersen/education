@@ -324,6 +324,41 @@ val studentsWithLongNames = studetns.ffilter{it.name .length > 5}
 
 When there is only one parameter, use the default it. It does not need to be passed in.
 
+Closure
+=======
+A closure is when the local variable of a function is kept alive after the function has ended.
+
+fun closureMakrer(): () -> Unit {
+    var num = 0
+    return{ pintln(num++)}	
+}
+
+func main(args: Array<String>){
+   val myCounter1 = clocureMaker()
+   val myCounter1 = clocureMaker()
+	myCounter1()
+	myCounter1()
+	myCounter1()
+	myCounter1()
+	myCounter2()
+	myCounter2()
+    myCounter1()
+}
+
+0
+1
+2
+3
+0
+1
+4
+
+num is kept in the closure.
+
+Method chaining
+===============
+A sequence is alazily evaluated collection // Like a stream in Java
+
 
 
 
