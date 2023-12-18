@@ -357,7 +357,64 @@ num is kept in the closure.
 
 Method chaining
 ===============
-A sequence is alazily evaluated collection // Like a stream in Java
+A sequence is a lazily evaluated collection // Like a stream in Java
+
+Strems csn run acreoos muiltiple cpus.
+
+Sequences are not collections
+A sequence is not generated until a terminal operation (sum, or toList ect.)
+A collection does always exist.
+
+fun sequences() {
+   val studens = getStudents()
+   val sqStudents = students.drop(1).take(39.tolIst()
+   println("Sequenced Students:" + sqStudents)
+   
+   val numbers = generateSequence(100) {it +1}
+   println("Numbers:" +  + numbers.drop(5).take(20).toList())
+   
+    val fib = generateSequence(1 t0 1) {it.second to it.first + it.seconde}.map{it.first
+
+)
+
+fun main(args: Array<String> {
+   sequences()
+}
+
+funKTional library
+==================
+funKTional is a library of functional constructs and patters for Kotlin.
+It helps to complete Kotlins functional toolkit
+
+build.gradle
+
+repositories {
+   mavenCentral()
+   jcenter()
+}
+
+
+// SourceSets represents al ogical group of Java and Kotlin sources and resources
+sourceSets {
+   main.kotlin.srcDirs += 'src/main/myKotlin'
+   main.java.srcDirs += 'src/main/myJava'
+}
+
+dependencies {
+   conpile 'org.funktionale:funktionale-all:1.0.1'
+}
+
+
+import org.functional.collections.destructured
+
+fun functional() {
+   val(head, tail) = listOf(1,2,3).destructured()
+   println("Head =" $had and tail = $tail").
+}
+
+Composistion
+============
+
 
 
 
