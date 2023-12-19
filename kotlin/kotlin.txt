@@ -414,7 +414,76 @@ fun functional() {
 
 Composistion
 ============
+Sammensætte funbktioner
 
+    val add5 ={i: Int -> 1 i 5}
+	val multipplyby2 ={i:Int -> i *2 }
+	
+	val multiplyBy2AndAdd5 = add5 compose multiplyBy2AndAdd5
+	val composeResults = multiplyBy2nad Add5(10)
+	
+	vad add5andMultiplyBy2 add5 forwardCompose multiplyBy2AndAdd5
+	val forwardComposeResults = add5anddMultiplyBy2(10)
+	
+Currying
+========
+Currying takes a funtion, which has multiple arguments, and transforms it into a chain of functions, each of which takes one argument
+There will be one functions for each argument in the original function
+
+import org.funktionale.currying.*
+
+   val sun3ints = {x: Int, y:Int, z:Int -> x + y -z}
+   
+   val curried: (Int) -> (Int) -> (Int) -> Int = sum3int3.curried
+   
+Now, curried is going to return a function that takes an int, that returns another function, that takes an int, that eturns another function, that takes an int - and finally returns an int.
+Ant the value of that funtion is going ro be sum3int3.curried
+  
+  val cur = curried(2)(4)(6)
+	
+We are callin three functions.
+We are calling the first function with a 2, the second function wih a 4 and the third function with a 6.
+
+Partial application
+===================
+A partial application takes a function, taht accepts some number of arguments, binding valus to one or more of those arguments, 
+and returning a new funtion, that only accepts the remaining unbound arguments.
+
+import org.funktionale.partial.partially1
+import org.funktionale.partial.partially3
+
+// the mthod prefixAndPostFix retuns a function, that takes 3 strings and returns a String
+val prefixAndPostFix: (String, String, String) -> String =
+   {prefix: String, x: String, postfix: String -> "{$prefix}{$x}${postfix}" }
+   
+val prefixAndBang: (String, String) -> String = prefixAndPostFix.partially3("!")
+
+// prefixAndPostFix wants three paramters, and we are going to tell it, 
+hey, you are only going to get pat of what you want.
+And we are going to supply the missing paramter, since prefixAndBang only gives it two.
+
+// The method hello returns a function, that taks on String and returns  a String
+val hello: (String) -> String  = prefixAndBang. pratially1("Hello", ")
+
+println(hello("Funktionale"))
+
+Partail application and currying give us the ability to creat specilized functions,
+from general ones, without introducing code duplication.
+
+Memo
+====
+
+
+
+
+
+ 
+
+
+
+
+
+	
 
 
 
