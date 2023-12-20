@@ -470,8 +470,37 @@ println(hello("Funktionale"))
 Partail application and currying give us the ability to creat specilized functions,
 from general ones, without introducing code duplication.
 
-Memo
-====
+Memoization
+===========
+Caching
+Pure fuctions
+
+inport org.funktionale.memoization.memoize
+
+fun memo(){
+   var fibonacci: (Long) -> Long = {it}
+   fibonacci = {  n: Long -> 
+      if (n < 2) n else fibonacci(n-1 + fibonacci(n-2)
+   }
+   
+   // Memoization function
+   var m: (Long)  -> Long = {it}
+   m = { n: Long ->   
+      if (n < 2) n else m(n-1) + m(n-2)
+   }.memoize()  
+   
+   println("Calling fib: + timeElapsed {finonacci(40)} + " ms" )
+   println("Calling m: + timeElapsed {m(40)} + " ms" )
+}
+
+// Body is a function, that return nothing
+// Unit = void
+func timeElapsed(body: () -> Unit): Long {
+   val start = System.currentTimeMillis()
+   body()
+   val end = System.currentTimeMillis()   
+   return end-start
+}
 
 
 
