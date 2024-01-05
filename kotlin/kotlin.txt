@@ -504,6 +504,18 @@ func timeElapsed(body: () -> Unit): Long {
 
 
 
+Further information
+===================
+
+kotlinlang.org
+kotlinlang.org/docs/reference
+trykotlinlang.org
+blog.jetbrains.com/kotlin
+
+therockncoder.com
+
+
+
 
 
  
