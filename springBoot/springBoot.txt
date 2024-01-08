@@ -1,0 +1,10 @@
+docs.docker.com/get-docker
+HTTPPie. curl alternative
+JSON Viewer. Plugin for Chrome.
+
+
+Basiics
+=======
+Start a new Spring Boot project
+   
+start.spring.io
