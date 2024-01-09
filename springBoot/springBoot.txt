@@ -3,8 +3,26 @@ HTTPPie. curl alternative
 JSON Viewer. Plugin for Chrome.
 
 
-Basiics
-=======
+Basics
+======
 Start a new Spring Boot project
    
 start.spring.io
+
+Autoconfiguration
+=================
+@EnableAutoConfiguration
+Driven off sping.factories
+
+Configuring Spring
+==================
+Cloud configuration. Se course Spring, Spring Cloud
+
+Spring Profiles
+===============
+Se course Spring Configuration in depth
+
+spring.prpfile.active
+
+Building Srping Boot applications
+=================================
