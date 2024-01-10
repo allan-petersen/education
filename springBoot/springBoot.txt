@@ -24,5 +24,10 @@ Se course Spring Configuration in depth
 
 spring.prpfile.active
 
-Building Srping Boot applications
-=================================
+Containerizing Spring Boot applications
+=======================================
+spring-boot:build-image for maven
+bootBuildImage for Gradle
+
+set JAVA_HOME=C:\tools\Eclipse Adoptium\jdk-17.0.7.7-hotspot
+Unrecognized VM option 'MaxPermSize=128m' fejl. Tet environment variable MAVEN_OPTS
