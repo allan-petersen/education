@@ -31,3 +31,58 @@ bootBuildImage for Gradle
 
 set JAVA_HOME=C:\tools\Eclipse Adoptium\jdk-17.0.7.7-hotspot
 Unrecognized VM option 'MaxPermSize=128m' fejl. Tet environment variable MAVEN_OPTS
+mvn clean package
+
+docker build -t booting-web .
+
+C:\work\booting.web>docker build -t booting-web .
+2024/01/11 08:15:05 http2: server: error reading preface from client //./pipe/docker_engine: file has already been closed
+[+] Building 50.0s (15/15) FINISHED                                                                      docker:default
+ => [internal] load .dockerignore                                                                                  0.0s
+ => => transferring context: 2B                                                                                    0.0s
+ => [internal] load build definition from Dockerfile                                                               0.0s
+ => => transferring dockerfile: 406B                                                                               0.0s
+ => [internal] load metadata for docker.io/library/openjdk:17-jdk-slim                                             1.0s
+ => [internal] load metadata for docker.io/library/maven:3.6.3-openjdk-17-slim                                     1.2s
+ => [builder 1/6] FROM docker.io/library/maven:3.6.3-openjdk-17-slim@sha256:6d8d6569d5a3b81e033e2f9905290fbd9c9b  25.8s
+ => => resolve docker.io/library/maven:3.6.3-openjdk-17-slim@sha256:6d8d6569d5a3b81e033e2f9905290fbd9c9b509fce188  0.0s
+ => => sha256:850a4d5b96e44cdd7c8217013733b18a4f449cfe35be341810d5e79588db32eb 7.90kB / 7.90kB                     0.0s
+ => => sha256:6d8d6569d5a3b81e033e2f9905290fbd9c9b509fce1889cdea5692b003edc9bb 549B / 549B                         0.0s
+ => => sha256:ead687c670f30898fc28e6c7b9dab652360d522b8912ba96eca0f08592a73eec 1.79kB / 1.79kB                     0.0s
+ => => sha256:41a9aed0479c2a558be624d8234821bad61eddda4c0d2472d1fdade77c84e6af 186.09MB / 186.09MB                20.2s
+ => => sha256:904869ca42fefc1785f38c52e6f3f497a07c65f496cc1b2adda6ee30e25be05d 2.62MB / 2.62MB                     4.8s
+ => => sha256:a778d69737c72683f8ea83d92fec57908ca8e4f224bc508423875cfa733ef51c 9.58MB / 9.58MB                     6.8s
+ => => sha256:53f217db9dce9458e85fb566fad7849a3f9a745b15ac160792b9251aa3aa5171 852B / 852B                         7.1s
+ => => sha256:6658044d924f9889ca5452cae3be1cf86cd659ddad24fcaba69a314532440734 361B / 361B                         7.4s
+ => => extracting sha256:41a9aed0479c2a558be624d8234821bad61eddda4c0d2472d1fdade77c84e6af                          4.7s
+ => => extracting sha256:904869ca42fefc1785f38c52e6f3f497a07c65f496cc1b2adda6ee30e25be05d                          0.2s
+ => => extracting sha256:a778d69737c72683f8ea83d92fec57908ca8e4f224bc508423875cfa733ef51c                          0.2s
+ => => extracting sha256:53f217db9dce9458e85fb566fad7849a3f9a745b15ac160792b9251aa3aa5171                          0.0s
+ => => extracting sha256:6658044d924f9889ca5452cae3be1cf86cd659ddad24fcaba69a314532440734                          0.0s
+ => [internal] load build context                                                                                  0.0s
+ => => transferring context: 2.59kB                                                                                0.0s
+ => [stage-1 1/3] FROM docker.io/library/openjdk:17-jdk-slim@sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0b  22.9s
+ => => resolve docker.io/library/openjdk:17-jdk-slim@sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0bc126b41f6  0.0s
+ => => sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0bc126b41f68c3f62f9774 547B / 547B                         0.0s
+ => => sha256:779635c0c3d23cc8dbab2d8c1ee4cf2a9202e198dfc8f4c0b279824d9b8e0f22 953B / 953B                         0.0s
+ => => sha256:37cb44321d0423bc57266a3bff658daf00478e4cdf2d3b8091f785310534256d 4.80kB / 4.80kB                     0.0s
+ => => sha256:1fe172e4850f03bb45d41a20174112bc119fbfec42a650edbbd8491aee32e3c3 31.38MB / 31.38MB                   2.3s
+ => => sha256:44d3aa8d076675d49d85180b0ced9daef210fe4fdff4bdbb422b9cf384e591d0 1.58MB / 1.58MB                     0.9s
+ => => sha256:6ce99fdf16e86bd02f6ad66a0e1334878528b5a4b5487850a76e0c08a7a27d56 187.90MB / 187.90MB                16.9s
+ => => extracting sha256:1fe172e4850f03bb45d41a20174112bc119fbfec42a650edbbd8491aee32e3c3                          4.8s
+ => => extracting sha256:44d3aa8d076675d49d85180b0ced9daef210fe4fdff4bdbb422b9cf384e591d0                          0.5s
+ => => extracting sha256:6ce99fdf16e86bd02f6ad66a0e1334878528b5a4b5487850a76e0c08a7a27d56                          5.5s
+ => [stage-1 2/3] WORKDIR /app/                                                                                    1.2s
+ => [builder 2/6] WORKDIR /build/                                                                                  0.3s
+ => [builder 3/6] COPY pom.xml /build/                                                                             0.1s
+ => [builder 4/6] COPY src /build/src/                                                                             0.1s
+ => [builder 5/6] RUN  mvn clean package                                                                          22.0s
+ => [builder 6/6] COPY target/booting.web-0.0.1-SNAPSHOT.jar target/application.jar                                0.1s
+ => [stage-1 3/3] COPY --from=BUILDER /build/target/application.jar /app/                                          0.1s
+ => exporting to image                                                                                             0.1s
+ => => exporting layers                                                                                            0.1s
+ => => writing image sha256:97bc79b9ce5f416df552b6e0c8c1a4a1f1cb528e787d9a62e26666e926b50dc9                       0.0s
+ => => naming to docker.io/library/booting-web                                                                     0.0s
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview
