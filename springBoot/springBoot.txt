@@ -86,3 +86,97 @@ C:\work\booting.web>docker build -t booting-web .
 
 What's Next?
   View a summary of image vulnerabilities and recommendations → docker scout quickview
+  
+  
+Run the applications: docker run -p8080:8080 -d booting-web
+
+Process status: docker ps
+
+docker stop 76e90db7dfa2
+
+
+Spring Boot Dependencies
+========================
+Embedded Tomcat server
+How you can build an executable jar file. that serves a web application
+The embedded Taocat can be replaces with jetty or orther app servers
+You can also remove Taocat and create a WAR istead of a jar
+
+JSOM Marshaller
+Spring Web Starter brings Jackson
+Usefulle for RESTful web services
+
+
+Test (JSON path)
+
+SLF4J
+
+SnakeYAML
+
+Configuring Embedded Tomcat
+===========================
+Configure the servlet container, the application is running in.
+servlets, filters, and listeners themselves
+
+Default servlet responds at "/"
+
+1. Configuration classes. Annotate with at bean
+or
+2. Annotate the actual class file  (wer servlet, web filter, web listener)
+
+Several application contexts:
+
+1. One of which is specific to the embedded Tomcat itself.
+2 Additional ServletContext can be loaded through the ServletContextInitializer interface
+
+Property based configuration
+============================
+server address etc.
+Session based config (cookies, timeouts, etc.)
+
+See
+org.springframework.boot.auticonfigure.web.ServerProperties
+
+Compression
+
+TLS
+Requires a Jva keystore, that contains the certificate
+Password
+
+Secret Manager, that connects to your runtime, used for storing all of your credentials
+
+
+Employing MVC in Spring Boot
+============================
+Templete Engine starter provides view resolvers in order to move away from traditional JSP.
+- and into more modern template engines
+
+Static file resolvers (example index.html)
+
+Access to CSS and JavaScript
+
+1. Build a project
+2. Add in view
+3. Add a models (or models) required to serve the view. 
+Often you will reuse object from different models to serve a web page.
+4. Add a controller. The controler will be used to wire the view and its model, and serrve it throug the templating engine.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
