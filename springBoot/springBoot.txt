@@ -162,9 +162,28 @@ Often you will reuse object from different models to serve a web page.
 4. Add a controller. The controler will be used to wire the view and its model, and serrve it throug the templating engine.
 
 
+Thymeleaf Templates
+===================
+Thymeleaf has a big benefit of being valid HTML as well as a template itself,
+ant this allows you to build a templete, and style it outside of the web application,
+and then just populate it with data.
 
 
+Web Application with Spring Boot
+================================
 
+@GetMapping
+public String getAllRooms(Model model) {
+  model.addAttribute("rooms", rooms)
+  return "rooms";  //This is the name of the view, that we want to resolve to
+}  
+
+
+Build staff view
+Simple page with a table of all staff
+Create 4 mock data elements
+Employee ID number (GUUID), firtst name, last name, position
+See CH02 -> 02_05 -> 02_05_begin -> sprng-boot-et-> bin -> data.sql
 
 
 
