@@ -168,6 +168,10 @@ Thymeleaf has a big benefit of being valid HTML as well as a template itself,
 ant this allows you to build a templete, and style it outside of the web application,
 and then just populate it with data.
 
+Thymeleaf is a modern server-side Java template engine for both web and standalone environments.
+
+Thymeleaf's main goal is to bring elegant natural templates to your development workflow — HTML that can be correctly displayed in browsers and also work as static prototypes, allowing for stronger collaboration in development teams.
+
 
 Web Application with Spring Boot
 ================================
@@ -207,6 +211,65 @@ Simple page with a table of all staff
 Create 4 mock data elements
 Employee ID number (GUUID), firtst name, last name, position
 See CH02 -> 02_05 -> 02_05_begin -> sprng-boot-et-> bin -> data.sql
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://wwww.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Landon Hotels | Staff</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Employee Firstname</th>
+            <th>Employee Lastname</th>
+            <th>Employee Occupation</th>
+        </tr>
+        <tr th:each="employee:${staff}">
+            <td th:text="${employee.firstName}">Firstname</td>
+            <td th:text="${employee.lastName}">Lastname</td>
+            <td th:text="${employee.occupation}">Lastname</td>
+        </tr>
+    </table>
+</body>
+</html>
+
+package com.frankmoley.lil.sbet.landon.roomwebapp.controllers;
+
+import com.frankmoley.lil.sbet.landon.roomwebapp.models.Employee;
+import com.frankmoley.lil.sbet.landon.roomwebapp.models.Room;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Controller
+@RequestMapping("/staff")
+public class StaffController {
+
+    private static final List<Employee> employees = new ArrayList<>();
+    static {
+        employees.add(new Employee( UUID.randomUUID().toString(), "Tine", "Hansen", "HOUSEKEEPING"));
+        employees.add(new Employee( UUID.randomUUID().toString(), "Tina", "Olsen", "SECURITY"));
+        employees.add(new Employee( UUID.randomUUID().toString(), "Hanne", "Hansen", "FRONT_DESK"));
+        employees.add(new Employee( UUID.randomUUID().toString(), "Petra", "Hansen", "CONCIERGE"));
+    }
+
+    @GetMapping
+    public String getAllEmployees(Model model){
+        model.addAttribute("staff", employees);
+        return "staff";
+    }
+}
+
+
+
+
+
 
 
 
