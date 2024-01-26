@@ -22,7 +22,7 @@ Spring Profiles
 ===============
 Se course Spring Configuration in depth
 
-spring.prpfile.active
+spring.profile.active
 
 Containerizing Spring Boot applications
 =======================================
@@ -340,12 +340,48 @@ public class StaffRestController {
     }
 }
 
-
+Note: You can have a route on the @GetMapping
 
 Test
 ====
 HTTPI application
 http :8080/api/rooms
+
+CommandLineRunner
+=================
+Think of admin task and batch operations
+
+The ApplicationRunner is a close cousin
+
+When levering multiple CLR or AR operations
+
+@Order annotation
+
+The Repository Pattern
+======================
+Most of Spring Dta is based on the repository pattern
+
+Spring JDBC can also be used to also create repository actions
+
+RepositoryRestResource adds a RESFful web service onto a raw repository
+
+Pattern
+Introduced as part of doman-driven design
+Simple operations of an entity or business object without kwowledge of other entities (as in DAO)
+Ubder the abstracion, the data access operations are hidden.
+
+Databases have become the bottleneck
+Prevnt data access logic from leaking into your business logicProvide a layer of abstraction to hide internals
+Focus on a single business object at a time.
+
+In Spring, start with repository interface in Spring Data or create your own interface using generics
+Define common data access methods
+Apply your business logic to a repository instance, and leverage the data access logic under the hood
+
+
+
+
+
 
 
 
