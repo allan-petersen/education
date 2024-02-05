@@ -378,6 +378,116 @@ In Spring, start with repository interface in Spring Data or create your own int
 Define common data access methods
 Apply your business logic to a repository instance, and leverage the data access logic under the hood
 
+Spring Data
+===========
+See.: Mary Ellen Bowmans course. Spring Spring Data
+
+You can onlu have 1 datasource auto-confifured.
+
+Embedded Databases
+==================
+logging.level.org.springframework.jdbc.datasource.init.ScriptUtils=debug
+spring.h2.console.enabled=true
+spring.datasource.url=jdbc:h2:mem:testdb
+
+http://localhost:8080/h2-console
+
+Repository
+==========
+# When we already have schema and data
+spring.jpa.hibernate.ddl-auto=none
+
+External databases
+==================
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.database=postgres
+spring.datasource.platform=postgres
+spring.datasource.url=jdbc:postgres://localhost:5432/dev
+spring.datasource.username=
+spring.datasource.password=
+
+Docker start postgres
+=====================
+#!/usr/bin/env bash
+
+set -euo pipefail
+which docker > /dev/null || (echoerr "Please ensure that docker is in your PATH" && exit 1)
+
+mkdir -p $HOME/docker/volumes/postgres
+rm -rf $HOME/docker/volumes/postgres/data
+
+docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dev -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql postgres
+sleep 3
+export PGPASSWORD=postgres
+
+docker cp ./schema.sql pg-docker:/docker-entrypoint-initdb.d/schema.sql
+docker cp ./data.sql pg-docker:/docker-entrypoint-initdb.d/data.sql
+docker exec -u postgres pg-docker psql dev postgres -f docker-entrypoint-initdb.d/schema.sql
+docker exec -u postgres pg-docker psql dev postgres -f docker-entrypoint-initdb.d/data.sql
+
+Docker start rabbit
+===================
+#!/usr/bin/env bash
+
+set -euo pipefail
+which docker > /dev/null || (echoerr "Please ensure that docker is in your PATH" && exit 1)
+
+mkdir -p $HOME/docker/volumes/postgres
+rm -rf $HOME/docker/volumes/postgres/data
+
+docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dev -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql postgres
+sleep 3
+export PGPASSWORD=postgres
+
+docker cp ./schema.sql pg-docker:/docker-entrypoint-initdb.d/schema.sql
+docker cp ./data.sql pg-docker:/docker-entrypoint-initdb.d/data.sql
+docker exec -u postgres pg-docker psql dev postgres -f docker-entrypoint-initdb.d/schema.sql
+docker exec -u postgres pg-docker psql dev postgres -f docker-entrypoint-initdb.d/data.sql
+
+
+
+CH_04/04_03/04-03_begnin
+@Enumeration
+
+@RestController
+@RequestMapping("/api/staff")
+public class StaffRestController {
+
+    private final StaffService staffService;
+
+    public StaffRestController(StaffService staffService) {
+        this.staffService = staffService;
+    }
+
+    @GetMapping
+    public List<StaffMember> getAllStaff(){
+        return staffService.getAllStaff();
+    }
+}
+
+Spring Security
+===============
+Spring Security gives you basic authetication on all endpoints except common ones like /js or /css
+
+Property based configuration
+
+Full sopport for form based autentication
+Create extension of WebSecurityConfigure
+
+Use @EnableWebSecurity  // Turns off basic
+
+Full support for OAuth2, server, and client
+
+Default implementation out of the box, using 
+@EnableOuth2Client annotation. That allows you to tie inton an Oauth server.
+Method level anntotation
+
+Simple autihorization server can be created with the annotation´
+@EnableAuthorizationServer, and it cn be customized
+
+ResourceServer is just as simple. @EnableResourceServer
+
+Pashword should be hashed, not encryped
 
 
 
@@ -408,4 +518,19 @@ Apply your business logic to a repository instance, and leverage the data access
 
 
 
+
+
+
+
+
+
+
+
+
+
+Other courses
+=============
+See.: 
+Mary Ellen Bowmans course. Spring Spring Data
+Spring Spring Security
 
