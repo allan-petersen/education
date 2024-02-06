@@ -489,6 +489,60 @@ ResourceServer is just as simple. @EnableResourceServer
 
 Pashword should be hashed, not encryped
 
+BCrypt is industry standard and should be used for form-based authentication.
+
+Using Spring Security
+=====================
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://wwww.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<form th:action="@{/login}" method="post">
+    <div>
+        <label>Username: <input type="text" name="username"/></label>
+        <label>Password: <input type="password" name="password"/></label>
+    </div>
+    <div>
+        <input type="submit" value="Login"/>
+    </div>
+</form>
+</body>
+</html>
+
+
+@Controller
+public class AuthenticationController {
+
+    @GetMapping("/login")
+    public String getLogin() {
+        return "login";
+    }
+
+}
+
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers("/", "/api/*").permitAll().anyRequest().authenticated()
+                .and().formLogin().loginPage("/login").permitAll()
+                .and().logout().permitAll();
+    }
+
+    @Autowired
+    public void ConfigureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+           auth.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance())
+                   .withUser("user").password("password").roles("USER");
+    }
+
+}
 
 
 
