@@ -574,26 +574,39 @@ guest/guest
 Producer
 ========
 
-
-
 Spring Data Rest repositories
 =============================
 
-
-
 Actuator
 ========
-Provides insights inti our running application
+Provides insights into our running application
 Provides configuration settings, usually through JMX
 Can also be exposed throuh the web.
 Allows you to monitor your running application
 
-HelthEndpoint
+Health Endpoint
 Up/down status of application
 Up/down status of dependencies
 Application status only up, if dependencies are up.
 
-TODO.
+Beans
+Env
+Info
+Metrix
+
+Default is relatively locked down
+Ensure it is not publicy availble
+Only configure what you need
+Customizable down to endpoints
+Can be extended with custom endpoints
+
+Dependency:
+spring-boot-starter-actuator
+
+Properties:
+management.endpoints.web.exposure.include=* // Do not use * in the real world
+management.endpoint.health.roles
+
 
 
 
