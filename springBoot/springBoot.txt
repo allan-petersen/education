@@ -605,14 +605,38 @@ spring-boot-starter-actuator
 
 Properties:
 management.endpoints.web.exposure.include=* // Do not use * in the real world
-management.endpoint.health.roles
+management.endpoint.health.roles= USER
+management.endpoint.health..show-details=when_authorized
+
+localhost:8080/actuator
+localhost:8080/actuator/health
+localhost:8080/actuator/env      // Protect this
+localhost:8080/actuator/metrics
+
+Spring Boot Starters
+====================
+Common code
+Common configuration
+Improve ease of use
+
+Creating a starter is driven of a business of technical need.
+Start by creating i library, that solves the technical need.
+
+Consder your dependencies wisely
+Try to use common componentry, whnever your can
+
+Build the Auto-Configuration Module
+This can be included in the starter, often isolated
+Should not be included in your library, but should include it.
+Your Auto-Configuration Module should include your library as a dependency.
+contains the spring.factories file in meta-info directory, that point to your auto configuration
+
+Build the starter ModuleUsually an empty JAR file
+that has e dependency on auto-configuration module and library and any other dependencies, that you maý need - other starters for instance
+Read the Spring doc.
 
 
-
-
-
-
-
+ 
 
 
 
