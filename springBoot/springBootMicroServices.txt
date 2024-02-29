@@ -1,0 +1,10 @@
+1. Web, which includes Tomcat and Spring MVC
+2. Rest repositories to expose Spring Data repositories over Rest
+3. Java persistence API
+4. H2 in mempry database driver
+
+Initializr generates the project.
+https://start.spring.io
+
+com.example.ec.explorecali
+explorecali
