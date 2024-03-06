@@ -1,28 +1,31 @@
 package com.frankmoley.lil.sbet.landon.roomwebapp.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.frankmoley.lil.sbet.landon.roomwebapp.models.Employee;
 import com.frankmoley.lil.sbet.landon.roomwebapp.models.Room;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-@RequestMapping("/rooms")
-public class RoomController {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-    private static final List<Room> rooms = new ArrayList<>();
+@Controller
+@RequestMapping("/staff")
+public class StaffController {
+
+    private static final List<Employee> employees = new ArrayList<>();
     static {
-        for(int i=0;i<10;i++){
-            rooms.add(new Room(i, "Room "+i, "R"+i, "Q"));
-        }
+        employees.add(new Employee( UUID.randomUUID().toString(), "Tine", "Hansen", "HOUSEKEEPING"));
+        employees.add(new Employee( UUID.randomUUID().toString(), "Tina", "Olsen", "SECURITY"));
+        employees.add(new Employee( UUID.randomUUID().toString(), "Hanne", "Hansen", "FRONT_DESK"));
+        employees.add(new Employee( UUID.randomUUID().toString(), "Petra", "Hansen", "CONCIERGE"));
     }
 
     @GetMapping
-    public String getAllRooms(Model model){
-        model.addAttribute("rooms", rooms);
-        return "rooms";
+    public String getAllEmployees(Model model){
+        model.addAttribute("staff", employees);
+        return "staff";
     }
 }
