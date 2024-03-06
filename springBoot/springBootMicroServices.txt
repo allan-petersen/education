@@ -8,3 +8,40 @@ https://start.spring.io
 
 com.example.ec.explorecali
 explorecali
+
+Spring Data JPA
+===============
+To load data from a database the @SpringBottApplication class can implement the CommandlineRunner
+
+RESTful APIs
+============
+Spring Data REST
+
+HTTP POST /tourPackages/ {<request body>}    201 CREATED
+HTTP GET /tourPackages/<code>                404 NOT FOUDND
+HTTP PUT ot PATCH /tourPackages/<code>
+HTTP DELETE /tourPackages/<code>
+
+tourPackeges/search // Giver options
+
+tourPackeges/search/findBYName?name=Backpacl%Cal
+
+Paging and sorting
+==================
+Url parameters: size, page, sort
+
+Controlling API Exposure
+========================
+@RepositoryRestResource(collectionReseorceRel = "packages, path = "packages")
+
+profie
+
+HAL Browser:
+localhost:8080
+
+
+Expose RESTful APIs with Spring MVC
+===================================
+
+
+

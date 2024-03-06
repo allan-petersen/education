@@ -635,22 +635,21 @@ Build the starter ModuleUsually an empty JAR file
 that has e dependency on auto-configuration module and library and any other dependencies, that you maý need - other starters for instance
 Read the Spring doc.
 
+Example
+=======
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
- 
+@RestController
+public class ConsentController {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @GetMapping("/Consent")
+    public String getConsent(@RequestParam("patient") String patientId, @RequestParam("status") String status) {
+        // Your logic to handle the request
+        return "GET request for Consent with patient ID: " + patientId + " and status: " + status;
+    }
+}
 
 
 
