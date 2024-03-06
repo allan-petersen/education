@@ -1,50 +1,50 @@
 package com.frankmoley.lil.sbet.landon.roomwebapp.models;
 
-public class Room {
-    private long id;
-    private String number;
-    private String name;
-    private String info;
+public class Employee {
+    private String id;
+    private String firstName;
+    private String lastName;
+    private String occupation;
 
-    public Room() {
+    public Employee() {
     }
 
-    public Room(long id, String number, String name, String info) {
-        this.id = id;
-        this.number = number;
-        this.name = name;
-        this.info = info;
-    }
-
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getNumber() {
-        return number;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getName() {
-        return name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getInfo() {
-        return info;
+    public String getOccupation() {
+        return occupation;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public Employee(String id, String firstName, String lastName, String occupation) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.occupation = occupation;
     }
 }

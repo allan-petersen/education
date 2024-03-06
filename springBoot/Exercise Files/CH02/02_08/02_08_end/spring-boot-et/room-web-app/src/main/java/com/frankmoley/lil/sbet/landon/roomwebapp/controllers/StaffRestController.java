@@ -1,24 +1,26 @@
 package com.frankmoley.lil.sbet.landon.roomwebapp.controllers;
 
-import java.util.List;
-
 import com.frankmoley.lil.sbet.landon.roomwebapp.models.Room;
+import com.frankmoley.lil.sbet.landon.roomwebapp.models.StaffMember;
 import com.frankmoley.lil.sbet.landon.roomwebapp.service.RoomService;
+import com.frankmoley.lil.sbet.landon.roomwebapp.service.StaffService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/rooms")
-public class RoomRestController {
-    private final RoomService roomService;
+import java.util.List;
 
-    public RoomRestController(RoomService roomService) {
-        this.roomService = roomService;
+@RestController
+@RequestMapping("/api/staff")
+public class StaffRestController {
+    private final StaffService staffService;
+
+    public StaffRestController(StaffService staffService) {
+        this.staffService = staffService;
     }
 
     @GetMapping
-    public List<Room> getAllRooms(){
-        return roomService.getAllRooms();
+    public List<StaffMember> getAllStaff(){
+        return staffService.getAllStaff();
     }
 }
