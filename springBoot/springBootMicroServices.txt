@@ -42,6 +42,59 @@ localhost:8080
 
 Expose RESTful APIs with Spring MVC
 ===================================
+@RestController
 
+A REST Controller class mediates between web requests and the internals of the applications
+
+Spring MVC
+Client Request -> Ny RestController class -> My Service
+
+Spring DATA Rest
+Client Request ->pring Data REST -> My Spring Data RepositoryRestResource
+
+Spring Web MVC
+Not Using Spring Data repositories
+API launches an algorithm
+Hide internal data model (entity schema)
+Require business layer service
+
+Example RestController
+======================
+@RestController
+@RequestMapping(path = "/exmaples")
+public class ExampleRestcontroller {
+
+   // CREATE
+   @PostMapping
+   @ResonseStatus(HttpStatus.CREATED) // Overrides default return status HTTP 200, HTTP.CREATED is 201
+   public Example create(@RequestBody Example example)
+   
+   // Default request body format is JSON
+   
+   // READ
+   @GetMapping
+   public List<Example> getAllExamples()
+   
+   @GetMapping(path = "/{id})
+   public static Example getOneExample(@PathVariable(value = "id") int id)
+   
+   // UPDATE
+   @PutMapping(path = "/{id})
+   public Example updateAll(@PathVariable(value = "id") int id, @RequestBody Example example)
+   
+   @PatchMapping(path = "/{id})
+   public Exmple updateSome(PathVariable(value = "id") int id, @RequestBody Example example)
+   
+   // DELETE
+   @dELETEMapping(path = "/{id})
+   public Exmple DELETE(PathVariable(value = "id") int id)
+   
+   
+   
+   
+
+}
+
+For maintainablility Each class should map to only ine resorce (here the resource is example)
 
 
