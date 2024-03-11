@@ -89,12 +89,52 @@ public class ExampleRestcontroller {
    @dELETEMapping(path = "/{id})
    public Exmple DELETE(PathVariable(value = "id") int id)
    
-   
-   
-   
-
 }
 
 For maintainablility Each class should map to only ine resorce (here the resource is example)
+
+Use case
+========
+Nouns:
+score
+comment
+customer identifier
+tour
+
+Create RestController HTTP POST method
+======================================
+
+Can all the attributes of a TourRating be sent in the request body
+
+TourRaingPK = Tour tour, Integer customerId
+The client dos  ot want to send aTour in the request, but probably a Tour identifier
+
+So we should create a Data Transfer Object (DTO) to encapsulate the request body.
+
+RatindDTO - score, comment, custimerId
+NO tourId attribute
+The toourId is going to be a parameter on the URL.
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+@ExceptionHandler(NuSuchElementException.class)
+public String retur400(NoSuchElementexception ex) {
+   return ex.getMessge();
+}
+
+@PostMapping@ResponseStatus(HttpStatus.CREATED)
+public void createTourRating(@PathVariable(Vvalue = "tourId") int tourId, @RequestBody @Validated RatingDto ratingDto) {
+   Tour tour = verfyTour(id);
+   tourRationRepository,save(new TourRating(new TourRatingPk(tour, ratingDto.getCustomerId), ratingDto.getScore(), ratingDto.getcomment()));
+
+}
+
+// Create a new tour ratingDtoPOST http://localhost:8080/tours/1/ratings/
+
+Create RestController HTTP GET methods
+======================================
+
+
+
+
 
 
