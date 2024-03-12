@@ -132,9 +132,27 @@ public void createTourRating(@PathVariable(Vvalue = "tourId") int tourId, @Reque
 
 Create RestController HTTP GET methods
 ======================================
+Hide the implememtation, return a lst of TourDTO objects
 
 
+/average at the end
+return adjacent package with a key-value pair of the word averge an then the avarge value.
 
+@GetMapping
+public List<RatingDTo> getAllRatingsForTour(@PathVariable(value = "tourId") int tourId
+
+@GetMapping(path="/average2)
+public Map<String, Double> getAverage(@PathVariable(value = "tourId") int tourId
+
+create RestController HTTP PUT, PATCH, and DELETE methods
+=========================================================
+PUT all the attributes are updated
+PATCH only update some methods on the entity
+
+
+@RequestBody @Validated RatingDto
+
+TODO: Update with patch
 
 
 
