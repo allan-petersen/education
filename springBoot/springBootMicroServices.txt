@@ -149,10 +149,32 @@ create RestController HTTP PUT, PATCH, and DELETE methods
 PUT all the attributes are updated
 PATCH only update some methods on the entity
 
-
+@putMapping
 @RequestBody @Validated RatingDto
 
-TODO: Update with patch
+Update with patch
+@PatchMapping
 
+@DeleteMapping(path ="/{customerId}"
+public void delete(@PathVariable(value = "tourId") int tourId, 
+                   @PathVariable(value = "customerId") int customerId)
 
+hppt://localhost:8080/tours/1/ratings/2
+2 is customerid
 
+Paging and sorting DTOs
+=======================
+Page<TourRating> findByPkTourId(Integget tourId, Pageable pageable);
+
+http://localhost:8080/tors/1/ratings?size2&page1&sort=score,desc  // 1 is second page
+
+Unlike Spring Data REST REST controller APIs do not automatically generate hypermedia links
+
+TODO: Entending, securing and Dockerizing Spring Boot MicroServices.
+
+Why would you choose Spring MVC over Spring Data Rest: Because it
+Hide internal data model (Entity schema)
+Require business layer servicenot using Srping data repositories
+
+Mongo DB
+========
