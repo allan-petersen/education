@@ -178,3 +178,19 @@ Require business layer servicenot using Srping data repositories
 
 Mongo DB
 ========
+MongoDB repositories have no schema requirements.
+
+Disadvantages
+Does not automatically catch referential integrity errors
+Application responsible for managing integrity.
+
+Spring Data MongoDB
+
+Removing the TourPackage attribute, which in JAP was referencing another table
+Embed these attrbutes instead
+duplication, but that is given for NoSQL databases.
+
+Map<String, String> details
+Individually attrbutes are now B key-value pairs in this details
+We no longer nedd the TourRation DTO in the Controller, because TourRating is now simple.
+
