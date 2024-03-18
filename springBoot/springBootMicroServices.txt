@@ -192,5 +192,16 @@ duplication, but that is given for NoSQL databases.
 
 Map<String, String> details
 Individually attrbutes are now B key-value pairs in this details
-We no longer nedd the TourRation DTO in the Controller, because TourRating is now simple.
+We no longer need the TourRation DTO in the Controller, because TourRating is now simple.
+
+We store Documents
+
+Microservice
+
+Other cources:
+Spring Data 2
+Extending, Securing and Dockerizing Spring Boot Microservices
+
+MaryEllenTeaches.me
+
 
