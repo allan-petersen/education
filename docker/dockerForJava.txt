@@ -1,3 +1,52 @@
 Aplications are packaged with the required infrastructure at the build phase.
 curl localhost.8080/actuator/health
 brew ls tomcat
+
+A running image is called a container.
+
+We have the entire infrastructure all the way down to operating system encapsulated into one self-contained unit. Hence the name container
+
+Command line:
+docker images
+docker ps -a
+docker stop my-demo-app
+// Remove the container
+docker rm my-demo-app 
+// Remove the image
+docker rmi my-demo-app 
+
+
+# Se hvad der er i containere
+docker exec -t -i my-demo-app /bin/sh
+ls 
+java -version
+ls target
+ls /usr/local/tomcat
+ls /usr/local/tomcat/webapps
+
+Containerization
+================
+Software is bundled with all it needs as one immutable artifact called an image.
+The image defines all the dependencies it needs to run,
+including any operating system files and libraries.
+
+The image is identical, whether it is delivered to test staging or production.
+It follows a spcification so that the runtime platform on test staging and production understands how to deploy it.
+Identical images can be seamlessly swapped out or replicated at runtime,
+making deployments resilient (?) and expandable.
+
+OCI = Open Container Initiative
+OCI image specification. The original Docker format.
+
+OCI runtime specification: Docker and others.
+This is the platform that unbundles the image and runs its contens in an isolated environment.
+
+
+
+
+
+
+
+
+
+
