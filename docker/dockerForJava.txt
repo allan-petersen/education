@@ -41,6 +41,29 @@ OCI image specification. The original Docker format.
 OCI runtime specification: Docker and others.
 This is the platform that unbundles the image and runs its contens in an isolated environment.
 
+Comparing images to containers
+==============================
+
+Image:
+Immutable object composed of files.
+Operating environment and application run command.
+
+Container runtime ad Engine
+===========================
+Platform for running images that follow the OCI image specification.
+
+Container
+=========
+Also known as container image or Docker container.
+The actual image of a running image.
+A container is an instantiation of an image
+
+Docker files
+
+
+
+
+
 
 
 
