@@ -59,6 +59,48 @@ The actual image of a running image.
 A container is an instantiation of an image
 
 Docker files
+============
+Image recipe card.
+
+FROM base image
+ADD, COPY, FROM, RUN, USER, VOLUME, WORKDIR
+CMD or ENTRYPOINT
+
+Docker CLI
+==========
+docker build: Creates an image
+docker run: Instantiates an image as a container and runs it.
+
+docker images: List images in local registry
+docker ps: List active containers
+docker exec: Run a command within a running container
+docker system: General Docker system inspection
+
+docker rmi:Remove image (no active containers)
+docker stop. Stop a running contaner
+docker rm: Remove a stopped container
+docker system prune: Removed all unused or orphan images.
+
+https://docs.docker.com/reference
+
+docker --help
+
+docker [commad] -- help
+
+Learn Dockerfile instructions
+=============================
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
