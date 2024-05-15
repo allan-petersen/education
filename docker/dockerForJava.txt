@@ -89,6 +89,38 @@ docker [commad] -- help
 
 Learn Dockerfile instructions
 =============================
+alpine is a slimmed down image of a Linux operating system.
+
+There is a default Docker image registry called Docker Hub (Just like Maven Central).
+
+https://hub.docker.com
+https://hub.docker.com/_/alphine
+
+docker build .
+docker images
+docker run --name os-app [IMAGE_ID]
+
+docker ps -a
+docker rm os-app
+docker rmi [IMAGE_ID]
+docker images
+
+docker build -t hello .
+ducker run --name hello-app hello
+
+
+FROM openjdk:11-jdk
+ADD app /app
+WORKDIR /app
+RUN javac -cp lombok.jar Forever.java
+CMD ["java", "Forever", "-cp", "lombok.jar"]
+
+// Compile
+javac -cp lombok.jar Forver.java
+
+Convert code to a Docker Image
+==============================
+
 
 
 
