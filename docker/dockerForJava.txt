@@ -118,17 +118,32 @@ CMD ["java", "Forever", "-cp", "lombok.jar"]
 // Compile
 javac -cp lombok.jar Forver.java
 
+--detach
+
 Convert code to a Docker Image
 ==============================
 
+docker logs foreverbuilder-app
+
+docker exec -t- i foreverbuilder-app ls /app
+
+docker exec -t- i foreverbuilder-app ls /bin/sh
+
+docker system prune -a  // Delete any a images that don not have a running image
 
 
+# Build the image
+docker build -t foreverbuilder -f Dockerfile-build .
+# Run the container
+docker run --detach -name foreverbuilder-app foreverbuilder
 
+C:\work\docker-for-java-developers-2452212\dockerfile-demos\runapp
 
+# Command to start a shell
+docker exec -t- i foreverbuilder-app ls /bin/sh
 
-
-
-
+Best practices
+==============
 
 
 
