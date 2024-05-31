@@ -198,9 +198,42 @@ ADD target/layerdemo-0.0.1-SNAPSHOT.jar /app/
 CMD ["java", "-jar", "layerdemo-0.0.1-SNAPSHOT.jar"]
 
 
+Multistage
+==========
 
 
+Volumes and ports
+=================
+1. Host volume: Shared host filesystem folder
+-v /host-folder-full-path:/container folder-name
 
+docker run -idt --name host-volume-app -v ${PWD}/my-host-folder:(copyntainer-folder alpine
+
+// Exec into that Container
+docker exec -it host-volume-app sh
+cat /container-folder//Host-hello.txt
+
+echo Hello from the Container >> /container-folder//Host-hello.txt // Reflected in the file outside thecontainer
+
+exit
+
+2. Anonymous volume: Shared Docker manages repository, name generated
+-v /container-folder-name
+
+docker run -idt --name anon-volume-app -v /container-folder alpine
+
+
+3. Named volume: Shared Docker-managed repositry, name provided
+-v name-of-the-volume:/container-folder-name
+
+docker run -idt --name named-volume-app -v bob:/container-folder alpine
+
+docker volume ls
+
+docker volume rm bob // ERROR. Volume in use
+
+4:22
+Chekc ud og find Docker fil.
 
 
 
