@@ -232,11 +232,33 @@ docker volume ls
 
 docker volume rm bob // ERROR. Volume in use
 
-4:22
-Chekc ud og find Docker fil.
+docker exec -it named-volume-app touch /container-folder/named-file
+
+Ports
+======
+curl localhost:8080/actuator/health
+
+Dockerfile:
+FROM openjdk:11.0-jre
+RUN mkdir /app
+ADD target/portdemo-0.0.1-SNAPSHOT.jar /app/portdemo.jar
+CMD ["java", "-jar", "/app/portdemo.jar"]
+
+docker build -t portdemo .
+docker run -idt --name portdemo-app portdemo
+
+docker run -p 8080:8080-idt --name portdemo-app80 portdemo
+
+1. port: our host
+2. port: the default from the SpringBoot app in the Container.
+
+docker run -p 9090:8080-idt --name portdemo-app90 portdemo
+
+curl localhost:9090/actuator/health 
 
 
-
+Docker Registry
+===============
 
 
 
