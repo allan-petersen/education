@@ -279,8 +279,27 @@ docker push docker.io/mellenbowman/alpine:me
 
 docker pull docker.io/mellenbowman/alpine:me
 
+Containter orchestration with Docker Compose
+============================================
+
+How do containers interact. 
+Example: Postgress container and Web app Container
 
 
+Example not best practice
+=========================
+Restcontroller is combined with the SpringBott application in Appication.java
+
+Running related containers is called Orchestration
+This can be done in the following ways:
+
+Docker CLI (manually)
+Docker ComposeDocker Swarm
+Kubernetes
+
+Manually
+========
+2:04
 
 
 
