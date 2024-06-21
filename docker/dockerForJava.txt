@@ -281,6 +281,7 @@ docker pull docker.io/mellenbowman/alpine:me
 
 Containter orchestration with Docker Compose
 ============================================
+orchestration = Running related containers
 
 How do containers interact. 
 Example: Postgress container and Web app Container
@@ -288,18 +289,65 @@ Example: Postgress container and Web app Container
 
 Example not best practice
 =========================
-Restcontroller is combined with the SpringBott application in Appication.java
+Restcontroller is combined with the SpringBoot application in Appication.java
+
+RestControler that exposes endpoints
 
 Running related containers is called Orchestration
 This can be done in the following ways:
 
 Docker CLI (manually)
-Docker ComposeDocker Swarm
+Docker Compose
+Docker Swarm
 Kubernetes
 
 Manually
 ========
-2:04
+
+Docker-compose
+==============
+docker-compose.yml
+
+8080:8080
+
+Exposes 8080 as 8080.
+
+docker-compose up
+
+Dockerfile Alternatives
+=======================
+Opinionated
+Applies best practiices for layering
+Ateempts lightst inage possible
+Configureable to override defaults
+Out if the Docker workld and back to coding
+
+Cloud Native Buildpacks
+Sprog Boot Docker Maven and Gradle plugin
+Jib Maven and Gradle plugin
+
+Cloud Native Buildpacks
+=======================
+CNCF
+buildpacks.io/docs
+
+Pack
+====
+pack build suggest
+pack build --builder gcr.io/buiidpacks/builder:v1 webapp-ib:buildpack
+
+docker images
+
+
+
+
+
+
+
+Sprog Boot Docker Maven and Gradle plugin
+Jib Maven and Gradle plugin
+
+
 
 
 
