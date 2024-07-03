@@ -1,0 +1,80 @@
+OICD = OpenID Connect
+
+An oAuth Server
+https://oauth2,thephpleague.com/
+Google OAuth 2.0 Palyground
+https://developers.google.com/oauthplayground/
+
+OAuth as a service
+API Access Management
+https://developer.okta.com/        
+
+Token Introspection Extension
+https://jwt.io
+(or local libraries)
+decode Jason Web Tokens (JWT),
+
+The code for this course
+========================
+https://github.com/caseysoftware/oauth-and-openid-connect
+
+Describing OAuth2.0
+===================
+Oauth is a framework for user to delegate access to 1 system over to another system
+You are autorizing one system to act on behalf of you to that other system
+You can do this to share data, functionality
+
+Athentication (AuthN)
+=====================
+Who are you
+
+Authorization (AuthZ)
+=====================
+What can you do
+
+OAuth2 is an authorization framework
+
+OpenID Connect is an OAuth 2.0 extension putting function and form to a users's profuile information.
+OpenID Connect is a special case of OAuth2.0
+
+Making OAuth 2.0 usefull with extensions
+========================================
+
+OAuth 2.0 Framework
+Loose operating agreement, not a contract
+
+Extensions
+==========
+
+1. OpenIdConnect 
+Provides a standard way to request and share profile data
+Gives us "Sign in with " on hundreds of sites
+Derpends on JSON Web Tokens, or JWTs
+
+2. Json Web Tokens (JWT)
+RFC 7519
+Oauth doesn't require JWTs, but they are commeon
+JWTs are encoded, not encrypted
+JSOM Web Encryption (JWE)
+Includes:
+iss (issuer)
+iat (issued at)
+sub (sunject)
+aud (audience)
+exp (expiration)
+
+3. RFC 7662 Token IntrospectionExamines a token to describe tis contents
+Useful for opaque tokens
+Describes if the token is active or notMandatory if you have Tkoen Revocation
+
+4. RFC 7009 Token Revocation
+Revokes (cancels) a token via API
+Technically optional
+In prectice, required
+
+RFC 8636 Auth Code with PKCE
+(End user facing extension)
+Usefulle for protecting  client-side flows (mobile devices, SPAs)
+Rpleaces the implicit grant type
+
+
