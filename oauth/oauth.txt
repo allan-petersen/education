@@ -77,4 +77,15 @@ RFC 8636 Auth Code with PKCE
 Usefulle for protecting  client-side flows (mobile devices, SPAs)
 Rpleaces the implicit grant type
 
+RFC 8693 Token Exchange
+Introduces an approach for tradinbg or exchanging tokens on behalf of another  user or service, aka dlelegation.
 
+RFC 8414 Authorization Server Metadata
+
+OpenID Connect
+==============
+OIDC is an extensin on top of Oauth2.0
+OIDC replaces SAML for Single Sign-On
+
+OAuth 2.0 Fundamentals
+======================
