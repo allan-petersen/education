@@ -89,3 +89,43 @@ OIDC replaces SAML for Single Sign-On
 
 OAuth 2.0 Fundamentals
 ======================
+1. Resource owner - that is you
+2. Resource server - what you are granting access to. Able to validate the token and allow requesting access
+3. Grant type - how the application is asking for access
+4. Scope - what access the application is requesting
+5. Authorization server - who is the application asking for access - grant type and scope is sent to the authorization server
+6. Token - how the application gets that access 
+7. Claims - the content or information in the token
+
+You (resource owner) want access to a room (the resource).
+The front desk is the Authorization server.
+Key card (token)
+
+Undestanding the OAuth Endpoints
+================================
+RFC 6749: OAuth Core
+
+/authorize
+The endpoint taht the enduser (reresource owner interacts with togrant permission for the application to access the resource
+Could retun n authorization code or a token
+
+Evaluate our grant type and our scope request.
+
+/token
+The endpoint that the application uses to trade an autohrization code or refreshtoken for an accesstoken
+
+The following endpoints are optional
+====================================
+/userinfo
+The endpoint that applicatins use to retreive profile information about the authenticated user.
+
+Returnt the claims about a user.
+
+This returns a spec-defined set of fields, depending on the permissions (scope) requested.
+
+RFC 8414. Oauth Authorization Server Metadata Discovery
+The endpont that applications use to retrieve the configuration information fir the authorizationserver.
+
+/introspect
+The endpoint that applications 
+TODO
