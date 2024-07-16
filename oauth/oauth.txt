@@ -129,3 +129,33 @@ The endpont that applications use to retrieve the configuration information fir 
 /introspect
 The endpoint that applications 
 TODO
+
+/revoke
+
+Grant types
+===========
+Authorization code
+Implicit or hybrid
+Resource Owner Password
+Client Credentals
+Device CodeAuthorization Code with PKCE
+
+Are you authorizing on behalf of a user or a service?
+Does the system in question have a web browser available?
+In the application entirely server side, or does it have a clinet side component?
+
+Oauth Scopres
+=============
+A set of permessions, you can request (example CRUD)
+
+Example: okta.apps.read
+
+OpenID Connect Scopes:
+openid
+profileemaik
+address
+phone
+
+Using the OAuth Playground
+==========================
+
