@@ -158,4 +158,55 @@ phone
 
 Using the OAuth Playground
 ==========================
+https:developers.google.com&/oauthplayground
 
+Oauth 2.0 tokens
+================
+
+1. Access token:
+The access token is a string representing an authorization issued to the client. This strong s usually opaque to the client.
+Tokens represent specific scopes and durations of access, granted by the resource owner, and enforced by the resource server and autorization server.
+
+
+2. Refresh token:
+A refresh token is a string representing the authorization granted to the client be the resource owner. The string is usually oopaque to the client. 
+The token denotes an identifier used to retrieve the autorization information.
+
+You can use a refresh token to request a new access token. Only for use with the authorization server
+
+
+How is a token structured?
+X. Opaque Tokens - there is nothing to see here.
+Y. JSON Web Token (JWT) Full of authorizatin nd profile data.  Base 64 encoded string containing signature information to verify who sent it, and the data in it.
+
+3. ID token
+The primary extension that OpenID Connect makes OAuth 2.0 eo enbale End-Usera to be Authenticated is the ID token data structure.
+The ID token is a security token, that contains claims about the autehntication of a end-user by an authorization server, h´when using a client, and potetially other requested claims.
+The ID token is represented as a JSON Web Token (JWT).
+
+Validating JWTs
+===============
+Validating establishes trust - anything else is irresponsible.
+
+Retrieve your signing keys - read the documentation from the OAuth provider. The public key of the sender.
+
+3 parts separated by periods.
+
+1. Header - tells us the algoritm used to generate the token.
+2. Payload
+3. Signature - Use the signing key to sign the payload and compare against the original structure.
+
+
+Sign the payload using the public key of the sender. The result should mathc the signature received in the token.
+
+The payload contains some key/value pairs called claims.
+
+iss: Issuer of the token. Usually the Authorization server. Make sure this fild is what you expect.
+sub: The entity ? the token is about. The enduser authenticated or the system, that requested the token.
+aud: The inrended audience of the token. The application which requested the token.
+iat: Issued at time
+
+Check out https//jwt.io to find a library for toekn validation - matching the algoritm use need.
+
+Handling Token Safely
+=====================
