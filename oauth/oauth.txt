@@ -163,12 +163,16 @@ https:developers.google.com&/oauthplayground
 Oauth 2.0 tokens
 ================
 
-1. Access token:
+1. Access token (Intended for the resource server)
 The access token is a string representing an authorization issued to the client. This strong s usually opaque to the client.
 Tokens represent specific scopes and durations of access, granted by the resource owner, and enforced by the resource server and autorization server.
 
+- **Purpose**: Used to gain access to protected resources on behalf of the user. 
+- **Usage**: Sent in API requests to authenticate and authorize access. 
+- **Content**: Contains information like scopes, expiration, and other metadata required by the resource server to validate the token. 
+- **Audience**: Intended for the resource server. 
 
-2. Refresh token:
+2. Refresh token
 A refresh token is a string representing the authorization granted to the client be the resource owner. The string is usually oopaque to the client. 
 The token denotes an identifier used to retrieve the autorization information.
 
@@ -179,10 +183,18 @@ How is a token structured?
 X. Opaque Tokens - there is nothing to see here.
 Y. JSON Web Token (JWT) Full of authorizatin nd profile data.  Base 64 encoded string containing signature information to verify who sent it, and the data in it.
 
-3. ID token
+3. ID token (Intended for the client application)
 The primary extension that OpenID Connect makes OAuth 2.0 to enbale End-Users to be Authenticated is the ID token data structure.
 The ID token is a security token, that contains claims about the authentication of a end-user by an authorization server, when using a client, and potetially other requested claims.
 The ID token is represented as a JSON Web Token (JWT).
+
+- **Purpose**: Used to authenticate the user and provide information about the user. 
+- **Usage**: Typically used in OpenID Connect (OIDC) to verify the user's identity. 
+- **Content**: Contains claims about the user, such as their identity, authentication time, and other profile information. 
+- **Audience**: Intended for the client application to validate the user's identity. 
+ 
+In summary, an access token is used for authorization, while an ID token is used for authentication.
+====================================================================================================
 
 Validating JWTs
 ===============
