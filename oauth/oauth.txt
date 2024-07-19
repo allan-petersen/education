@@ -180,8 +180,8 @@ X. Opaque Tokens - there is nothing to see here.
 Y. JSON Web Token (JWT) Full of authorizatin nd profile data.  Base 64 encoded string containing signature information to verify who sent it, and the data in it.
 
 3. ID token
-The primary extension that OpenID Connect makes OAuth 2.0 eo enbale End-Usera to be Authenticated is the ID token data structure.
-The ID token is a security token, that contains claims about the autehntication of a end-user by an authorization server, h´when using a client, and potetially other requested claims.
+The primary extension that OpenID Connect makes OAuth 2.0 to enbale End-Users to be Authenticated is the ID token data structure.
+The ID token is a security token, that contains claims about the authentication of a end-user by an authorization server, when using a client, and potetially other requested claims.
 The ID token is represented as a JSON Web Token (JWT).
 
 Validating JWTs
@@ -210,3 +210,34 @@ Check out https//jwt.io to find a library for toekn validation - matching the al
 
 Handling Token Safely
 =====================
+Access and refresh tokena are credentials
+Use TLS
+Use Secure Cookies
+
+ID token is going to the ownerDo not embed sensitive data
+Use the token to retrieve sensitive infomation from the resource server directly.
+
+Exchange  refresh token for en new acccess token.
+
+Grant type. Authorization Code flow.
+===================================
+1. The user authenticates
+2. The application (for example Web App, that the ser is using) authenticates
+
+The autorization server now knows, who it granted a token to and for which app.
+
+At no time did the application have the chance to touch our password
+The user and the browser never had the chhance to touch the access token.
+
+Onely the one-time-use authorization code is exposed,
+The application never sees the user's credentials
+The user never sees the access or refrsh tokens
+
+User get back an auth code from the authorization server
+
+The application uses the auth code and the clinet secret to get an access token (and optionally refresh token)
+
+When should you use this
+========================
+TODO
+
