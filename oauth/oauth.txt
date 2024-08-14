@@ -231,7 +231,7 @@ Use the token to retrieve sensitive infomation from the resource server directly
 
 Exchange  refresh token for en new acccess token.
 
-Grant type. Authorization Code flow.
+4. Grant type. Authorization Code flow.
 ===================================
 1. The user authenticates
 2. The application (for example Web App, that the ser is using) authenticates
@@ -249,7 +249,19 @@ User get back an auth code from the authorization server
 
 The application uses the auth code and the clinet secret to get an access token (and optionally refresh token)
 
-When should you use this
-========================
-TODO
+When should you use Authrization Code Flow
+==========================================
+Are you authorizing on behalf of a user?
+Does the system in question have a webbrowser available?
+Is the application entirely server side, or does it have a clietn side component?
 
+Example
+=======
+The 3. part application never sees our credentilas 
+and the end user never sees the access token.
+
+Postman:
+Access Token
+id_token
+
+TODO Prøv.
