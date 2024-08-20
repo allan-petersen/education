@@ -2,7 +2,7 @@ OICD = OpenID Connect
 
 An oAuth Server
 https://oauth2,thephpleague.com/
-Google OAuth 2.0 Palyground
+Google OAuth 2.0 Playground
 https://developers.google.com/oauthplayground/
 
 OAuth as a service
@@ -249,8 +249,8 @@ User get back an auth code from the authorization server
 
 The application uses the auth code and the clinet secret to get an access token (and optionally refresh token)
 
-When should you use Authrization Code Flow
-==========================================
+When should you use Authorization Code Flow
+===========================================
 Are you authorizing on behalf of a user?
 Does the system in question have a webbrowser available?
 Is the application entirely server side, or does it have a clietn side component?
@@ -260,8 +260,67 @@ Example
 The 3. part application never sees our credentilas 
 and the end user never sees the access token.
 
+https://github.com/caseysoftware/oauth-and-openid-connect
+
+
 Postman:
 Access Token
 id_token
 
-TODO Prøv.
+Postman:
+
+Auth Url:          https://xxx/oauth/authorize
+Access Token Url:  https://xxx/oauth/token
+
+# Session 4.3: Using the Authorization Code Grant Type
+
+Before using the following setup, ensure your Auth0 environment is configured as descibed in `other_oauth_server\README.md`. Because this Grant Type includes an interactive step, I recommend you use Postman or another visual client.
+
+### Setting up Postman for Auth Code Flow using Auth0
+
+For the Settings in this section, on your Auth0 Dashboard vist Applications > Applications and your specific application.
+
+0. In the Postman request editor, immediately below the URL box, select Authorization.
+0. For Type, select `OAuth 2.0`
+0. For Auth URL, set it to your Auth0 domain (from the Settings tab) and append `/oauth/authorize`
+0. For Access Token URL, use your Auth0 domain and append `/oauth/access_token`
+0. For Client ID, use your Auth0 Client ID
+0. For Client Secret, use your Auth0 Client Secret
+0. For Scope, set `openid email`
+0. Click "Get New Access Token"
+
+If all goes well, you should see a redirect to your Auth0 login page. Log in with the credentials you created at setup and you should get back an `access_token` and `id_token`. Copy and paste either into jwt.io to see the decoded JWT.
+
+Note: You may see an empty payload for the `access_token` which is okay. It depends on your configuration. The `id_token` will have your email information as specified by the `openid email` scopes. Change this to other OIDC scopes - like `openid profile` - to see how it changes.
+
+
+https://jwt.io
+
+Clear cookies. to see authorization.
+
+Auth-Code and PKCE overview
+===========================
+Singe Page Aps - loads them selves entirely client side in the browser or on a device.
+We could not count on them to keep secrets for us.
+
+No clinet secrets
+No refresh tokens
+RFC 7636 - Proof Key for Code Exchange
+
+Authorization Code Flow with PKCE
+
+It sestores the Application Authetification step rom the original Auto Code flow.
+
+The App uses a PKCE code verifier to generate a challange
+
+Send challange to /authorize
+
+Send authorization code and code verifier to /token
+
+The autho server uses the verifier to regenerate the original challange and compared them.
+
+If they match, we know, that this is the app, that started the process - and atoken is teturned.
+
+We managed to recreate App Authentification, without having to embed secrets in the app.
+
+When should you uses PKCE?
