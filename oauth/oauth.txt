@@ -283,7 +283,7 @@ For the Settings in this section, on your Auth0 Dashboard vist Applications > Ap
 0. In the Postman request editor, immediately below the URL box, select Authorization.
 0. For Type, select `OAuth 2.0`
 0. For Auth URL, set it to your Auth0 domain (from the Settings tab) and append `/oauth/authorize`
-0. For Access Token URL, use your Auth0 domain and append `/oauth/access_token`
+0. For Access Token URL, use your Auth0 domain and append `/oauth/token`
 0. For Client ID, use your Auth0 Client ID
 0. For Client Secret, use your Auth0 Client Secret
 0. For Scope, set `openid email`
@@ -298,10 +298,19 @@ https://jwt.io
 
 Clear cookies. to see authorization.
 
+Authorization Code. Husk. Yderligere 
+====================================
+1. Klik "Autheticate Using Browser" i postman
+2. Kopier Postman Callback url til Auth server "Allowed Callback Urls"
+3. På Auth Server i Advanced setting "Grant Types" skal "Authtification Code" enables.
+4. Make sure your browser allows pop-ups
+
 Auth-Code and PKCE overview
 ===========================
 Singe Page Aps - loads them selves entirely client side in the browser or on a device.
 We could not count on them to keep secrets for us.
+
+Oauth is a framewrok, not a specification. We kan extend it.
 
 No clinet secrets
 No refresh tokens
@@ -324,3 +333,20 @@ If they match, we know, that this is the app, that started the process - and ato
 We managed to recreate App Authentification, without having to embed secrets in the app.
 
 When should you uses PKCE?
+==========================
+You cannot trust a client application to keep secrets for us.
+AppAuch appoiach: https://appauth.io/
+
+https://auth0.com/docs/quickstart/spa/vanillajs/interactive
+
+Example:
+Our application is to be running on localhost:3000
+
+Allowed Callback URL:
+Here is a safe URL, that we plan on redirecting the user to, and there fore the token, after the autentificatin flows.
+
+Allowed Logout URLs:
+After the user logs out, we will redirect him back to this URL.
+
+Allowed Web Origins:
+This is a safe URL, that this flow might start from.
