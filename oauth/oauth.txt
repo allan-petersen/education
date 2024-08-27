@@ -310,7 +310,7 @@ Auth-Code and PKCE overview
 Singe Page Aps - loads them selves entirely client side in the browser or on a device.
 We could not count on them to keep secrets for us.
 
-Oauth is a framewrok, not a specification. We kan extend it.
+Oauth is a framework, not a specification. We kan extend it.
 
 No clinet secrets
 No refresh tokens
@@ -318,7 +318,8 @@ RFC 7636 - Proof Key for Code Exchange
 
 Authorization Code Flow with PKCE
 
-It sestores the Application Authetification step rom the original Auto Code flow.
+It restores the Application Authetification step f
+Security Considerationsrom the original Auto Code flow.
 
 The App uses a PKCE code verifier to generate a challange
 
@@ -326,7 +327,7 @@ Send challange to /authorize
 
 Send authorization code and code verifier to /token
 
-The autho server uses the verifier to regenerate the original challange and compared them.
+The autho server uses the verifier to regenerate the original challange and compares them.
 
 If they match, we know, that this is the app, that started the process - and atoken is teturned.
 
@@ -336,6 +337,12 @@ When should you uses PKCE?
 ==========================
 You cannot trust a client application to keep secrets for us.
 AppAuch appoiach: https://appauth.io/
+
+Do we have a user - yes
+Browser Available - yse
+Server side only - yes.  Use Authorization Code Flow
+Servider side only - no. Use Authorization Code Flow with PKCE.
+
 
 https://auth0.com/docs/quickstart/spa/vanillajs/interactive
 
@@ -350,3 +357,17 @@ After the user logs out, we will redirect him back to this URL.
 
 Allowed Web Origins:
 This is a safe URL, that this flow might start from.
+
+
+Security Considerations
+=======================
+It is only open when we have received the auth code, but not yet used it.
+After the user autenticates, they get that auth code, which the server side app, then exchanges for the access token.
+The auth code can only be used once.
+The user or any other appplication in the browser cannot even see any of the resulting access tokens or refresh tokens.
+Be aware of the users session
+Protect your redirect_uri, which is where the oauh server will send tha auth code
+You must validate your access token, with RFC 7519 or your oauth provider.
+
+5. Grant Type. Resource Owner Code Flow
+=======================================
