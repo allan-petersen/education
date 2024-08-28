@@ -247,7 +247,19 @@ The user never sees the access or refrsh tokens
 
 User get back an auth code from the authorization server
 
-The application uses the auth code and the clinet secret to get an access token (and optionally refresh token)
+The application uses the auth code and the client secret to get an access token (and optionally refresh token)
+
+1. Authorization Code Request to /autorize (client sends)
+2. 302 Redirect to authentification prompt (Authorization server sends)
+3. Authentification and consent (client sends)
+4. Authorization Code response (Authorization server sends)
+5. Authorization Code and Client secret to /token (client sends)
+6. Access token and optionally 
+7.
+8.
+
+
+
 
 When should you use Authorization Code Flow
 ===========================================
@@ -318,8 +330,8 @@ RFC 7636 - Proof Key for Code Exchange
 
 Authorization Code Flow with PKCE
 
-It restores the Application Authetification step f
-Security Considerationsrom the original Auto Code flow.
+It restores the Application Authentification step f
+Security Considerations from the original Auto Code flow.
 
 The App uses a PKCE code verifier to generate a challange
 
@@ -357,6 +369,50 @@ After the user logs out, we will redirect him back to this URL.
 
 Allowed Web Origins:
 This is a safe URL, that this flow might start from.
+
+- **Public Clients**: Use this flow when developing public clients, such as mobile apps, desktop apps, or single-page applications (SPAs), where you cannot securely store a client secret. 
+These applications are considered "public" because they run in environments where keeping secrets secure is not feasible. 
+- **Enhanced Security**: PKCE (Proof Key for Code Exchange) adds an extra layer of security by requiring a dynamically generated code verifier and code challenge. 
+This helps prevent attacks such as 
+, even if the code is intercepted during the exchange process. 
+- **Browser-Based Applications**: If you're developing an application that runs in a web browser and needs to authenticate users, 
+using PKCE with the Authorization Code Flow is a secure choice. 
+
+2. **Authentication**: The client secret is used in conjunction with the client ID to authenticate the client application when it requests an access token from the authorization server. 
+This helps ensure that only authorized applications can obtain access tokens. 
+
+Authorization Code Interception attacks
+=======================================
+An "authorization code interception" attack is a security threat in the OAuth 2.0 authorization process, specifically targeting the Authorization Code Flow. 
+This type of attack occurs when an unauthorized party intercepts the authorization code that is sent from the authorization server to the client application. 
+Here's how it can happen and why it matters:
+
+### How It Happens:
+1. **Redirect URI Manipulation**: An attacker may manipulate the redirect URI to capture the authorization code intended for the legitimate client. 
+This can occur if the client application does not properly validate or restrict redirect URIs.
+
+2. **Network Interception**: If the authorization code is transmitted over an insecure channel (e.g., HTTP instead of HTTPS), 
+an attacker on the same network could intercept the code.
+
+3. **Malicious Apps or Scripts**: An attacker might use malicious apps or scripts to intercept the authorization code,
+ if the client application is running in an insecure environment.
+
+### Why It's a Problem:
+- **Impersonation**: Once an attacker has the authorization code, they can potentially exchange it for an access token at the authorization server, 
+allowing them to impersonate the legitimate client application and access protected resources on behalf of the user.
+
+### Mitigation Strategies:
+- **Use HTTPS**: Always use HTTPS to encrypt communications between the client and the authorization server to prevent interception by network attackers.
+  
+- **PKCE (Proof Key for Code Exchange)**: Implement PKCE, especially for public clients like mobile apps or single-page applications. 
+PKCE adds a layer of security by requiring the client to prove it is the legitimate recipient of the authorization code through a dynamically generated code verifier and code challenge.
+
+- **Strict Redirect URI Validation**: Ensure that the authorization server only redirects authorization codes to pre-registered and validated redirect URIs.
+
+- **Short-lived Codes**: Use short-lived authorization codes that expire quickly, reducing the window of opportunity for an attacker to use an intercepted code.
+
+By implementing these strategies, you can significantly reduce the risk of authorization code interception attacks 
+and protect user data and application integrity.
 
 
 Security Considerations
