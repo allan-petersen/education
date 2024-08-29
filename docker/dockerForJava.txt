@@ -338,19 +338,26 @@ pack build --builder gcr.io/buiidpacks/builder:v1 webapp-ib:buildpack
 
 docker images
 
+Sprog Boot Build plugin
+=======================
+-- Here the application is built on our host machine, not within the image
+./mvnw package spring-boot:buiild image
 
+The Google Jib plugin
+=====================
+./mvnw package -DskipTests jib:build
 
+docker login docker.io
 
+docker images 
+does not find anything. It is not a local image
 
+it is in docker hub
 
+To build a local image do:
+./mvnw package -DskipTests jib:dockerBuild
 
-Sprog Boot Docker Maven and Gradle plugin
-Jib Maven and Gradle plugin
-
-
-
-
-
+Uing jib, you do not need to hve the Docker runtime installed.
 
 
 
