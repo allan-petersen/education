@@ -249,16 +249,17 @@ User get back an auth code from the authorization server
 
 The application uses the auth code and the client secret to get an access token (and optionally refresh token)
 
+Authorizarion Code Flow
+=======================
+
 1. Authorization Code Request to /autorize (client sends)
 2. 302 Redirect to authentification prompt (Authorization server sends)
 3. Authentification and consent (client sends)
 4. Authorization Code response (Authorization server sends)
-5. Authorization Code and Client secret to /token (client sends)
-6. Access token and optionally 
-7.
-8.
-
-
+5. Send Authorization Code and Client secret to /token (client sends)
+6. Access token (and optionally refresh token) (Authorization server sends)
+7. Request with access token to Resource server (Your application)
+8. Response (Your application)
 
 
 When should you use Authorization Code Flow
@@ -345,6 +346,38 @@ If they match, we know, that this is the app, that started the process - and ato
 
 We managed to recreate App Authentification, without having to embed secrets in the app.
 
+Authorization Code Flow with PKCE (RFC 7636)
+============================================
+1. PKCE code verifier and challange generated (Client side) 
+2  Authorization Code Request and code challange to /autorize (client sends)
+3. 302 Redirect to authentification prompt (Authorization server sends)
+4. Authentification and consent (client sends)
+5. Authorization Code response (Authorization server sends)
+6. Send Authorization Code and Code verifier to /token (client sends)
+      The server uses the verifier to regenerate the original challange and compares it to the original (send in step 2).
+7. Eval PKCE code (Authorization server)
+8. Access token (Authorization server sends)
+9. Request with access token to Resource server (Your application)
+10. Response (Your application)
+
+
+In OAuth 2.0 with PKCE (Proof Key for Code Exchange), a "code verifier" is a crucial component used to enhance the security of the authorization code flow. 
+It is a high-entropy cryptographic random string that the client generates at the beginning of the authorization process. 
+The code verifier serves as a secret that is never shared directly with the authorization server during the initial authorization request.
+
+Egentlig i stedet for client secret.
+
+Here are some key points about the code verifier:
+
+1. **Random and Secure**: The code verifier is a random string that should be securely generated to ensure unpredictability. It typically consists of a series of characters that can include letters, numbers, and symbols.
+
+2. **Length and Composition**: According to the PKCE specification, the code verifier should be between 43 and 128 characters long. It must be composed of characters from the unreserved URI characters set, which includes ASCII alphanumeric characters and the following:  `-` ,  `.` ,  `_` ,  `~` .
+
+3. **Role in PKCE**: The code verifier is used to generate the code challenge, which is sent to the authorization server during the initial authorization request. Later, when exchanging the authorization code for an access token, the client sends the code verifier to the authorization server. The server uses it to verify the code challenge and ensure the integrity and authenticity of the request.
+
+By using a code verifier, PKCE provides an additional layer of security, especially for public clients, by protecting against interception attacks in which an attacker might try to exchange an intercepted authorization code for an access token.
+
+
 When should you uses PKCE?
 ==========================
 You cannot trust a client application to keep secrets for us.
@@ -427,3 +460,128 @@ You must validate your access token, with RFC 7519 or your oauth provider.
 
 5. Grant Type. Resource Owner Code Flow
 =======================================
+Resource Owner Password Flow 
+
+
+
+
+
+
+
+
+
+Tokens
+======
+In OAuth 2.0 and OpenID Connect, "access tokens" and "ID tokens" serve different purposes, and it's important to understand their roles in authentication and authorization processes:
+
+### Access Token
+- **Purpose**: An access token is used to authorize access to protected resources on behalf of the user. It is a credential that the client application uses to make API requests to the resource server.
+- **Usage**: When a client application wants to access a user's data from a resource server (like an API), it presents the access token in the request headers. 
+    The resource server validates the token to ensure that the request is authorized.
+- **Content**: Access tokens can contain information about the user and the permissions granted, but the specific content and format depend on the implementation. They are often opaque strings, but they can also be JSON Web Tokens (JWTs) with encoded claims.
+- **Lifespan**: Access tokens are typically short-lived to minimize the risk of misuse if they are intercepted.
+
+### ID Token
+- **Purpose**: An ID token is used to authenticate the user. It is a token that contains information about the user and is issued by the identity provider as part of the OpenID Connect protocol, 
+  which is an identity layer on top of OAuth 2.0.
+- **Usage**: The ID token is intended for the client application to verify the identity of the user who authenticated. 
+    It is not used to access resources or APIs.
+- **Content**: ID tokens are usually JSON Web Tokens (JWTs) that contain claims about the user, such as their unique identifier, name, email, and authentication time. 
+    These claims are digitally signed by the identity provider to ensure their integrity and authenticity.
+- **Lifespan**: ID tokens are typically valid for a short period, just long enough to authenticate the user to the client application.
+
+### Summary
+- **Access Token**: Used for authorizing access to APIs and resources on behalf of the user.
+- **ID Token**: Used for authenticating the user and providing information about their identity to the client application.
+
+These tokens play complementary roles in securing web applications and APIs, with access tokens focusing on authorization and ID tokens on authentication.
+
+Claims
+======
+In OAuth 2.0, a "claim" typically refers to a piece of information asserted about an entity, often a user, in the context of an access token or an ID token. Claims are a fundamental concept in JSON Web Tokens (JWT), which are often used as the format for tokens in OAuth 2.0 and OpenID Connect.
+
+Here are some key points about claims:
+
+1. **Information about the User or Client**: Claims can include various types of information about the user or client, such as the user's name, email address, roles, or any other relevant data.
+
+2. **Standard and Custom Claims**: There are standard claims defined by specifications (such as  `iss`  for issuer,  `sub`  for subject,  `aud`  for audience,  `exp`  for expiration time) and custom claims that can be defined by the application or identity provider to include additional information.
+
+3. **Token Types**:
+   - **Access Token**: In OAuth 2.0, an access token may include claims that specify the permissions or scopes granted to the client, as well as information about the user or client.
+   - **ID Token**: In OpenID Connect, which is an identity layer built on top of OAuth 2.0, the ID token is specifically designed to convey identity information about the user and includes claims such as  `sub`  (subject),  `name` , and  `email` .
+
+4. **Security and Privacy**: Claims need to be carefully managed to ensure security and privacy. Sensitive information should not be exposed unnecessarily, and claims should be signed and optionally encrypted to prevent tampering and unauthorized access.
+
+5. **Usage**: Claims are used by the client application to understand the identity of the user and the permissions granted, allowing it to make authorization decisions and customize the user experience.
+
+Overall, claims are a versatile way to convey information within tokens, enabling secure and efficient communication between identity providers, authorization servers, and client applications.
+
+Sign
+====
+To "digitally sign" a claim means to apply a cryptographic signature to the data, ensuring its authenticity and integrity. 
+This process involves using a cryptographic algorithm to generate a signature based on the content of the claim and a private key. 
+Here’s a breakdown of what this entails:
+
+1. **Authenticity**: A digital signature allows the recipient to verify the identity of the signer. 
+It confirms that the claim was issued by a trusted entity, such as an identity provider or an authorization server.
+
+2. **Integrity**: The digital signature ensures that the claim has not been altered or tampered with since it was signed. 
+If any part of the claim is changed, the signature will no longer be valid.
+
+3. **Verification**: To verify a digitally signed claim, 
+the recipient uses the public key corresponding to the private key used to sign the claim. 
+The verification process checks that the signature matches the claim's content and confirms the signer's identity.
+
+4. **Common Use in Tokens**: In the context of OAuth 2.0 and OpenID Connect, claims are often part of JSON Web Tokens (JWTs). 
+These tokens are typically signed using algorithms like RSA or ECDSA. 
+The signature is part of the token structure, allowing any party with the appropriate public key to verify the token's authenticity and integrity.
+
+5. **Security**: Digital signatures are a fundamental security measure in ensuring that data exchanged between parties in a digital environment is trustworthy. 
+They prevent unauthorized entities from impersonating legitimate issuers or modifying claims without detection.
+
+Overall, digitally signing a claim provides a robust mechanism for ensuring that the information conveyed is both genuine and unchanged, which is crucial in systems that rely on secure and reliable data exchange.
+
+Verify an token
+===============
+Verifying an OAuth 2.0 access token involves several steps to ensure that the token is valid, has not expired, and was issued by a trusted authorization server. Here’s a general approach to verifying an access token:
+
+1. **Token Format**: Determine the format of the access token. Access tokens can be opaque (where the contents are not visible to the client) or structured, such as JSON Web Tokens (JWTs), which are self-contained and include claims about the user and the token itself.
+
+2. **JWT Verification** (if applicable):
+   - **Signature Verification**: If the access token is a JWT, verify the token's signature using the public key of the authorization server. This step ensures that the token was issued by a trusted server and has not been tampered with.
+   - **Claims Verification**: Check the claims within the token, such as  `iss`  (issuer),  `aud`  (audience),  `exp`  (expiration), and any other relevant claims. Ensure that:
+     - The  `iss`  claim matches the expected authorization server.
+     - The  `aud`  claim matches your application or API.
+     - The  `exp`  claim indicates that the token has not expired.
+
+3. **Introspection Endpoint** (for opaque tokens):
+   - If the access token is opaque, you may need to use the token introspection endpoint provided by the authorization server. This endpoint allows you to send the access token and receive information about its validity, associated user, and any scopes or permissions granted.
+
+4. **Scope and Permissions**: Verify that the token includes the necessary scopes or permissions required for the requested resource or operation.
+
+5. **Revocation Check**: Ensure that the token has not been revoked. This may involve checking with the authorization server or maintaining a list of revoked tokens if the server provides such a capability.
+
+6. **Use a Library**: Consider using a library or SDK provided by the authorization server or a third party to handle token verification. These libraries can simplify the process and ensure compliance with best practices.
+
+By following these steps, you can ensure that an access token is valid and authorized to access the resources or perform the actions requested. The specific implementation details can vary depending on the OAuth 2.0 provider and the token format used.
+
+
+RFC 7519
+========
+RFC 7519 is the specification for JSON Web Tokens (JWT), which are often used in OAuth 2.0 for representing access tokens and ID tokens. 
+JWTs are a compact, URL-safe means of representing claims to be transferred between two parties. Here's how RFC 7519 is used in the context of OAuth 2.0:
+
+1. **Token Format**: JWT defines a standardized format for tokens that includes three parts: a header, a payload, and a signature, all encoded in Base64URL and separated by periods.
+
+2. **Claims**: The payload of a JWT contains claims, which are statements about an entity (typically, the user) and additional data. 
+These claims can include standard claims like  `iss`  (issuer),  `sub`  (subject),  `aud`  (audience),  `exp`  (expiration), and custom claims defined by the application.
+
+3. **Signature**: JWTs are often signed using a cryptographic algorithm specified in the header (e.g., HS256 or RS256). 
+The signature ensures the integrity and authenticity of the token, confirming that it was issued by a trusted source and has not been tampered with.
+
+4. **Self-Contained**: Because JWTs are self-contained, they can include all the information needed to authenticate a user and authorize access without needing to query a database or another service.
+
+5. **Interoperability**: RFC 7519 provides a standardized way to encode claims, making JWTs widely interoperable across different platforms and services that support OAuth 2.0.
+
+In OAuth 2.0, JWTs are commonly used as access tokens or ID tokens in OpenID Connect, providing a secure and efficient way to transmit claims between parties. 
+By following RFC 7519, developers can ensure that their implementation of JWTs is consistent with industry standards, enhancing security and compatibility.
