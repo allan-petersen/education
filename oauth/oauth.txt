@@ -461,8 +461,16 @@ You must validate your access token, with RFC 7519 or your oauth provider.
 5. Grant Type. Resource Owner Code Flow
 =======================================
 Resource Owner Password Flow 
+============================
+1. Authenticates (User sends to client) - Wait What does that mean. The app as your credential!
+2. Access token request to /token (client sends)
+3. Access token (and optionally refresh token) (Authorization server sends)
+4. Request with access token to Resource server (Your application)
+5. Response (Your application)
 
+Never use it - except to bridge legacy systems to Oauth.
 
+TODO
 
 
 
