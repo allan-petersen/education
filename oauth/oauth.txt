@@ -1,3 +1,12 @@
+Graunt types:
+
+1. Authorization Code
+2. Authirization Code with PKCE
+3. Resource Owner Password
+4. Client Credential (backend)
+5. Device type Grant
+
+
 OICD = OpenID Connect
 
 An oAuth Server
@@ -474,8 +483,71 @@ TODO
 
 
 
+Grant type Client Credential (no user - but backend service)
+======================================
+You will never use it for Open Id Connect
 
 
+Grant type Client Credential Flow
+=================================
+1. Access token request to /token (client system sends)
+   - using clientId and clientSecret. (These are the applications credentials)
+2. Access token (and optionally refresh token) (Authorization server sends)
+3. Request with access token to Resource server (Your application)
+4. Response (Your application)
+
+Benefits:
+
+Rotating credentials.
+Granular permissions by scope
+
+Alternative: Use API Keys
+
+Benefits of OAuth over API Keys
+1. Simplifies with consistent interface
+2. Credential rotation, scopes an better tools
+3. Fever components and implementations overall.
+
+The client secret is a passwaord (the systems password)
+
+curl -X "POST" "https://dev-cohwjw0vlospxg1v.us.auth0.com/oauth/token" \
+	-H "Content-Type: application/x-www-form-urlencoded" \
+	-H "Accept: 1.0" \
+	--data-urlencode "grant_type=client_credentials" \
+	--data-urlencode "client_id=MvLVZSH5k6TxOaDHIHLltnnAoW9FKJ5d" \
+	--data-urlencode "client_secret=BON9hb5fUf1ESgAf6w6n4JpcnxLl8yifer84ibOFmhBKKRXBYIdbtmR-CwYuZwg8" \
+	--data-urlencode "audience=linkedin-learning-api"
+
+Security Considerations
+=======================
+Use TLS
+The client secret is acredaentail -protect it
+Validate the access token
+Protect the access token
+Log and monitor the system
+Client Credential flow is not necessarily for all devices.
+Not on IOT devices. 
+
+
+In all the other Oauth flows, the applications sends the user to the authorization server or identitiprovider to autenticate and authorize the application
+
+This flow() captures the users credentials in the application itself, and sends them to the server on behalf of the user behind the scenes.
+
+This mean, that the application developer has your credentials.
+
+Your user is giving their credentails to the application.
+Do we want to train our uses to put their credentails anywhere
+Do we trust the applications and all the developers.
+The requested scopes will apply to the access token, and limit the users overall authorizations
+Scopes don't linit access here
+Revoking the token doesn't help either
+
+The only Valid Use Case:
+"Wrapping" legacy systems in an Oauth ibterface to bring them under the saeme security practices.
+
+Grant Type. Device type (Browser less systems)
+==============================================
+TODO
 
 
 Tokens
@@ -593,3 +665,15 @@ The signature ensures the integrity and authenticity of the token, confirming th
 
 In OAuth 2.0, JWTs are commonly used as access tokens or ID tokens in OpenID Connect, providing a secure and efficient way to transmit claims between parties. 
 By following RFC 7519, developers can ensure that their implementation of JWTs is consistent with industry standards, enhancing security and compatibility.
+
+
+PHP Server remarks
+==================
+## Caveats and Warnings
+
+0. Our only user is hardcoded in `examples\Repositories\UserRepository.php` on line 27. 
+In a real implementation, that method would call a database or other user store for password verification.
+0. Our only OAuth Client is hardcoded in `examples\Repositories\ClientRepository.php` on line 42. 
+In a real implementation, that method would call a database or other list of OAuth clients to validate the client_id and client_secret.
+0. Our allowed scopes are hardcoded in `examples\Repositories\ScopeRepository.php` starting on line 21. 
+In a real implementation, that method would call a database or other list of scopes to grant.
