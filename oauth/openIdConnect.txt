@@ -1,0 +1,24 @@
+In OAuth 2.0, the  `openid`  scope is specifically related to OpenID Connect (OIDC), which is an identity layer built on top of the OAuth 2.0 protocol. The  `openid`  scope is a fundamental part of OIDC and is required for any request that aims to authenticate a user and retrieve their identity information.
+
+### Key Points about the  `openid`  Scope:
+
+1. **Identity Authentication**: When the  `openid`  scope is included in an OAuth 2.0 authorization request, it indicates that the client application is requesting to authenticate the user and obtain an ID token. This ID token contains information about the user, such as their identity and authentication details.
+
+2. **ID Token**: The main purpose of the  `openid`  scope is to trigger the issuance of an ID token, which is a JWT (JSON Web Token) that contains claims about the authenticated user. These claims can include the user's unique identifier ( `sub` ), authentication time ( `auth_time` ), and potentially other profile information, depending on additional scopes requested.
+
+3. **User Information**: While the  `openid`  scope itself is primarily for obtaining the ID token, additional scopes such as  `profile` ,  `email` , and  `address`  can be requested to obtain more detailed user information from the UserInfo endpoint.
+
+4. **Authorization and Authentication**: OAuth 2.0 is primarily an authorization protocol, while OpenID Connect adds authentication capabilities. The  `openid`  scope bridges this gap by enabling applications to verify user identity in addition to authorizing access to resources.
+
+5. **Mandatory for OIDC**: The  `openid`  scope is mandatory in any OpenID Connect flow. Without it, the request will be treated as a standard OAuth 2.0 request without the identity component.
+
+### Example Usage
+
+When initiating an OpenID Connect authentication request, the  `openid`  scope is included alongside other desired scopes:
+https://authorization-server.com/auth?response_type=code
+&client_id=your_client_id
+&redirect_uri=https://yourapp.com/callback
+&scope=openid profile email
+In this example, the request asks for the  `openid`  scope to obtain the ID token, along with  `profile`  and  `email`  scopes to access additional user information.
+
+By including the  `openid`  scope, applications can leverage OpenID Connect to authenticate users and retrieve identity information securely.
