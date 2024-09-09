@@ -22,3 +22,51 @@ https://authorization-server.com/auth?response_type=code
 In this example, the request asks for the  `openid`  scope to obtain the ID token, along with  `profile`  and  `email`  scopes to access additional user information.
 
 By including the  `openid`  scope, applications can leverage OpenID Connect to authenticate users and retrieve identity information securely.
+
+OpenID vs. OAuth2
+=================
+While OAuth 2.0 is about resource access and sharing, OIDC is about user authentication. 
+Its purpose is to give you one login for multiple sites. 
+Each time you need to log in to a website using OIDC, you are redirected to your OpenID site where you log in, and then taken back to the website. 
+For example, if you chose to sign in to Auth0 using your Google account then you used OIDC. 
+Once you successfully authenticate with Google and authorize Auth0 to access your information, 
+Google sends information back to Auth0 about the user and the authentication performed. 
+This information is returned in a JWT. You'll receive an access token and if requested, an ID token.
+
+OpenID Connect explained
+========================
+https://connect2id.com/learn/openid-connect
+
+OAuth 2.0 also means having one protocol for authentication and authorisation (obtaining access tokens).
+
+Embedded web views are not be trusted, as there is nothing to prevent the app from snooping on the user password. 
+User authentication must always occur in a trusted context that is separate from the app (e.g. the browser).
+
+
+ID tokens are requested via the OAuth 2.0 protocol, which has been a tremendous success on its own. 
+OAuth was originally devised as a simple authorisation mechanism for apps to obtain access tokens for web APIs or other protected resources. 
+It has flows designed for all application types: traditional server-based web applications, browser (JavaScript) only apps, and native / mobile apps.
+
+An ID token can be put to uses beyond basic sign-in:
+
+The ID token may be exchanged for an access token at the token endpoint of an OAuth 2.0 authorisation server (RFC 8693). 
+
+Example
+=======
+The OpenID authentication request is essentially an OAuth 2.0 authorisation request to access the user's identity, 
+indicated by an openid value in the scope parameter.
+
+At the OP, the user will typically be authenticated by checking if they have a valid session (established by a browser cookie), 
+and in the absence of that, by prompting the user to login. After that the user will typically be asked whether they agree to sign into the RP.
+
+The authorisation code is an intermediate credential.
+
+The client ID and secret are passed via the Authorization header. 
+Apart from HTTP basic authentication 
+OpenID Connect also supports authentication with a JWT, 
+which doesn't expose the client credentials with the token request, has expiration, and thus provides stronger security.
+
+The ID token is a JWT and must be properly validated by the RP before it can be accepted.
+
+(a client, called Relying Party (RP)) 
+
