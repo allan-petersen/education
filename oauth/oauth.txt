@@ -547,7 +547,16 @@ The only Valid Use Case:
 
 Grant Type. Device type (Browser less systems)
 ==============================================
+Do we have a user involved: Yes. (This also also means the we can use OpenIdConnect in addition to regular oauth (authozization))
+Do we have a browser available: No (or the browser does not supports redirects).
+
+It is not secuere to type a password in the airport for instance.
+
+Flow:
+1. The device request a device code. Make a POST request to the device code endpoint
+
 TODO
+
 
 
 Tokens
