@@ -554,9 +554,23 @@ It is not secuere to type a password in the airport for instance.
 
 Flow:
 1. The device request a device code. Make a POST request to the device code endpoint
+   The response code contains:
+   a .The device code is returned. This is effectiviely the device identity.
+   b. The user_code
+   c. The verification_uri. This is where the user will actually present their user code after authentification.
+   
+2. Tell the user to enter the user_code
+   You will have to present the user_code to the user. Just add it to the verification URL is the easiest.
+   We can present that entire url as a QR code, that the user just scans
 
-TODO
+   The device uses the interval field is used to determine how often to pull the autorization server to see, if the user has completed their process.
+   
+3. Poll the token endpoint.   
+   The device gets back an access and a refresh token.
+   
+Now the divcie can use this access token to make API requests on behalf of the user.
 
+TODO.
 
 
 Tokens
