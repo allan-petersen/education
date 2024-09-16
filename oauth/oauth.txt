@@ -137,7 +137,6 @@ The endpont that applications use to retrieve the configuration information fir 
 
 /introspect
 The endpoint that applications 
-TODO
 
 /revoke
 
@@ -479,8 +478,6 @@ Resource Owner Password Flow
 
 Never use it - except to bridge legacy systems to Oauth.
 
-TODO
-
 
 
 Grant type Client Credential (no user - but backend service)
@@ -568,7 +565,17 @@ Flow:
 3. Poll the token endpoint.   
    The device gets back an access and a refresh token.
    
-Now the divcie can use this access token to make API requests on behalf of the user.
+Now the device can use this access token to make API requests on behalf of the user.
+
+You will probably use a similar process for setting up multi factor authenfication with you bank or even GitHub.
+
+When you set up an autentification app, your are presented with a QR code, which you scan.
+The you provide the generated number back to the web site, which allows you to log in.
+It is not quite the divice gtant ype, but is is pretty close.
+
+Security Considerations
+=======================
+
 
 TODO.
 
