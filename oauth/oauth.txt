@@ -809,6 +809,50 @@ In the context of JWT validation using the  `java-jwt`  library, let's break dow
 
 In summary,  `.withIssuer()`  is used to validate the issuer of the JWT, while the private key is used by the issuer to sign the token. The resource server uses the public key to verify the token's signature, ensuring its authenticity and integrity.
 
+Token Validation Code
+=====================
+import com.auth0.jwt.JWT;
+   import com.auth0.jwt.algorithms.Algorithm;
+   import com.auth0.jwt.interfaces.DecodedJWT;
+   import com.auth0.jwt.interfaces.JWTVerifier;
+
+   import java.security.interfaces.RSAPublicKey;
+   import java.security.PublicKey;
+   import java.security.KeyFactory;
+   import java.security.spec.X509EncodedKeySpec;
+   import java.util.Base64;
+
+   public class JWTValidator {
+
+       public static void main(String[] args) {
+           String token = "your_jwt_token_here";
+           String publicKeyPEM = "your_public_key_here";
+
+           try {
+               // Convert PEM string to PublicKey
+               byte[] decoded = Base64.getDecoder().decode(publicKeyPEM);
+               X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
+               KeyFactory kf = KeyFactory.getInstance("RSA");
+               RSAPublicKey publicKey = (RSAPublicKey) kf.generatePublic(spec);
+
+               // Create JWT Verifier
+               Algorithm algorithm = Algorithm.RSA256(publicKey, null);
+               JWTVerifier verifier = JWT.require(algorithm)
+                       .withIssuer("https://your-issuer.com")
+                       .build();
+
+               // Verify the token
+               DecodedJWT jwt = verifier.verify(token);
+
+               // Access JWT claims
+               String subject = jwt.getSubject();
+               System.out.println("Token is valid. Subject: " + subject);
+
+           } catch (Exception e) {
+               System.out.println("Invalid token: " + e.getMessage());
+           }
+       }
+   }
 
 
 TODO: Token validation.
