@@ -577,7 +577,24 @@ Security Considerations
 =======================
 
 
-TODO.
+
+State of the Industry
+=====================
+Always use SSL/TLS and a trusted certificate authoroty.
+
+Client Application or device
+Ptentially an API Gateway
+Authorization Server (OKTA)
+Resource server (api) - The thing we are protecting - The resource server or the API itself.
+
+The resource server should validate every access token, it receives and respect the expiration time.
+Confirm that the token grants the authorizations , that match the action requested.
+
+
+ 
+
+
+
 
 
 Tokens
@@ -707,3 +724,96 @@ In a real implementation, that method would call a database or other user store 
 In a real implementation, that method would call a database or other list of OAuth clients to validate the client_id and client_secret.
 0. Our allowed scopes are hardcoded in `examples\Repositories\ScopeRepository.php` starting on line 21. 
 In a real implementation, that method would call a database or other list of scopes to grant.
+
+Token validation
+================
+using oauth2, how do you validate an access token on the resource server?
+
+To validate an access token on a resource server using OAuth2, you typically follow one of these approaches:
+
+### 1. Introspection Endpoint
+Many OAuth2 providers offer an introspection endpoint, which allows a resource server to query the authorization server to validate an access token. Here's a general process:
+
+1. **Send a Request to the Introspection Endpoint**: The resource server sends the access token to the introspection endpoint provided by the authorization server. This request usually includes client authentication (client ID and secret).
+
+2. **Receive Token Information**: The authorization server responds with a JSON object containing information about the token, such as whether it is active, its scope, expiration, and the associated user or client.
+
+3. **Validate the Token**: The resource server checks if the token is active and has the necessary scope for the requested resource.
+
+### Example Request
+http
+POST /introspect HTTP/1.1
+Host: authorization-server.com
+Authorization: Basic base64(client_id:client_secret)
+Content-Type: application/x-www-form-urlencoded
+
+token=access_token_here
+### Example Response
+{
+  "active": true,
+  "scope": "read write",
+  "client_id": "client123",
+  "username": "user1",
+  "exp": 1622499222
+}
+### 2. Self-Contained Tokens (JWT)
+If the access token is a JSON Web Token (JWT), it can be validated locally by the resource server without needing to communicate with the authorization server:
+
+1. **Decode the JWT**: Extract the header, payload, and signature from the JWT.
+
+2. **Verify the Signature**: Use the public key provided by the authorization server to verify the token's signature, ensuring it was issued by a trusted source.
+
+3. **Check Claims**: Validate the claims within the token, such as  `exp`  (expiration),  `iss`  (issuer),  `aud`  (audience), and any custom claims specific to your application.
+
+### Example JWT Header
+{
+  "alg": "RS256",
+  "typ": "JWT"
+}
+### Example JWT Payload
+{
+  "sub": "user1",
+  "scope": "read write",
+  "iss": "https://authorization-server.com",
+  "exp": 1622499222,
+  "aud": "resource-server"
+}
+### Best Practices
+- **Use HTTPS**: Always use HTTPS to protect sensitive information in transit.
+- **Cache Introspection Responses**: To improve performance, cache introspection responses when possible, but be mindful of token expiration.
+- **Regularly Update Public Keys**: If using JWTs, regularly update the public keys used for signature verification to handle key rotation.
+
+Choose the method that best fits your architecture and security requirements. If using a third-party OAuth2 provider, refer to their documentation for specific details on token validation.
+
+
+Token validation details
+========================
+
+In the context of JWT validation using the  `java-jwt`  library, let's break down the two aspects you're asking about:  `.withIssuer("https://your-issuer.com")`  and the use of the private key.
+
+### 1.  `.withIssuer("https://your-issuer.com")` 
+
+- **Purpose**: The  `.withIssuer("https://your-issuer.com")`  method is used to specify the expected issuer of the JWT. The issuer ( `iss`  claim) is a string or URI that uniquely identifies the party that issued the JWT. This is typically the authorization server or identity provider.
+
+- **Validation**: When you call  `.withIssuer()` , the library will check the  `iss`  claim in the JWT against the value you provide. If they don't match, the verification will fail. This ensures that the token was issued by a trusted source.
+
+- **Importance**: Validating the issuer is crucial for security, as it helps prevent tokens from unauthorized or malicious issuers from being accepted by your application.
+
+### 2. Use of the Private Key
+
+- **Private Key Role**: The private key is not used in the resource server during token validation. Instead, it is used by the authorization server to sign the JWT. The signing process ensures that the token cannot be altered without invalidating the signature.
+
+- **Public Key Use**: The public key, which corresponds to the private key, is used in the resource server to verify the JWT's signature. This is why, in the example, we use  `Algorithm.RSA256(publicKey, null)` . The public key allows you to verify that the token was indeed signed by the expected issuer's private key.
+
+- **Security**: The separation of private and public keys is a fundamental aspect of asymmetric cryptography. The private key is kept secure by the issuer (authorization server), while the public key is distributed to resource servers to verify tokens.
+
+In summary,  `.withIssuer()`  is used to validate the issuer of the JWT, while the private key is used by the issuer to sign the token. The resource server uses the public key to verify the token's signature, ensuring its authenticity and integrity.
+
+
+
+TODO: Token validation.
+
+
+
+
+
