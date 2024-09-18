@@ -855,9 +855,10 @@ import com.auth0.jwt.JWT;
    }
 
 
-TODO: Token validation.
+Token validation.
+=================
+RFC 7519
 
-
-
-
+JWT - JWS (JSON  Web Signature). RFC 7515
+JWT - JWE (JSON Web Encryption). RFC 7516
 
