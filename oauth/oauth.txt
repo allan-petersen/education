@@ -575,22 +575,41 @@ It is not quite the divice gtant ype, but is is pretty close.
 
 Security Considerations
 =======================
+Always use SSL/TLS
+Use a trusted certificate authorothy.
 
-
-
-State of the Industry
-=====================
+OAuth Recommended Practices
+===========================
 Always use SSL/TLS and a trusted certificate authoroty.
 
 Client Application or device
-Ptentially an API Gateway
+	Chose the right grant type	
+	Use SSL
+	Validate your tokens
+	Secure your tokens
+	
+
+Potentially an API Gateway
+
+
 Authorization Server (OKTA)
+
 Resource server (api) - The thing we are protecting - The resource server or the API itself.
-
 The resource server should validate every access token, it receives and respect the expiration time.
-Confirm that the token grants the authorizations , that match the action requested.
+	If you validate locally, you will not know, if the authrization server has revoked it.
+	Remote validation adds latency to rquests.
+	
+	
 
 
+
+Confirm that the token grants the authorizations, that match the action requested.
+
+
+TODO
+
+State of the Industry
+=====================
  
 
 
@@ -803,11 +822,15 @@ In the context of JWT validation using the  `java-jwt`  library, let's break dow
 
 - **Private Key Role**: The private key is not used in the resource server during token validation. Instead, it is used by the authorization server to sign the JWT. The signing process ensures that the token cannot be altered without invalidating the signature.
 
-- **Public Key Use**: The public key, which corresponds to the private key, is used in the resource server to verify the JWT's signature. This is why, in the example, we use  `Algorithm.RSA256(publicKey, null)` . The public key allows you to verify that the token was indeed signed by the expected issuer's private key.
+- **Public Key Use**: The public key, which corresponds to the private key, is used in the resource server to verify the JWT's signature. This is why, in the example, we use  `Algorithm.RSA256(publicKey, null)` . 
 
-- **Security**: The separation of private and public keys is a fundamental aspect of asymmetric cryptography. The private key is kept secure by the issuer (authorization server), while the public key is distributed to resource servers to verify tokens.
+The public key allows you to verify that the token was indeed signed by the expected issuer's private key.
 
-In summary,  `.withIssuer()`  is used to validate the issuer of the JWT, while the private key is used by the issuer to sign the token. The resource server uses the public key to verify the token's signature, ensuring its authenticity and integrity.
+- **Security**: The separation of private and public keys is a fundamental aspect of asymmetric cryptography. The private key is kept secure by the issuer (authorization server), 
+while the public key is distributed to resource servers to verify tokens.
+
+In summary,  `.withIssuer()`  is used to validate the issuer of the JWT, while the private key is used by the issuer to sign the token. 
+The resource server uses the public key to verify the token's signature, ensuring its authenticity and integrity.
 
 Token Validation Code
 =====================
@@ -853,6 +876,87 @@ import com.auth0.jwt.JWT;
            }
        }
    }
+
+Example 2
+=========
+Verify the signature of an access token on a resource server using OAuth 2.0, you typically follow these general steps. The exact implementation may vary depending on the OAuth 2.0 provider (e.g., Google, Auth0, Okta) and the type of token (e.g., JWT): 
+ 
+1. **Obtain the Public Key:** 
+   - Most OAuth 2.0 providers expose a URL where you can fetch their public keys. This is often a JSON Web Key Set (JWKS) endpoint. 
+   - Retrieve the public key that corresponds to the key ID ( kid ) in the token's header. 
+ 
+2. **Parse the Token:** 
+   - Decode the access token. If it's a JWT, it will consist of three parts: header, payload, and signature. 
+   - Extract the header and payload without verifying the signature initially to obtain the  kid . 
+ 
+3. **Verify the Signature:** 
+   - Use the public key obtained from the JWKS to verify the signature of the token. 
+   - Ensure you use the correct algorithm specified in the token's header (e.g.,  RS256 ). 
+ 
+4. **Validate the Claims:** 
+   - Check the token's claims (e.g.,  iss ,  exp ,  aud ) to ensure they match your expectations. 
+   - Verify that the token has not expired and is intended for your resource. 
+ 
+5. **Implement Error Handling:** 
+   - Handle cases where the token is invalid, expired, or the signature verification fails. 
+ 
+import com.auth0.jwk.Jwk;
+import com.auth0.jwk.JwkProvider;
+import com.auth0.jwk.JwkProviderBuilder;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.JWTVerifier;
+
+import java.net.URL;
+import java.security.interfaces.RSAPublicKey;
+import java.util.concurrent.TimeUnit;
+
+public class TokenVerifier {
+
+    public static DecodedJWT verifyToken(String token, String jwksUrl, String audience, String issuer) throws Exception {
+        // Create a JWK Provider for fetching the public keys
+        JwkProvider provider = new JwkProviderBuilder(new URL(jwksUrl))
+                .cached(10, 24, TimeUnit.HOURS)  // Cache up to 10 keys for 24 hours
+                .rateLimited(10, 1, TimeUnit.MINUTES)  // Limit to 10 requests per minute
+                .build();
+
+        // Decode the token to get the 'kid' from the header
+        DecodedJWT jwt = JWT.decode(token);
+        String kid = jwt.getKeyId();
+
+        // Fetch the JWK using the kid
+        Jwk jwk = provider.get(kid);
+        RSAPublicKey publicKey = (RSAPublicKey) jwk.getPublicKey();
+
+        // Create a verifier with the public key, audience, and issuer
+        Algorithm algorithm = Algorithm.RSA256(publicKey, null);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withAudience(audience)
+                .withIssuer(issuer)
+                .build();
+
+        // Verify the token
+        return verifier.verify(token);
+    }
+
+    public static void main(String[] args) {
+        String accessToken = "your_access_token_here";
+        String jwksUrl = "https://your-oauth-provider.com/.well-known/jwks.json";
+        String audience = "your-audience";
+        String issuer = "https://your-oauth-provider.com/";
+
+        try {
+            DecodedJWT decodedToken = verifyToken(accessToken, jwksUrl, audience, issuer);
+            System.out.println("Token is valid: " + decodedToken.getPayload());
+        } catch (JWTVerificationException e) {
+            System.out.println("Token verification failed: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+    }
+}
 
 
 Token validation.
