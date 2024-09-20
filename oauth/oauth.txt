@@ -605,12 +605,34 @@ The resource server should validate every access token, it receives and respect 
 
 Confirm that the token grants the authorizations, that match the action requested.
 
-
-TODO
-
 State of the Industry
 =====================
- 
+OAuth Extensions
+
+RFC 6749 The OAuth 2.0 Authorization Framework
+RFC 7519 JSON Web Token (JWT)
+RFC 6750 The OAuth 2.0 Authorization Framework: Bearer Token Usage. Bearer tokens in the authorization header. To pass tokens around securely. Tkone should not be passed in the URL.
+RFC 7636 Proof Key for Code Exchange by OAuth Public Clients (Open Id connect)
+(RFC 8628 OAuth 2.0 Device Authorization Grant)
+RFC 7516 JSON Web Encryption (JWE). Pass sensitive information safely (healthcare and banking systems).
+RFC 7662 OAuth 2.0 Token Introspection. Usethe authorization server to check if a token is invalid.
+RFC 7009  OAuth 2.0 Token Revocation
+
+// App support
+RFC 7636 Proof Key for Code Exchange by OAuth Public Clients. Autorization code flow with PKCE. Better support for native apps and single page apps.
+RFC 8628 OAuth 2.0 Device Authorization Grant
+
+// 
+RFC 7591 OAuth 2.0 Dynamic Client Registration Protocol
+RFC 7592  OAuth 2.0 Dynamic Client Registration Management Protocol
+
+RFC 8414  OAuth 2.0 Authorization Server Metadata
+
+
+
+
+
+TODO 
 
 
 
