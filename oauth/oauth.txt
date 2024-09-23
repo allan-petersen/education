@@ -628,6 +628,16 @@ RFC 7592  OAuth 2.0 Dynamic Client Registration Management Protocol
 
 RFC 8414  OAuth 2.0 Authorization Server Metadata
 
+Indystry-specific Oauth Extensions
+==================================
+SMART on FHIR
+
+Next step
+=========
+Book: OAuth 2.0 Simplified by Aaron Pareecki.
+oahth.com (online version of the book).
+Do not build it yourself.
+https://s/www.aoth.com/oauth2-server/map-oauth-2-0-specs
 
 
 
