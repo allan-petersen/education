@@ -1,0 +1,31 @@
+Single Sign ON
+==============
+
+Token request to the Identity Provider
+
+The confirmed token follows the user across 
+services taht accept token forwarding.
+
+Trusted relationship between the service provdier and the identity provider
+
+Federation
+==========
+A collection of domains (or service providers) with established trust between one another, following standards.
+
+Single sign-on (SSO9 is part of the federation framework
+
+3 protocols used in federation
+==============================
+SAML - Security Assertion Markup language
+Passes authentication between an identity provder and a service provider. 
+Mostly used in Web browsers
+XML
+
+Oauth 2.0
+Requests authentication without sharing passwords.
+
+
+OpenId Connnect (OIDC)
+
+
+
