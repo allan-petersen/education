@@ -1,0 +1,32 @@
+https://medium.com/@toando.coffee/spring-boot-starters-auto-configuration-and-properties-in-spring-ai-fe03590f11ea
+
+Starter
+=======
+In Spring Boot, a starter is a pre-configured, ready-to-use set of dependencies,
+that simplifies the inclusion of specific functionalities or libraries in your Spring Boot application.
+
+Auto-configuration
+==================
+Auto-configuration in Spring Boot is a feature that automatically configures the Spring application context,
+based on the dependencies present in the classpath.
+Look for a class with a name following the pattern “xxxAutoConfiguration,” where “xxx” corresponds to the module you are interested in
+
+There are 2 most popular conditions 
+@ConditionalOnClass and @ConditionalOnProperty. 
+They are commonly used in auto-configuration classes to conditionally enable or disable certain configurations
+based on the presence of classes or properties.
+
+
+
+
+
+Proxy Bean Methods
+==================
+https://www.danvega.dev/blog/spring-proxy-bean-methods
+
+
+SFFEAT0031024
+https://medium.com/javarevisited/spring-boot-autoconfiguration-and-how-to-create-your-own-ddc16120e4db
+https://shahbazkhan1003.medium.com/custom-spring-boot-configuration-with-annotation-41dab05b84b0
+https://reflectoring.io/spring-boot-testconfiguration/
+
