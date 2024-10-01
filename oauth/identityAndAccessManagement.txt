@@ -1,3 +1,6 @@
+A.Authentication
+================
+
 Single Sign ON
 ==============
 
@@ -24,8 +27,25 @@ XML
 Oauth 2.0
 Requests authentication without sharing passwords.
 
+Login via Facebook account. Facebook issues a token that can be use in to another web site.
 
 OpenId Connnect (OIDC)
+======================
+Request autehntication wirh additional user details.
+Extends the token protocol from oauth.
+
+Oath does not include any information that is identifieable in its token.
+OIDC allows for sharing account data from one appæication to another.
+
+AirBnB (example) may request to have the users profile and email adrees iformation in addition to use the toke to validate the users identifity.
 
 
+Federation (SSO is the most commonly used approach to federation) can create a simple user experience by
+sharing identity validation amongs a group of trusted service providers
 
+
+B. Authorization
+================
+Least priviledge
+
+TODO
