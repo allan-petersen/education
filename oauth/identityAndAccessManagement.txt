@@ -48,4 +48,37 @@ B. Authorization
 ================
 Least priviledge
 
-TODO
+Provisioning  = proper access
+
+Identity lifecycle
+
+Zero trust
+==========
+No one is trusted
+Verification is required for access.
+
+Role Mining
+===========
+
+Passwords
+=========
+
+Password less
+=============
+Biometrics
+Authenticator application
+Security keys. Fido2 Keys?
+
+Biometrics
+During registrato you create a device-spcific private key using biometrics or pin.
+The private key is held onyour comnputer and only there.
+
+See NIST SP 800-63B Rev.3
+
+https://lnkd.in/eQdnXhTU
+
+Start small, do not start to boil the ocean.
+
+
+
+
