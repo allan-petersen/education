@@ -1,0 +1,69 @@
+
+HPPTie
+curl
+
+PostGress
+========
+=
+docker ps
+docker exec -it pg-docker /bin/bash
+
+psql -d local postgres
+
+select *
+from lil.rooms
+
+The part  -v "$HOME"/.local/docker//lib/postgresql/data postgres  in the Docker command is using the volume (-v) flag to create a persistent storage for the PostgreSQL data. Let's break it down: 
+ 
+1.  -v  is the flag for creating a volume. 
+ 
+2.  "$HOME"/.local/docker/postgresql/data  is the path on your host machine where the data will be stored.  $HOME  is an environment variable that typically points to the user's home directory. 
+ 
+3.  :  separates the host path from the container path. 
+ 
+4.  /var/lib/postgresql/data  is the path inside the Docker container where PostgreSQL stores its data by default. 
+ 
+5.  postgres  at the end specifies the image to use for creating the container. 
+ 
+This volume mapping ensures that the PostgreSQL data is stored persistently on your host machine, rather than being lost when the container is removed. It allows you to: 
+ 
+1. Preserve your database data between container restarts or removals. 
+2. Easily backup your data by accessing the files in the specified host directory. 
+3. Share the same data between multiple containers if needed. 
+ 
+This setup provides data persistence and easier management of your PostgreSQL database when using Docker.
+
+DRY - Do not repeat yourself
+
+Introduction to Spring
+======================
+Spring beans: POJOs configured in the application context.
+
+Data transfer objects (DTOs):
+JavaBeans used to move state between layers.
+
+Inversion of control (IoC)
+Configuration is building the IoC container.
+IoC provides the mechanism of dependency injection.
+Allowing a shift in object creation.
+The application context wraps the Bean Factory which serves the beans to the runtime of the application.
+Sprin Boot provides auto-configuration of the ApplicationContext, 
+based on the precense or absence of classes among other conditionals
+
+Introduction to Spring Boot
+===========================
+Embedded Apache Tomcat (or others).
+Auto-configuration of the ApplicationContext
+Automatic Servlet
+
+
+
+
+
+
+
+
+Recommended course.
+Spring Framework in Depth
+
+
