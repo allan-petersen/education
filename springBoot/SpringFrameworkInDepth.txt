@@ -1,0 +1,14 @@
+Inversion of Control (IoC)
+==========================
+Container maintains your class dependencies.
+Objects  are injected at runtime or startup time.
+An object accepts the dependencies for cunstruction instead of constructing them (or though setter injection)
+If your class cannot operate without a dependency, then this dependency should be injected via construtors.
+If your class can threat thedependecy as optional or can accept multiple but variable concrete instances of the denpendency, 
+then it can be injected via setter injection.
+
+This allows interfaces to be dependencies instead of concreate objects.
+
+The Application Context
+=======================
+The Application Context encapsulates the Beanfactory
