@@ -54,7 +54,37 @@ Introduction to Spring Boot
 ===========================
 Embedded Apache Tomcat (or others).
 Auto-configuration of the ApplicationContext
-Automatic Servlet
+Automatic Servlet mappings
+Automatic Controller mapping.
+
+
+Annotations
+===========
+Metadata for your code
+Often the are used for compiler or runtime instructions.
+Greate leverage point for pointcuts (Spring Framework in Depth)
+
+Autoconfiguration
+=================
+@EnableAutoConfiguraion (or @SpringBootApplication per default enables AutoConfuguration)
+IoC container configured based on class path, via the depnedency jars included in the project as well as conbditions
+Exclusion proives customized behavior
+Spring AutoConfigure operations will stop trying to configure a Bean, if you have already defined that bean in your Configuration 
+or in components that are annotated.
+Beans in BeanFactory are proxied
+Annotation drive proxies
+Annotations are easy extension points - to trigger aspects on
+You can add behavior as well through the use of aspecting
+Order of method call
+In you call a metyod internally, the proxy behaviour isn't applied.
+Avoid class level internal method calls
+Example: Class has getX and getY methods
+If from external to that class you call getX, you will get the proxy behaviour
+If from external to that class you call getY, you will get the proxy behaviour
+If you call getX and within the getX method call, it call getY, you will not have the proxied behaviour, aroun that getY method call
+
+
+ 
 
 
 
@@ -63,7 +93,10 @@ Automatic Servlet
 
 
 
-Recommended course.
+
+
+Recommended courses.
 Spring Framework in Depth
+Learning Spring with Spring Boot
 
 
