@@ -83,6 +83,16 @@ If from external to that class you call getX, you will get the proxy behaviour
 If from external to that class you call getY, you will get the proxy behaviour
 If you call getX and within the getX method call, it call getY, you will not have the proxied behaviour, aroun that getY method call
 
+Repositories
+============
+https://docs.spring.io/spring-data/jpa/reference/repositories/query-keywords-reference.htmlhttps://docs.spring.oi/spring-data/jpa/docs/current/reference/html/#repository-query-keywords
+
+
+Branch 02_05_begin
+
+Guest entity, reservation
+
+GetAllReservationonResDate
 
  
 
