@@ -4,14 +4,32 @@ curl
 
 PostGress
 ========
-=
-docker ps
-docker exec -it pg-docker /bin/bash
+Start:
+set HOME=C:\work\education\postgress
 
+if not exist "%HOME%\.local\docker\postgresql" mkdir "%HOME%\.local\docker\postgresql"
+
+docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=local -d -p 5432:5432 -e PGDATA=/var/lib/postgresql/data/pgdata -v "%HOME%\.local\docker\var/lib/postgresql/data" postgres
+
+Stop:
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+docker stop pg-docker
+
+
+
+docker ps
+
+docker cp C:\work\education\postgress\schema.sql pg-docker:/tmp/schema.sql
+
+docker exec -it pg-docker /bin/bash
 psql -d local postgres
 
-select *
-from lil.rooms
+\i /tmp/schema.sql
+
+select * from lil.rooms;
 
 The part  -v "$HOME"/.local/docker//lib/postgresql/data postgres  in the Docker command is using the volume (-v) flag to create a persistent storage for the PostgreSQL data. Let's break it down: 
  
@@ -32,6 +50,8 @@ This volume mapping ensures that the PostgreSQL data is stored persistently on y
 3. Share the same data between multiple containers if needed. 
  
 This setup provides data persistence and easier management of your PostgreSQL database when using Docker.
+
+
 
 DRY - Do not repeat yourself
 
