@@ -1,0 +1,532 @@
+Online playground: try.kotlinglang.org
+See koans
+Advent of code
+
+Type System
+===========
+Val-  creates in immutable declaration
+Var - is used for a mutable declaration
+
+The only type we nedd to specify the type a variable is when the compiler is unable to determine it.
+
+When we do not give the variable a definition,we must give it a type
+
+var myLong = 123456L
+var myShort: Short = 12
+var myByte: Byte = 127
+
+val anInt: Int = 1
+val aLong: Long = anInt.toLong()
+
+Control flow - if
+=================
+If is an expression in Kotlin, not a statement (as it is in Java).
+
+Statement:Program instructions that return no value; can't be on the right side of on equasl sign.
+Expression: Program instructions that return values; can be on the right side of on equasl sign.
+
+// int lowest = (a<b) ? a : b;    // Java
+
+val lowest = if (myInt < anInt) myInt else anInt;
+println("The lowest value is $lowest");
+
+Control flow - when
+===================
+case -> when
+
+Control flow - loops
+====================
+Kotlinns for statement works in conjunctuin with any type, that has an iterator
+
+for (item in 1..10) = {
+   println ("$item, ")
+}
+
+for (ch in "busquit") = {
+ }
+
+Control flow - - advanced loops
+===============================
+vard ndx = 0
+
+for (item in 10.rangeTo(20).step(2)) {
+   println("${++ndx}) $item, ")
+}
+println
+
+
+for ((index, item) in 10.rangeTo(20).step(2).withIndex()) {
+   println("${index+1}) $item, ")
+}
+println
+
+val myArray = arrayOf()10,20,30)
+for (item in myArray.indces) {
+   println("At index $Item is ${myArray[item]}")
+}
+println
+
+
+Functions
+=========
+
+Expression fuunction:
+fun pplus(param1: Int, param2: Int): Int = param1 + pramm2
+
+fun pplus(param1: Int, param2: Int) = param1 + pramm2
+
+named arguments
+
+Unit is Kotlins version of a Java void
+
+infix keyword: It allows us to move the function in between its paramters (like +)
+
+
+Objects
+=======
+val location object {
+var xPosistion = 200
+
+fun printIt(
+}
+
+}
+
+object type, see above
+
+object declaration: is a statement not an expression
+
+object MySingleton {
+   var temperatures = arrafOf(80, 76, 90)
+   fuc getLatTemperature = temperatures.last()
+   
+}   
+
+val temperatures = MySingleton.getLatTemperature()
+
+Interfaces
+==========
+interface Vehicle {
+   val MakeName: String
+   fun go() {}
+}
+
+Generics
+========
+Put an upper bound on our functions type parameter
+
+package com.tekadept.demo
+
+// Add your solution here
+fun <T: Comparable<T>> getSmaller(param1: T, param2: T): T {
+    val result = param1.compareTo(param2)
+    return if(result >0) param2 else param1
+}
+
+fun main(args: Array<String>) {
+    println("getSmaller")
+
+    // Please add the getSmaller function above the main function
+    val minInt: Int = getSmaller(42, 99)
+    val minDouble: Double = getSmaller(9.807, 3.14159)
+    val minString: String = getSmaller("kitten", "kittens")
+
+    println("The min Int = $minInt")
+    println("The min Double = $minDouble")
+    println("The min String = $minString")
+}
+
+
+val maxInt: Int = max(42, 99)
+
+Use Java from Kotlin
+====================
+fun JavaIterop() {
+   val Frisky = Animal("Frisky", "cat", 10)
+   println(Frisky.Show())
+   Frisky.weight = 15
+}
+
+Use Kotlin from Java
+====================
+
+public class HelloWorld {
+   public static void main(String [] args) {
+   
+   }
+   
+   Person Bog = new Person ("Robert", "Smith")
+   System.out.println(Bob.getFirstName())
+   
+   Bob.setFirstName("Bob");
+ 
+   // Name of the Kotlin file 
+   Integer maxInt = MaxKt.max(2001, 2010)
+}
+
+Operator overloading
+====================
+Operators are functions, that use symbolic names
+
+We can create our own functions for symbols in classes.
+This is called oprator overloading.
+
+data class Position(var x: Int, var y: Int) {
+   operator fun plus(other: Position) : Position {
+      return Position(x + other x), y + other.y)
+   }
+}
+
+Annotations
+===========
+Annotation are a way to attach metadata to code
+
+Reflection
+==========
+Reflections allows us to access programmatic information dynamicly at runtime.
+
+val Joe = Person("Joe", "Smith")
+val kClass = Joe.javaClass.kotlin
+println("Simple name = ${kClass.simplename}")
+
+//  Add kotin-reflect.jar to the classpath
+/// Simple name = person
+
+for  (name in kClass.memberproperties) {
+   println("Property name = $name)
+    println("Property name = {$name.name )}
+}
+
+DSL
+===
+is a computer language which is focuesed on a very narrow problem set.
+
+
+interface Matcher<T> {
+   fun test(lhs: T): Unit
+   
+   infix fun or(other: Matcher<T>) Matcher<T> = object : Matcher<T> {
+      override fun test(lhs: T) {
+	     try {
+	        this$Matcher.test(lhs)
+		 } catch(e: RuntimeException) {
+		    other.test(lhs)
+		 }
+	  }
+   }   
+}
+
+// Should for a single object
+infix fun <T> T.should(matcher: Matcher<T>) {
+   // Test the current object
+   matcher.test(this)
+}
+
+// Should for a collection
+// fn for function
+infix fun <T> Collection<T>.should(fn: CollectionMatchers<T>.()-> Unit) {
+   val matchers = CollectionMatchers(this)
+   // Call the function that got passed into us
+   matchers.fn()
+}
+
+// CollectionMatcher class. This class holds the clause , which comes after the word should
+class CollectionMatcher<T> (val collection: Collection<T>) {
+   fun contains(rhs: T) : Unit {
+      if (!collection.contains(rhs))
+	     throw RuntimException("Collection did not contain $rhs")
+   }
+   
+   fun notContain(rhs: T) : Unit {
+      if (collection.contains(rhs))
+	     throw RuntimException("Collection should not contain $rhs")
+   }
+   
+   fun haveSizeLessThan(size: Int) : Unit {
+      if (collection.size >= size)
+	     throw RuntimException("Collection should have size less than $size")
+   }
+}
+
+func unitTest() {
+   val listOfNames = listOf¨("April", "May", "June")
+   // There are several ways to obtain an instance of a function type:
+   // Use a code block within a function literal, in one of the following forms:
+   // a lambda expression: { a, b -> a + b },
+   // ... See https://kotlinlang.org/docs/lambdas.html#instantiating-a-function-type
+   listOfNames should { notContain("Portia") }
+   
+}
+
+Destructing
+===========
+Pull just the variables, taht we want from a more complicated object.
+
+class Point(val x: Int, val y: Int, val z: Int) {
+   operator fun component(): Int = x
+   operator fun component(): Int = y
+   operator fun component(): Int = z
+    
+}
+
+fun showComponents()
+   val myPoint = Point(5000, 500, 60000)
+   // Destructuring
+   val (myX, myY, myZ) = myPoint
+   println ("myX = $myX, myY = $myY, myZ = $myZ") 
+}   
+
+showComponents();
+
+// 06_06_end challenge
+package com.tekadept.demo
+
+// Add your solution here
+
+data class Cubic(var x: Int, var y: Int, var z: Int){
+    operator fun plus(other: Cubic): Cubic {
+        return Cubic(x + other.x, y + other.y, z + other.z)
+    }
+    operator fun minus(other: Cubic): Cubic {
+        return Cubic(x - other.x, y - other.y, z - other.z)
+    }
+}
+
+fun main(args: Array<String>) {
+    println("operator")
+
+    val pt1 = Cubic(100, 200, 300)
+    val pt2 = Cubic(10, 20, 30)
+
+    println("pt1 = $pt1")
+    println("pt2 = $pt2")
+    println("pt1 + pt2 = ${pt1 + pt2}")
+    println("pt1 - pt2 = ${pt1 - pt2}")
+}
+
+Functtional programming
+=======================
+State is not stored
+Only immutable objects
+No loops - depends on recursion instead
+
+Lambdas
+=======
+
+val combos = students.map{ a -> a.name + " : " + a.age }
+println("Combos: " + combos)
+
+println("The oldest student : ${studetns.maxBy{it.age}}")
+
+val studentsWithLongNames = studetns.ffilter{it.name .length > 5}
+
+}
+
+When there is only one parameter, use the default it. It does not need to be passed in.
+
+Closure
+=======
+A closure is when the local variable of a function is kept alive after the function has ended.
+
+fun closureMakrer(): () -> Unit {
+    var num = 0
+    return{ pintln(num++)}	
+}
+
+func main(args: Array<String>){
+   val myCounter1 = clocureMaker()
+   val myCounter1 = clocureMaker()
+	myCounter1()
+	myCounter1()
+	myCounter1()
+	myCounter1()
+	myCounter2()
+	myCounter2()
+    myCounter1()
+}
+
+0
+1
+2
+3
+0
+1
+4
+
+num is kept in the closure.
+
+Method chaining
+===============
+A sequence is a lazily evaluated collection // Like a stream in Java
+
+Strems csn run acreoos muiltiple cpus.
+
+Sequences are not collections
+A sequence is not generated until a terminal operation (sum, or toList ect.)
+A collection does always exist.
+
+fun sequences() {
+   val studens = getStudents()
+   val sqStudents = students.drop(1).take(39.tolIst()
+   println("Sequenced Students:" + sqStudents)
+   
+   val numbers = generateSequence(100) {it +1}
+   println("Numbers:" +  + numbers.drop(5).take(20).toList())
+   
+    val fib = generateSequence(1 t0 1) {it.second to it.first + it.seconde}.map{it.first
+
+)
+
+fun main(args: Array<String> {
+   sequences()
+}
+
+funKTional library
+==================
+funKTional is a library of functional constructs and patters for Kotlin.
+It helps to complete Kotlins functional toolkit
+
+build.gradle
+
+repositories {
+   mavenCentral()
+   jcenter()
+}
+
+
+// SourceSets represents al ogical group of Java and Kotlin sources and resources
+sourceSets {
+   main.kotlin.srcDirs += 'src/main/myKotlin'
+   main.java.srcDirs += 'src/main/myJava'
+}
+
+dependencies {
+   conpile 'org.funktionale:funktionale-all:1.0.1'
+}
+
+
+import org.functional.collections.destructured
+
+fun functional() {
+   val(head, tail) = listOf(1,2,3).destructured()
+   println("Head =" $had and tail = $tail").
+}
+
+Composistion
+============
+Sammensætte funbktioner
+
+    val add5 ={i: Int -> 1 i 5}
+	val multipplyby2 ={i:Int -> i *2 }
+	
+	val multiplyBy2AndAdd5 = add5 compose multiplyBy2AndAdd5
+	val composeResults = multiplyBy2nad Add5(10)
+	
+	vad add5andMultiplyBy2 add5 forwardCompose multiplyBy2AndAdd5
+	val forwardComposeResults = add5anddMultiplyBy2(10)
+	
+Currying
+========
+Currying takes a funtion, which has multiple arguments, and transforms it into a chain of functions, each of which takes one argument
+There will be one functions for each argument in the original function
+
+import org.funktionale.currying.*
+
+   val sun3ints = {x: Int, y:Int, z:Int -> x + y -z}
+   
+   val curried: (Int) -> (Int) -> (Int) -> Int = sum3int3.curried
+   
+Now, curried is going to return a function that takes an int, that returns another function, that takes an int, that eturns another function, that takes an int - and finally returns an int.
+Ant the value of that funtion is going ro be sum3int3.curried
+  
+  val cur = curried(2)(4)(6)
+	
+We are callin three functions.
+We are calling the first function with a 2, the second function wih a 4 and the third function with a 6.
+
+Partial application
+===================
+A partial application takes a function, taht accepts some number of arguments, binding valus to one or more of those arguments, 
+and returning a new funtion, that only accepts the remaining unbound arguments.
+
+import org.funktionale.partial.partially1
+import org.funktionale.partial.partially3
+
+// the mthod prefixAndPostFix retuns a function, that takes 3 strings and returns a String
+val prefixAndPostFix: (String, String, String) -> String =
+   {prefix: String, x: String, postfix: String -> "{$prefix}{$x}${postfix}" }
+   
+val prefixAndBang: (String, String) -> String = prefixAndPostFix.partially3("!")
+
+// prefixAndPostFix wants three paramters, and we are going to tell it, 
+hey, you are only going to get pat of what you want.
+And we are going to supply the missing paramter, since prefixAndBang only gives it two.
+
+// The method hello returns a function, that taks on String and returns  a String
+val hello: (String) -> String  = prefixAndBang. pratially1("Hello", ")
+
+println(hello("Funktionale"))
+
+Partail application and currying give us the ability to creat specilized functions,
+from general ones, without introducing code duplication.
+
+Memoization
+===========
+Caching
+Pure fuctions
+
+inport org.funktionale.memoization.memoize
+
+fun memo(){
+   var fibonacci: (Long) -> Long = {it}
+   fibonacci = {  n: Long -> 
+      if (n < 2) n else fibonacci(n-1 + fibonacci(n-2)
+   }
+   
+   // Memoization function
+   var m: (Long)  -> Long = {it}
+   m = { n: Long ->   
+      if (n < 2) n else m(n-1) + m(n-2)
+   }.memoize()  
+   
+   println("Calling fib: + timeElapsed {finonacci(40)} + " ms" )
+   println("Calling m: + timeElapsed {m(40)} + " ms" )
+}
+
+// Body is a function, that return nothing
+// Unit = void
+func timeElapsed(body: () -> Unit): Long {
+   val start = System.currentTimeMillis()
+   body()
+   val end = System.currentTimeMillis()   
+   return end-start
+}
+
+
+
+Further information
+===================
+
+kotlinlang.org
+kotlinlang.org/docs/reference
+trykotlinlang.org
+blog.jetbrains.com/kotlin
+
+therockncoder.com
+
+
+
+
+
+ 
+
+
+
+
+
+	
+
+
+
+
+

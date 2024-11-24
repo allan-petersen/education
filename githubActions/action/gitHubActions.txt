@@ -1,0 +1,33 @@
+
+
+Runtime environment resources
+Local file system
+Environment variables
+Event Payloads
+
+Compute resources
+One virtual CPU
+Memory op to 3,75 GB
+Remote network connectivity
+
+Read and write access
+
+Environmnet variable
+
+GITHUB_TOKEN
+GITHUB_REPOSITORY
+GITHUB_EVENT_PATH
+
+/github/workflow/event.json
+The payload is a JSON file with a treasure trove of information about the event, that triggered the workflow
+
+
+Events and Payloads
+===================
+
+https://developer.github.com/v3/activity/events/types
+
+
+sample_push_event.json
+
+entryPoint.sh

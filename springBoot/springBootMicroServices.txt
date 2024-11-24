@@ -1,0 +1,207 @@
+1. Web, which includes Tomcat and Spring MVC
+2. Rest repositories to expose Spring Data repositories over Rest
+3. Java persistence API
+4. H2 in mempry database driver
+
+Initializr generates the project.
+https://start.spring.io
+
+com.example.ec.explorecali
+explorecali
+
+Spring Data JPA
+===============
+To load data from a database the @SpringBottApplication class can implement the CommandlineRunner
+
+RESTful APIs
+============
+Spring Data REST
+
+HTTP POST /tourPackages/ {<request body>}    201 CREATED
+HTTP GET /tourPackages/<code>                404 NOT FOUDND
+HTTP PUT ot PATCH /tourPackages/<code>
+HTTP DELETE /tourPackages/<code>
+
+tourPackeges/search // Giver options
+
+tourPackeges/search/findBYName?name=Backpacl%Cal
+
+Paging and sorting
+==================
+Url parameters: size, page, sort
+
+Controlling API Exposure
+========================
+@RepositoryRestResource(collectionReseorceRel = "packages, path = "packages")
+
+profie
+
+HAL Browser:
+localhost:8080
+
+
+Expose RESTful APIs with Spring MVC
+===================================
+@RestController
+
+A REST Controller class mediates between web requests and the internals of the applications
+
+Spring MVC
+Client Request -> Ny RestController class -> My Service
+
+Spring DATA Rest
+Client Request ->pring Data REST -> My Spring Data RepositoryRestResource
+
+Spring Web MVC
+Not Using Spring Data repositories
+API launches an algorithm
+Hide internal data model (entity schema)
+Require business layer service
+
+Example RestController
+======================
+@RestController
+@RequestMapping(path = "/exmaples")
+public class ExampleRestcontroller {
+
+   // CREATE
+   @PostMapping
+   @ResonseStatus(HttpStatus.CREATED) // Overrides default return status HTTP 200, HTTP.CREATED is 201
+   public Example create(@RequestBody Example example)
+   
+   // Default request body format is JSON
+   
+   // READ
+   @GetMapping
+   public List<Example> getAllExamples()
+   
+   @GetMapping(path = "/{id})
+   public static Example getOneExample(@PathVariable(value = "id") int id)
+   
+   // UPDATE
+   @PutMapping(path = "/{id})
+   public Example updateAll(@PathVariable(value = "id") int id, @RequestBody Example example)
+   
+   @PatchMapping(path = "/{id})
+   public Exmple updateSome(PathVariable(value = "id") int id, @RequestBody Example example)
+   
+   // DELETE
+   @dELETEMapping(path = "/{id})
+   public Exmple DELETE(PathVariable(value = "id") int id)
+   
+}
+
+For maintainablility Each class should map to only ine resorce (here the resource is example)
+
+Use case
+========
+Nouns:
+score
+comment
+customer identifier
+tour
+
+Create RestController HTTP POST method
+======================================
+
+Can all the attributes of a TourRating be sent in the request body
+
+TourRaingPK = Tour tour, Integer customerId
+The client dos  ot want to send aTour in the request, but probably a Tour identifier
+
+So we should create a Data Transfer Object (DTO) to encapsulate the request body.
+
+RatindDTO - score, comment, custimerId
+NO tourId attribute
+The toourId is going to be a parameter on the URL.
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+@ExceptionHandler(NuSuchElementException.class)
+public String retur400(NoSuchElementexception ex) {
+   return ex.getMessge();
+}
+
+@PostMapping@ResponseStatus(HttpStatus.CREATED)
+public void createTourRating(@PathVariable(Vvalue = "tourId") int tourId, @RequestBody @Validated RatingDto ratingDto) {
+   Tour tour = verfyTour(id);
+   tourRationRepository,save(new TourRating(new TourRatingPk(tour, ratingDto.getCustomerId), ratingDto.getScore(), ratingDto.getcomment()));
+
+}
+
+// Create a new tour ratingDtoPOST http://localhost:8080/tours/1/ratings/
+
+Create RestController HTTP GET methods
+======================================
+Hide the implememtation, return a lst of TourDTO objects
+
+
+/average at the end
+return adjacent package with a key-value pair of the word averge an then the avarge value.
+
+@GetMapping
+public List<RatingDTo> getAllRatingsForTour(@PathVariable(value = "tourId") int tourId
+
+@GetMapping(path="/average2)
+public Map<String, Double> getAverage(@PathVariable(value = "tourId") int tourId
+
+create RestController HTTP PUT, PATCH, and DELETE methods
+=========================================================
+PUT all the attributes are updated
+PATCH only update some methods on the entity
+
+@putMapping
+@RequestBody @Validated RatingDto
+
+Update with patch
+@PatchMapping
+
+@DeleteMapping(path ="/{customerId}"
+public void delete(@PathVariable(value = "tourId") int tourId, 
+                   @PathVariable(value = "customerId") int customerId)
+
+hppt://localhost:8080/tours/1/ratings/2
+2 is customerid
+
+Paging and sorting DTOs
+=======================
+Page<TourRating> findByPkTourId(Integget tourId, Pageable pageable);
+
+http://localhost:8080/tors/1/ratings?size2&page1&sort=score,desc  // 1 is second page
+
+Unlike Spring Data REST REST controller APIs do not automatically generate hypermedia links
+
+TODO: Entending, securing and Dockerizing Spring Boot MicroServices.
+
+Why would you choose Spring MVC over Spring Data Rest: Because it
+Hide internal data model (Entity schema)
+Require business layer servicenot using Srping data repositories
+
+Mongo DB
+========
+MongoDB repositories have no schema requirements.
+
+Disadvantages
+Does not automatically catch referential integrity errors
+Application responsible for managing integrity.
+
+Spring Data MongoDB
+
+Removing the TourPackage attribute, which in JAP was referencing another table
+Embed these attrbutes instead
+duplication, but that is given for NoSQL databases.
+
+Map<String, String> details
+Individually attrbutes are now B key-value pairs in this details
+We no longer need the TourRation DTO in the Controller, because TourRating is now simple.
+
+We store Documents
+
+Microservice
+
+Other cources:
+Spring Data 2
+Extending, Securing and Dockerizing Spring Boot Microservices
+
+MaryEllenTeaches.me
+
+

@@ -1,0 +1,668 @@
+docs.docker.com/get-docker
+HTTPPie. curl alternative
+JSON Viewer. Plugin for Chrome.
+
+
+Basics
+======
+Start a new Spring Boot project
+   
+start.spring.io
+
+Autoconfiguration
+=================
+@EnableAutoConfiguration
+Driven off sping.factories
+
+Configuring Spring
+==================
+Cloud configuration. Se course Spring, Spring Cloud
+
+Spring Profiles
+===============
+Se course Spring Configuration in depth
+
+spring.profile.active
+
+Containerizing Spring Boot applications
+=======================================
+spring-boot:build-image for maven
+bootBuildImage for Gradle
+
+set JAVA_HOME=C:\tools\Eclipse Adoptium\jdk-17.0.7.7-hotspot
+Unrecognized VM option 'MaxPermSize=128m' fejl. Tet environment variable MAVEN_OPTS
+mvn clean package
+
+docker build -t booting-web .
+
+C:\work\booting.web>docker build -t booting-web .
+2024/01/11 08:15:05 http2: server: error reading preface from client //./pipe/docker_engine: file has already been closed
+[+] Building 50.0s (15/15) FINISHED                                                                      docker:default
+ => [internal] load .dockerignore                                                                                  0.0s
+ => => transferring context: 2B                                                                                    0.0s
+ => [internal] load build definition from Dockerfile                                                               0.0s
+ => => transferring dockerfile: 406B                                                                               0.0s
+ => [internal] load metadata for docker.io/library/openjdk:17-jdk-slim                                             1.0s
+ => [internal] load metadata for docker.io/library/maven:3.6.3-openjdk-17-slim                                     1.2s
+ => [builder 1/6] FROM docker.io/library/maven:3.6.3-openjdk-17-slim@sha256:6d8d6569d5a3b81e033e2f9905290fbd9c9b  25.8s
+ => => resolve docker.io/library/maven:3.6.3-openjdk-17-slim@sha256:6d8d6569d5a3b81e033e2f9905290fbd9c9b509fce188  0.0s
+ => => sha256:850a4d5b96e44cdd7c8217013733b18a4f449cfe35be341810d5e79588db32eb 7.90kB / 7.90kB                     0.0s
+ => => sha256:6d8d6569d5a3b81e033e2f9905290fbd9c9b509fce1889cdea5692b003edc9bb 549B / 549B                         0.0s
+ => => sha256:ead687c670f30898fc28e6c7b9dab652360d522b8912ba96eca0f08592a73eec 1.79kB / 1.79kB                     0.0s
+ => => sha256:41a9aed0479c2a558be624d8234821bad61eddda4c0d2472d1fdade77c84e6af 186.09MB / 186.09MB                20.2s
+ => => sha256:904869ca42fefc1785f38c52e6f3f497a07c65f496cc1b2adda6ee30e25be05d 2.62MB / 2.62MB                     4.8s
+ => => sha256:a778d69737c72683f8ea83d92fec57908ca8e4f224bc508423875cfa733ef51c 9.58MB / 9.58MB                     6.8s
+ => => sha256:53f217db9dce9458e85fb566fad7849a3f9a745b15ac160792b9251aa3aa5171 852B / 852B                         7.1s
+ => => sha256:6658044d924f9889ca5452cae3be1cf86cd659ddad24fcaba69a314532440734 361B / 361B                         7.4s
+ => => extracting sha256:41a9aed0479c2a558be624d8234821bad61eddda4c0d2472d1fdade77c84e6af                          4.7s
+ => => extracting sha256:904869ca42fefc1785f38c52e6f3f497a07c65f496cc1b2adda6ee30e25be05d                          0.2s
+ => => extracting sha256:a778d69737c72683f8ea83d92fec57908ca8e4f224bc508423875cfa733ef51c                          0.2s
+ => => extracting sha256:53f217db9dce9458e85fb566fad7849a3f9a745b15ac160792b9251aa3aa5171                          0.0s
+ => => extracting sha256:6658044d924f9889ca5452cae3be1cf86cd659ddad24fcaba69a314532440734                          0.0s
+ => [internal] load build context                                                                                  0.0s
+ => => transferring context: 2.59kB                                                                                0.0s
+ => [stage-1 1/3] FROM docker.io/library/openjdk:17-jdk-slim@sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0b  22.9s
+ => => resolve docker.io/library/openjdk:17-jdk-slim@sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0bc126b41f6  0.0s
+ => => sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0bc126b41f68c3f62f9774 547B / 547B                         0.0s
+ => => sha256:779635c0c3d23cc8dbab2d8c1ee4cf2a9202e198dfc8f4c0b279824d9b8e0f22 953B / 953B                         0.0s
+ => => sha256:37cb44321d0423bc57266a3bff658daf00478e4cdf2d3b8091f785310534256d 4.80kB / 4.80kB                     0.0s
+ => => sha256:1fe172e4850f03bb45d41a20174112bc119fbfec42a650edbbd8491aee32e3c3 31.38MB / 31.38MB                   2.3s
+ => => sha256:44d3aa8d076675d49d85180b0ced9daef210fe4fdff4bdbb422b9cf384e591d0 1.58MB / 1.58MB                     0.9s
+ => => sha256:6ce99fdf16e86bd02f6ad66a0e1334878528b5a4b5487850a76e0c08a7a27d56 187.90MB / 187.90MB                16.9s
+ => => extracting sha256:1fe172e4850f03bb45d41a20174112bc119fbfec42a650edbbd8491aee32e3c3                          4.8s
+ => => extracting sha256:44d3aa8d076675d49d85180b0ced9daef210fe4fdff4bdbb422b9cf384e591d0                          0.5s
+ => => extracting sha256:6ce99fdf16e86bd02f6ad66a0e1334878528b5a4b5487850a76e0c08a7a27d56                          5.5s
+ => [stage-1 2/3] WORKDIR /app/                                                                                    1.2s
+ => [builder 2/6] WORKDIR /build/                                                                                  0.3s
+ => [builder 3/6] COPY pom.xml /build/                                                                             0.1s
+ => [builder 4/6] COPY src /build/src/                                                                             0.1s
+ => [builder 5/6] RUN  mvn clean package                                                                          22.0s
+ => [builder 6/6] COPY target/booting.web-0.0.1-SNAPSHOT.jar target/application.jar                                0.1s
+ => [stage-1 3/3] COPY --from=BUILDER /build/target/application.jar /app/                                          0.1s
+ => exporting to image                                                                                             0.1s
+ => => exporting layers                                                                                            0.1s
+ => => writing image sha256:97bc79b9ce5f416df552b6e0c8c1a4a1f1cb528e787d9a62e26666e926b50dc9                       0.0s
+ => => naming to docker.io/library/booting-web                                                                     0.0s
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview
+  
+  
+Run the applications: docker run -p8080:8080 -d booting-web
+
+Process status: docker ps
+
+docker stop 76e90db7dfa2
+
+
+Spring Boot Dependencies
+========================
+Embedded Tomcat server
+How you can build an executable jar file. that serves a web application
+The embedded Taocat can be replaces with jetty or orther app servers
+You can also remove Taocat and create a WAR istead of a jar
+
+JSOM Marshaller
+Spring Web Starter brings Jackson
+Usefulle for RESTful web services
+
+
+Test (JSON path)
+
+SLF4J
+
+SnakeYAML
+
+Configuring Embedded Tomcat
+===========================
+Configure the servlet container, the application is running in.
+servlets, filters, and listeners themselves
+
+Default servlet responds at "/"
+
+1. Configuration classes. Annotate with at bean
+or
+2. Annotate the actual class file  (wer servlet, web filter, web listener)
+
+Several application contexts:
+
+1. One of which is specific to the embedded Tomcat itself.
+2 Additional ServletContext can be loaded through the ServletContextInitializer interface
+
+Property based configuration
+============================
+server address etc.
+Session based config (cookies, timeouts, etc.)
+
+See
+org.springframework.boot.auticonfigure.web.ServerProperties
+
+Compression
+
+TLS
+Requires a Jva keystore, that contains the certificate
+Password
+
+Secret Manager, that connects to your runtime, used for storing all of your credentials
+
+
+Employing MVC in Spring Boot
+============================
+Templete Engine starter provides view resolvers in order to move away from traditional JSP.
+- and into more modern template engines
+
+Static file resolvers (example index.html)
+
+Access to CSS and JavaScript
+
+1. Build a project
+2. Add in view
+3. Add a models (or models) required to serve the view. 
+Often you will reuse object from different models to serve a web page.
+4. Add a controller. The controler will be used to wire the view and its model, and serrve it throug the templating engine.
+
+
+Thymeleaf Templates
+===================
+Thymeleaf has a big benefit of being valid HTML as well as a template itself,
+ant this allows you to build a templete, and style it outside of the web application,
+and then just populate it with data.
+
+Thymeleaf is a modern server-side Java template engine for both web and standalone environments.
+
+Thymeleaf's main goal is to bring elegant natural templates to your development workflow — HTML that can be correctly displayed in browsers and also work as static prototypes, allowing for stronger collaboration in development teams.
+
+
+Web Application with Spring Boot
+================================
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://wwww.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Landon Hotels | Rooms</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Room Number</th>
+            <th>Room Name</th>
+            <th>Bed Info</th>
+        </tr>
+        <tr th:each="room:${rooms}">
+            <td th:text="${room.number}">Number</td>
+            <td th:text="${room.name}">Name</td>
+            <td th:text="${room.info}">Info</td>
+        </tr>
+    </table>
+</body>
+</html>
+
+
+
+@GetMapping
+public String getAllRooms(Model model) {
+  model.addAttribute("rooms", rooms)
+  return "rooms";  //This is the name of the view, that we want to resolve to
+}  
+
+
+Build staff view
+Simple page with a table of all staff
+Create 4 mock data elements
+Employee ID number (GUUID), firtst name, last name, position
+See CH02 -> 02_05 -> 02_05_begin -> sprng-boot-et-> bin -> data.sql
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://wwww.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Landon Hotels | Staff</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Employee Firstname</th>
+            <th>Employee Lastname</th>
+            <th>Employee Occupation</th>
+        </tr>
+        <tr th:each="employee:${staff}">
+            <td th:text="${employee.firstName}">Firstname</td>
+            <td th:text="${employee.lastName}">Lastname</td>
+            <td th:text="${employee.occupation}">Lastname</td>
+        </tr>
+    </table>
+</body>
+</html>
+
+package com.frankmoley.lil.sbet.landon.roomwebapp.controllers;
+
+import com.frankmoley.lil.sbet.landon.roomwebapp.models.Employee;
+import com.frankmoley.lil.sbet.landon.roomwebapp.models.Room;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Controller
+@RequestMapping("/staff")
+public class StaffController {
+
+    private static final List<Employee> employees = new ArrayList<>();
+    static {
+        employees.add(new Employee( UUID.randomUUID().toString(), "Tine", "Hansen", "HOUSEKEEPING"));
+        employees.add(new Employee( UUID.randomUUID().toString(), "Tina", "Olsen", "SECURITY"));
+        employees.add(new Employee( UUID.randomUUID().toString(), "Hanne", "Hansen", "FRONT_DESK"));
+        employees.add(new Employee( UUID.randomUUID().toString(), "Petra", "Hansen", "CONCIERGE"));
+    }
+
+    @GetMapping
+    public String getAllEmployees(Model model){
+        model.addAttribute("staff", employees);
+        return "staff";
+    }
+}
+
+
+Web srvices with Spring Boot
+============================
+The pattern is the same as for web applicaions,
+but in the case of web services, the view is the content type (?) of the page, not HTML
+
+Restcontroller instead of Controller in order to not map to a view,
+instead, an object that has benn marshalled is returned.
+
+JSON is the default output type for the view
+
+
+Model - StaffMember
+===================
+
+Service: StaffService
+=====================
+package com.frankmoley.lil.sbet.landon.roomwebapp.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+
+import com.frankmoley.lil.sbet.landon.roomwebapp.models.Position;
+import com.frankmoley.lil.sbet.landon.roomwebapp.models.StaffMember;
+import org.springframework.stereotype.Service;
+
+@Service
+public class StaffService {
+
+    private static final List<StaffMember> staff = new ArrayList();
+
+    static{
+        staff.add(new StaffMember(UUID.randomUUID().toString(), "John", "Doe", Position.CONCIERGE));
+        staff.add(new StaffMember(UUID.randomUUID().toString(), "Jane", "Doe", Position.FRONT_DESK));
+        staff.add(new StaffMember(UUID.randomUUID().toString(), "Oliver", "Handle", Position.SECURITY));
+        staff.add(new StaffMember(UUID.randomUUID().toString(), "Sammy", "Smith", Position.HOUSEKEEPING));
+    }
+
+    public List<StaffMember> getAllStaff(){
+        return staff;
+    }
+}
+
+Service: StaffRestController
+============================
+package com.frankmoley.lil.sbet.landon.roomwebapp.controllers;
+
+import com.frankmoley.lil.sbet.landon.roomwebapp.models.Room;
+import com.frankmoley.lil.sbet.landon.roomwebapp.models.StaffMember;
+import com.frankmoley.lil.sbet.landon.roomwebapp.service.RoomService;
+import com.frankmoley.lil.sbet.landon.roomwebapp.service.StaffService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/staff")
+public class StaffRestController {
+    private final StaffService staffService;
+
+    public StaffRestController(StaffService staffService) {
+        this.staffService = staffService;
+    }
+
+    @GetMapping
+    public List<StaffMember> getAllStaff(){
+        return staffService.getAllStaff();
+    }
+}
+
+Note: You can have a route on the @GetMapping
+
+Test
+====
+HTTPI application
+http :8080/api/rooms
+
+CommandLineRunner
+=================
+Think of admin task and batch operations
+
+The ApplicationRunner is a close cousin
+
+When levering multiple CLR or AR operations
+
+@Order annotation
+
+The Repository Pattern
+======================
+Most of Spring Dta is based on the repository pattern
+
+Spring JDBC can also be used to also create repository actions
+
+RepositoryRestResource adds a RESFful web service onto a raw repository
+
+Pattern
+Introduced as part of doman-driven design
+Simple operations of an entity or business object without kwowledge of other entities (as in DAO)
+Ubder the abstracion, the data access operations are hidden.
+
+Databases have become the bottleneck
+Prevnt data access logic from leaking into your business logicProvide a layer of abstraction to hide internals
+Focus on a single business object at a time.
+
+In Spring, start with repository interface in Spring Data or create your own interface using generics
+Define common data access methods
+Apply your business logic to a repository instance, and leverage the data access logic under the hood
+
+Spring Data
+===========
+See.: Mary Ellen Bowmans course. Spring Spring Data
+
+You can onlu have 1 datasource auto-confifured.
+
+Embedded Databases
+==================
+logging.level.org.springframework.jdbc.datasource.init.ScriptUtils=debug
+spring.h2.console.enabled=true
+spring.datasource.url=jdbc:h2:mem:testdb
+
+http://localhost:8080/h2-console
+
+Repository
+==========
+# When we already have schema and data
+spring.jpa.hibernate.ddl-auto=none
+
+External databases
+==================
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.database=postgres
+spring.datasource.platform=postgres
+spring.datasource.url=jdbc:postgres://localhost:5432/dev
+spring.datasource.username=
+spring.datasource.password=
+
+Docker start postgres
+=====================
+#!/usr/bin/env bash
+
+set -euo pipefail
+which docker > /dev/null || (echoerr "Please ensure that docker is in your PATH" && exit 1)
+
+mkdir -p $HOME/docker/volumes/postgres
+rm -rf $HOME/docker/volumes/postgres/data
+
+docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dev -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql postgres
+sleep 3
+export PGPASSWORD=postgres
+
+docker cp ./schema.sql pg-docker:/docker-entrypoint-initdb.d/schema.sql
+docker cp ./data.sql pg-docker:/docker-entrypoint-initdb.d/data.sql
+docker exec -u postgres pg-docker psql dev postgres -f docker-entrypoint-initdb.d/schema.sql
+docker exec -u postgres pg-docker psql dev postgres -f docker-entrypoint-initdb.d/data.sql
+
+Docker start rabbit
+===================
+#!/usr/bin/env bash
+
+set -euo pipefail
+which docker > /dev/null || (echoerr "Please ensure that docker is in your PATH" && exit 1)
+
+mkdir -p $HOME/docker/volumes/postgres
+rm -rf $HOME/docker/volumes/postgres/data
+
+docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dev -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql postgres
+sleep 3
+export PGPASSWORD=postgres
+
+docker cp ./schema.sql pg-docker:/docker-entrypoint-initdb.d/schema.sql
+docker cp ./data.sql pg-docker:/docker-entrypoint-initdb.d/data.sql
+docker exec -u postgres pg-docker psql dev postgres -f docker-entrypoint-initdb.d/schema.sql
+docker exec -u postgres pg-docker psql dev postgres -f docker-entrypoint-initdb.d/data.sql
+
+
+
+CH_04/04_03/04-03_begnin
+@Enumeration
+
+@RestController
+@RequestMapping("/api/staff")
+public class StaffRestController {
+
+    private final StaffService staffService;
+
+    public StaffRestController(StaffService staffService) {
+        this.staffService = staffService;
+    }
+
+    @GetMapping
+    public List<StaffMember> getAllStaff(){
+        return staffService.getAllStaff();
+    }
+}
+
+Spring Security
+===============
+Spring Security gives you basic authetication on all endpoints except common ones like /js or /css
+
+Property based configuration
+
+Full sopport for form based autentication
+Create extension of WebSecurityConfigure
+
+Use @EnableWebSecurity  // Turns off basic
+
+Full support for OAuth2, server, and client
+
+Default implementation out of the box, using 
+@EnableOuth2Client annotation. That allows you to tie inton an Oauth server.
+Method level anntotation
+
+Simple autihorization server can be created with the annotation´
+@EnableAuthorizationServer, and it cn be customized
+
+ResourceServer is just as simple. @EnableResourceServer
+
+Pashword should be hashed, not encryped
+
+BCrypt is industry standard and should be used for form-based authentication.
+
+Using Spring Security
+=====================
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://wwww.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<form th:action="@{/login}" method="post">
+    <div>
+        <label>Username: <input type="text" name="username"/></label>
+        <label>Password: <input type="password" name="password"/></label>
+    </div>
+    <div>
+        <input type="submit" value="Login"/>
+    </div>
+</form>
+</body>
+</html>
+
+
+@Controller
+public class AuthenticationController {
+
+    @GetMapping("/login")
+    public String getLogin() {
+        return "login";
+    }
+
+}
+
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers("/", "/api/*").permitAll().anyRequest().authenticated()
+                .and().formLogin().loginPage("/login").permitAll()
+                .and().logout().permitAll();
+    }
+
+    @Autowired
+    public void ConfigureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+           auth.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance())
+                   .withUser("user").password("password").roles("USER");
+    }
+
+}
+
+Messsaging
+==========
+
+Producers
+=========
+For RabbitMQ, provide exchange and queue name.
+Exchange and queue name are linked.
+Post message as string or object. I prefer aJSon string
+
+Comsumers
+=========
+
+
+#!/usr/bin/env bash
+set -euo pipefail
+which docker > /dev/null || (echoerr "Please ensure that docker is in your PATH" && exit 1)
+
+docker run --rm -d --name rabbit-docker -p 5671:5671 -p 5672:5672 -p 15672:15672 rabbitmq:3.8.9-management
+
+#!/usr/bin/env bash
+set -euo pipefail
+which docker > /dev/null || (echoerr "Please ensure that docker is in your PATH" && exit 1)
+docker stop rabbit-docker
+
+localhost:15672
+guest/guest
+
+Producer
+========
+
+Spring Data Rest repositories
+=============================
+
+Actuator
+========
+Provides insights into our running application
+Provides configuration settings, usually through JMX
+Can also be exposed throuh the web.
+Allows you to monitor your running application
+
+Health Endpoint
+Up/down status of application
+Up/down status of dependencies
+Application status only up, if dependencies are up.
+
+Beans
+Env
+Info
+Metrix
+
+Default is relatively locked down
+Ensure it is not publicy availble
+Only configure what you need
+Customizable down to endpoints
+Can be extended with custom endpoints
+
+Dependency:
+spring-boot-starter-actuator
+
+Properties:
+management.endpoints.web.exposure.include=* // Do not use * in the real world
+management.endpoint.health.roles= USER
+management.endpoint.health..show-details=when_authorized
+
+localhost:8080/actuator
+localhost:8080/actuator/health
+localhost:8080/actuator/env      // Protect this
+localhost:8080/actuator/metrics
+
+Spring Boot Starters
+====================
+Common code
+Common configuration
+Improve ease of use
+
+Creating a starter is driven of a business of technical need.
+Start by creating i library, that solves the technical need.
+
+Consder your dependencies wisely
+Try to use common componentry, whnever your can
+
+Build the Auto-Configuration Module
+This can be included in the starter, often isolated
+Should not be included in your library, but should include it.
+Your Auto-Configuration Module should include your library as a dependency.
+contains the spring.factories file in meta-info directory, that point to your auto configuration
+
+Build the starter ModuleUsually an empty JAR file
+that has e dependency on auto-configuration module and library and any other dependencies, that you maý need - other starters for instance
+Read the Spring doc.
+
+Example
+=======
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class ConsentController {
+
+    @GetMapping("/Consent")
+    public String getConsent(@RequestParam("patient") String patientId, @RequestParam("status") String status) {
+        // Your logic to handle the request
+        return "GET request for Consent with patient ID: " + patientId + " and status: " + status;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+Other courses
+=============
+See.: 
+Mary Ellen Bowmans course. Spring Spring Data
+Spring Spring Security
+

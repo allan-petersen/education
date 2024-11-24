@@ -1,0 +1,11 @@
+name: custom 
+on: push
+jobs:
+   first:
+      runs-on: ubuntu-latest
+      steps:
+         - name: checkout
+           uses: actions/checkout@v1
+         - name: script
+           uses: allan-petersen/customAction@main
+           

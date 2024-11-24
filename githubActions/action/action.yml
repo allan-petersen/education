@@ -1,0 +1,22 @@
+Action name
+Description
+Author
+Commands
+Input
+Outputs
+Branding
+
+# Icons for actions
+https://feathericons.com
+
+name "Keyword Releaser 9000"
+description: 'Creates releases based on keyword"
+
+runs:
+   using: 'docker'
+   image: 'Dockerfile'
+
+branding:
+   icon:  'gift'
+   color: 'blue'
+   

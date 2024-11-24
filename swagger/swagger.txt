@@ -1,10 +1,209 @@
 Open Api Sepicification (OAS) - Former Swagger specification
 =============================
+See: https://github.com/OAI
+
 Standard format for metadata used to define RESTful services
 
 Used to describe or define RESTful web services
 
 The metadata is machine readable.
+
+https://github.com/OIA/OpenAPI-Secification/blob/master/versions/3.0.0,md
+
+Go to the schema section:
+openapi: REQUIRED
+info: REQUIRED
+paths: REQUIRED (CAPABILITIES)
+
+
+
+openapi: 3.0.0
+info:
+  title: H Sports Plus API   
+  version: 1.0.0
+paths:
+  /product:
+    get:
+      responses:	
+        200:
+          description: This is a list of the products
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  properties:
+                    id:
+                      type: integer
+                      example: 400
+                    name:
+                      type: string
+                      example: Lemon Water
+				    
+
+Example 1
+=========
+openapi: 3.0.0
+info:
+  title: H Sports Plus API   
+  version: 1.0.0
+tags:
+  - name: Article
+    description: Articles for the H Plus Sport Blog
+paths:
+  /product:
+    get:
+	  tags:
+	    - Article
+      responses:	
+        200:
+          description: This is a list of the products
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+				  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 400
+                    created:
+                      type: string
+					  format: date
+                      example: 2023-09-26
+                    tagline:
+                      type: string
+                      example: Lemon Water
+                    content:
+                      type: string
+                      example: Bla bla
+                    category:
+                      type: string
+                      example: My category
+                    taglist:
+                        type: array
+                        items:
+                          type: string
+                          example: 1. tag, 2 tag
+
+
+Paramters:						  
+get:
+  paramters:
+    - in: query
+      name. pagenumber 
+	  description: Page number to return
+	  required: false
+	  schema: 
+	    type:integer  
+        example: 1	
+    - in: header		
+	  namer: customer-security-header 
+	  required: false
+	  sechma:
+	    type: false.
+		
+POST (or PUT) request (create, update)
+
+   post:
+     description: Add aprocut to the catalog
+	 requestBody:
+	   content:
+	     application/json
+		   sehema
+		     type: object
+			 properties:
+			 ...
+	 responses:		
+       200:
+         description: The product has been created	   
+		
+	
+			
+Template parameters in paths: Path varuiables
+
+get /product/{productId}
+
+
+paths:
+  /product/{productId}
+    get:
+      paramters:
+        - in: paths
+          nmae: productId 
+          required: true
+          schema: 
+            type: integer		  
+            exmple: 12345
+      reponses:	
+        200	  
+
+Reuse objects:
+==============
+components:
+  schemas:
+    Product:
+	  type:
+	  required:
+	    -name
+	  
+$ref: '#/components/schemas/Product'  // Hash means current file
+
+
+responses:
+  500ApiError:
+    description: This is an unexpected error
+	content.
+	  applicatin/json
+	  schema:
+	  type: object
+	  properties:
+	    statusCode:
+		  type: string
+		  example: 500
+		message:
+		  type: string
+		  example: This is an error
+		  
+// Reference to common response:
+
+500:
+  $ref; '#/components/responses/500ApiError'		  
+		 
+Reuse query paramters:
+
+parameters:
+  PageNumber:
+  ....
+  
+  - $ref: '#/components/parameters/PageNumber'
+  - $ref: '#/components/parameters/PageSize'
+  
+Content Negatiation
+===================
+
+apllication/xml
+  schema:
+     $ref: '#/components/schemas/Product'  // Hash means current file
+			
+
+			
+OpenAPI 3.0			
+
+info
+servers	security (API keys, OWA flows, or security cookies)
+paths
+tags (used to group API operations)	external docs (link to external resources about the API)
+components: (common schema objects, parameters, request bodies, that may be used througout the API). Reuse components
+			
+OAS definitions can be build with either YAML or JSON			
+
+The schema object allows the definition of input and output data types.
+
+yaml
+====
+yaml (2 space indentions)
 
 Swagger
 =======
@@ -16,3 +215,324 @@ Open source tools:
 Swagger editor
 Swagger UI
 Swagger codegen
+
+https://github.com/swagger-api
+
+nodejs
+======
+Install local http server.
+npm install -g http-server
+
+Swagger editor
+==============
+Save as yaml
+
+Swagger UI
+==========
+Paste the definitio file into the dist folder of Swagger UI
+
+Copy the dist catalog to your own workspace and rename it
+
+Correct the URL in the index:
+
+url: "hsports-api.yaml"
+
+Start the http server to serve the apidocs directory
+
+http_server api-docs -a 127.0.0.1 -p 8081
+
+Swagger Hub
+===========
+Domians: Allows object definitions to be reused across API definitions
+
+3.0.0
+
+Template: Simpe API
+
+Templates
+
+tags:
+  - name: customer
+    description: customer releated calls  
+	
+	schema:
+	  type: array
+	  items:
+	    $ref: '#/components/schemas/Customer'
+		
+Versioning:
+		
+Importing:
+
+# Group operations
+get:
+   tags: 
+     - product
+
+Security schemes:
+
+Template  
+  Security schemes:
+    Example. OAuth 2.0 Password
+	
+	securitySchemes:
+	
+	     # An API consumer can receive an access token from the tokenUrl, once providing the appropriate parwmters.
+	     tokenUrl:
+		 scope
+    
+	ecrity:
+	  - password: [write]
+
+
+Domains
+=======
+Across multiple API definitions
+
+Select OpenAPI version 3.0.0	  
+
+Reference domain from API:
+
+$ref: 'https://api.swaggerhub.com/domains/hplussport1/hplus/1.0.0#/components/schemas/Customer'	
+
+Nesting schemas into domains:	
+
+format: date-time
+example: 2023-0101T16:37:30-08:00  -- Difference from UTC
+
+Reference locally:
+$ref: "#/xcomponents/schemas/Customer'
+		
+In API definition
+
+  /order
+    post 
+	  tags:
+	    - order # specify an array of tags that apply to this operations
+	  security
+	    - password [write]
+	  requestBody
+        content:
+		  application/json
+		    schema: 
+			  $ref: 'https://api.swaggerhub.com/domains/hplussport1/hplus/2.0.0#/components/schemas/Order'	
+    responses:
+	  200:
+	    description: This is a successful response
+		content:
+		  application/json
+		    schema: 
+			  $ref: 'https://api.swaggerhub.com/domains/hplussport1/hplus/2.0.0#/components/schemas/Order'	
+		
+Enforcing API standards
+=======================
+
+"Gear" button.
+
+Standardization tab
+
+Example:
+
+Operation must have one and only one tag
+
+
+tags:
+  - name: order
+  - description: This is an order related operation
+  
+
+Auto Mocking APIs
+
+
+servers:
+   - description: SwaggerHub APÅI Auto MOCKING  
+   url: https://virtserver.swaggerhub.com/hplussport1/catalog/1.0.0
+   
+   Try it out button
+  
+Adding Organization members
+
+
+
+Inviting individual collaborators - work on specific API
+
+Challenge
+=========
+Import the blog API definition to SwaggerHub and publish it
+Create a new version
+Update the POST operation to include API key security
+Publish the API
+
+Import excercise file 03_14_begin.yaml
+
+securitySchemes:
+  spiKey:
+    type: apiKey
+	name: api-key
+	in: header  # Where to find the api-key 
+
+
+post:
+  security:
+    - apiKey []
+
+Capstone Project
+================
+In the couse prject, we will create an API solution centeres around our OAS API definition file for the H+ Sports catalog API. 
+The solution will create an API implementation and integrate in with several cloud-based products to provide an end-to-end API solution.
+
+We wlll build:
+A virual server, that can mock API calls (runs an SwaggerHub)
+An angular clientSDK for calling that Api
+A Spring based server stub, that provedes the beginnings of an API implemtation
+
+We will thrn integrate the ckient SDK into a small Angular Application
+
+The jar will hosted on a Linux Server running in Azure.
+
+We will replace theSwagger Hub virtual server wih an API gateway named Apigee
+Apigee proxies traffic to our API implementation on Azure
+
+API Gateway like Apigee can manage an orgaization's API catalog in a sinelge platform,
+solving commin API concerns, like throtteling and securiy in a sensual location.
+
+1. Generating server stubs and client SDKs
+=======================================
+Export option
+Server-stub: Spring
+Client: typescript-agular-client-generated
+
+2. Building an API client
+=========================
+Angular application
+Node.js, Angular and Visial Studioo Code shoul be installed
+
+hsprts-client-app (couse file - not generated from swagger)
+Paste teh generated client code into the REST catalog.
+
+in Visual Studio.
+npm install 
+All of out npm packges have been loaded
+
+serve
+
+localhost:4200
+
+3. Client SDK Internals
+=======================
+typescript
+product.service.ts
+
+4. API Implementation
+=====================
+hsport-catalog-server
+
+build the code that provides our data and capabilities
+
+ProductService.java
+Modify the ProductApiController - to access the model
+
+http://localhost:8080/hplussport1/catalog/1.0.0
+
+http://localhost:8080/hplussport1/catalog/1.0.0/product
+
+http://localhost:8080/hplussport1/catalog/1.0.0/product/524
+
+5. Packaging the API Implementation
+===================================
+maven clean package
+
+swagger-spring-1.0.0.jar 
+
+6. Hosting APIs in Azure
+========================
+Microsoft cloud service
+
+7 .API Server setup
+===================
+Setup DNS name resolution
+WinSCP
+
+Azure. Serial console
+
+" Java
+apt install default-jre
+nohup java -jr -Dserver.port 80 swagger-spring-1.0
+
+DNS name: 
+
+8 Publishing public APIs
+========================
+SwaggerHub: 
+servers
+  - description: Production Instance
+    url: 
+
+9 API Management i APIgee
+=========================
+API Gateway in front of our API implementation
+
+Security
+Throtteling
+Monetization ?
+Monitoring
+Air handling
+
+Create a new API spec - Import from Swagger Hub
+
+https://app.swaggerhub.com/&apis/hplussport1/catelog/1.0.0
+
+Change app to api
+Add swagger.yaml suffix
+
+https://api.swaggerhub.com/&apis/hplussport1/catelog/1.0.0/swagger.yaml
+
+Copy url for production
+
+Setup a proxy. Pass traffic from Apigee back to out API implementation running on Azure
+
+Reverse proxy
+
+Name: hsports-ctalog
+Exiting api. Pass in production URL
+Pass throuh - just for now.
+Add CORS headers: ?
+
+Copy Apigee url.
+
+10 Monitoring API Usage
+=======================
+
+
+11 Client modifications
+=======================
+Setup Angular application to use the Apigee proxy URL, só thaat the application accesses the production instance of out API
+
+src/app/rest/api/product.service.ts
+
+Use mock to develop, before the API is ready. Contract first approach
+
+
+12 Conclusion
+=============
+The OAS API definition file that we built with Swagger
+
+Documentation, a client SDK, a server-side stub, a mock API server, 
+and i supported integration with a cloud based API management platform
+
+Blog: http://tothought.com
+kevin-bowersox on Stack Overflow
+
+
+
+
+
+
+
+
+
+
+
+
+
+

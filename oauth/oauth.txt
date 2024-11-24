@@ -1,0 +1,1000 @@
+Graunt types:
+
+1. Authorization Code
+2. Authirization Code with PKCE
+3. Resource Owner Password
+4. Client Credential (backend)
+5. Device type Grant
+
+
+OICD = OpenID Connect
+
+An oAuth Server
+https://oauth2,thephpleague.com/
+Google OAuth 2.0 Playground
+https://developers.google.com/oauthplayground/
+
+OAuth as a service
+API Access Management
+https://developer.okta.com/        
+
+Token Introspection Extension
+https://jwt.io
+(or local libraries)
+decode Jason Web Tokens (JWT),
+
+The code for this course
+========================
+https://github.com/caseysoftware/oauth-and-openid-connect
+
+Describing OAuth2.0
+===================
+Oauth is a framework for user to delegate access to 1 system over to another system
+You are autorizing one system to act on behalf of you to that other system
+You can do this to share data, functionality
+
+Athentication (AuthN)
+=====================
+Who are you
+
+Authorization (AuthZ)
+=====================
+What can you do
+
+OAuth2 is an authorization framework
+
+OpenID Connect is an OAuth 2.0 extension putting function and form to a users's profuile information.
+OpenID Connect is a special case of OAuth2.0
+
+Making OAuth 2.0 usefull with extensions
+========================================
+
+OAuth 2.0 Framework
+Loose operating agreement, not a contract
+
+Extensions
+==========
+
+1. OpenIdConnect 
+Provides a standard way to request and share profile data
+Gives us "Sign in with " on hundreds of sites
+Derpends on JSON Web Tokens, or JWTs
+
+2. Json Web Tokens (JWT)
+RFC 7519
+Oauth doesn't require JWTs, but they are commeon
+JWTs are encoded, not encrypted
+JSOM Web Encryption (JWE)
+Includes:
+iss (issuer)
+iat (issued at)
+sub (sunject)
+aud (audience)
+exp (expiration)
+
+3. RFC 7662 Token IntrospectionExamines a token to describe tis contents
+Useful for opaque tokens
+Describes if the token is active or notMandatory if you have Tkoen Revocation
+
+4. RFC 7009 Token Revocation
+Revokes (cancels) a token via API
+Technically optional
+In prectice, required
+
+RFC 8636 Auth Code with PKCE
+(End user facing extension)
+Usefulle for protecting  client-side flows (mobile devices, SPAs)
+Rpleaces the implicit grant type
+
+RFC 8693 Token Exchange
+Introduces an approach for tradinbg or exchanging tokens on behalf of another  user or service, aka dlelegation.
+
+RFC 8414 Authorization Server Metadata
+
+OpenID Connect
+==============
+OIDC is an extensin on top of Oauth2.0
+OIDC replaces SAML for Single Sign-On
+
+OAuth 2.0 Fundamentals
+======================
+1. Resource owner - that is you
+2. Resource server - what you are granting access to. Able to validate the token and allow requesting access
+3. Grant type - how the application is asking for access
+4. Scope - what access the application is requesting
+5. Authorization server - who is the application asking for access - grant type and scope is sent to the authorization server
+6. Token - how the application gets that access 
+7. Claims - the content or information in the token
+
+You (resource owner) want access to a room (the resource).
+The front desk is the Authorization server.
+Key card (token)
+
+Undestanding the OAuth Endpoints
+================================
+RFC 6749: OAuth Core
+
+/authorize
+The endpoint taht the enduser (reresource owner interacts with togrant permission for the application to access the resource
+Could retun n authorization code or a token
+
+Evaluate our grant type and our scope request.
+
+/token
+The endpoint that the application uses to trade an autohrization code or refreshtoken for an accesstoken
+
+The following endpoints are optional
+====================================
+/userinfo
+The endpoint that applicatins use to retreive profile information about the authenticated user.
+
+Returnt the claims about a user.
+
+This returns a spec-defined set of fields, depending on the permissions (scope) requested.
+
+RFC 8414. Oauth Authorization Server Metadata Discovery
+The endpont that applications use to retrieve the configuration information fir the authorizationserver.
+
+/introspect
+The endpoint that applications 
+
+/revoke
+
+Grant types
+===========
+Authorization code
+Implicit or hybrid
+Resource Owner Password
+Client Credentals
+Device CodeAuthorization Code with PKCE
+
+Are you authorizing on behalf of a user or a service?
+Does the system in question have a web browser available?
+In the application entirely server side, or does it have a clinet side component?
+
+Oauth Scopres
+=============
+A set of permessions, you can request (example CRUD)
+
+Example: okta.apps.read
+
+OpenID Connect Scopes:
+openid
+profileemaik
+address
+phone
+
+Using the OAuth Playground
+==========================
+https:developers.google.com&/oauthplayground
+
+Oauth 2.0 tokens
+================
+
+1. Access token (Intended for the resource server)
+The access token is a string representing an authorization issued to the client. This strong s usually opaque to the client.
+Tokens represent specific scopes and durations of access, granted by the resource owner, and enforced by the resource server and autorization server.
+
+- **Purpose**: Used to gain access to protected resources on behalf of the user. 
+- **Usage**: Sent in API requests to authenticate and authorize access. 
+- **Content**: Contains information like scopes, expiration, and other metadata required by the resource server to validate the token. 
+- **Audience**: Intended for the resource server. 
+
+2. Refresh token
+A refresh token is a string representing the authorization granted to the client be the resource owner. The string is usually oopaque to the client. 
+The token denotes an identifier used to retrieve the autorization information.
+
+You can use a refresh token to request a new access token. Only for use with the authorization server
+
+
+How is a token structured?
+X. Opaque Tokens - there is nothing to see here.
+Y. JSON Web Token (JWT) Full of authorizatin nd profile data.  Base 64 encoded string containing signature information to verify who sent it, and the data in it.
+
+3. ID token (Intended for the client application)
+The primary extension that OpenID Connect makes OAuth 2.0 to enbale End-Users to be Authenticated is the ID token data structure.
+The ID token is a security token, that contains claims about the authentication of a end-user by an authorization server, when using a client, and potetially other requested claims.
+The ID token is represented as a JSON Web Token (JWT).
+
+- **Purpose**: Used to authenticate the user and provide information about the user. 
+- **Usage**: Typically used in OpenID Connect (OIDC) to verify the user's identity. 
+- **Content**: Contains claims about the user, such as their identity, authentication time, and other profile information. 
+- **Audience**: Intended for the client application to validate the user's identity. 
+ 
+In summary, an access token is used for authorization, while an ID token is used for authentication.
+====================================================================================================
+
+Validating JWTs
+===============
+Validating establishes trust - anything else is irresponsible.
+
+Retrieve your signing keys - read the documentation from the OAuth provider. The public key of the sender.
+
+3 parts separated by periods.
+
+1. Header - tells us the algoritm used to generate the token.
+2. Payload
+3. Signature - Use the signing key to sign the payload and compare against the original structure.
+
+
+Sign the payload using the public key of the sender. The result should mathc the signature received in the token.
+
+The payload contains some key/value pairs called claims.
+
+iss: Issuer of the token. Usually the Authorization server. Make sure this fild is what you expect.
+sub: The entity ? the token is about. The enduser authenticated or the system, that requested the token.
+aud: The inrended audience of the token. The application which requested the token.
+iat: Issued at time
+
+Check out https//jwt.io to find a library for toekn validation - matching the algoritm use need.
+
+Handling Token Safely
+=====================
+Access and refresh tokena are credentials
+Use TLS
+Use Secure Cookies
+
+ID token is going to the ownerDo not embed sensitive data
+Use the token to retrieve sensitive infomation from the resource server directly.
+
+Exchange  refresh token for en new acccess token.
+
+4. Grant type. Authorization Code flow.
+===================================
+1. The user authenticates
+2. The application (for example Web App, that the ser is using) authenticates
+
+The autorization server now knows, who it granted a token to and for which app.
+
+At no time did the application have the chance to touch our password
+The user and the browser never had the chhance to touch the access token.
+
+Onely the one-time-use authorization code is exposed,
+The application never sees the user's credentials
+The user never sees the access or refrsh tokens
+
+User get back an auth code from the authorization server
+
+The application uses the auth code and the client secret to get an access token (and optionally refresh token)
+
+Authorizarion Code Flow
+=======================
+
+1. Authorization Code Request to /autorize (client sends)
+2. 302 Redirect to authentification prompt (Authorization server sends)
+3. Authentification and consent (client sends)
+4. Authorization Code response (Authorization server sends)
+5. Send Authorization Code and Client secret to /token (client sends)
+6. Access token (and optionally refresh token) (Authorization server sends)
+7. Request with access token to Resource server (Your application)
+8. Response (Your application)
+
+
+When should you use Authorization Code Flow
+===========================================
+Are you authorizing on behalf of a user?
+Does the system in question have a webbrowser available?
+Is the application entirely server side, or does it have a clietn side component?
+
+Example
+=======
+The 3. part application never sees our credentilas 
+and the end user never sees the access token.
+
+https://github.com/caseysoftware/oauth-and-openid-connect
+
+
+Postman:
+Access Token
+id_token
+
+Postman:
+
+Auth Url:          https://xxx/oauth/authorize
+Access Token Url:  https://xxx/oauth/token
+
+# Session 4.3: Using the Authorization Code Grant Type
+
+Before using the following setup, ensure your Auth0 environment is configured as descibed in `other_oauth_server\README.md`. Because this Grant Type includes an interactive step, I recommend you use Postman or another visual client.
+
+### Setting up Postman for Auth Code Flow using Auth0
+
+For the Settings in this section, on your Auth0 Dashboard vist Applications > Applications and your specific application.
+
+0. In the Postman request editor, immediately below the URL box, select Authorization.
+0. For Type, select `OAuth 2.0`
+0. For Auth URL, set it to your Auth0 domain (from the Settings tab) and append `/oauth/authorize`
+0. For Access Token URL, use your Auth0 domain and append `/oauth/token`
+0. For Client ID, use your Auth0 Client ID
+0. For Client Secret, use your Auth0 Client Secret
+0. For Scope, set `openid email`
+0. Click "Get New Access Token"
+
+If all goes well, you should see a redirect to your Auth0 login page. Log in with the credentials you created at setup and you should get back an `access_token` and `id_token`. Copy and paste either into jwt.io to see the decoded JWT.
+
+Note: You may see an empty payload for the `access_token` which is okay. It depends on your configuration. The `id_token` will have your email information as specified by the `openid email` scopes. Change this to other OIDC scopes - like `openid profile` - to see how it changes.
+
+
+https://jwt.io
+
+Clear cookies. to see authorization.
+
+Authorization Code. Husk. Yderligere 
+====================================
+1. Klik "Autheticate Using Browser" i postman
+2. Kopier Postman Callback url til Auth server "Allowed Callback Urls"
+3. På Auth Server i Advanced setting "Grant Types" skal "Authtification Code" enables.
+4. Make sure your browser allows pop-ups
+
+Auth-Code and PKCE overview
+===========================
+Singe Page Aps - loads them selves entirely client side in the browser or on a device.
+We could not count on them to keep secrets for us.
+
+Oauth is a framework, not a specification. We kan extend it.
+
+No clinet secrets
+No refresh tokens
+RFC 7636 - Proof Key for Code Exchange
+
+Authorization Code Flow with PKCE
+
+It restores the Application Authentification step f
+Security Considerations from the original Auto Code flow.
+
+The App uses a PKCE code verifier to generate a challange
+
+Send challange to /authorize
+
+Send authorization code and code verifier to /token
+
+The autho server uses the verifier to regenerate the original challange and compares them.
+
+If they match, we know, that this is the app, that started the process - and atoken is teturned.
+
+We managed to recreate App Authentification, without having to embed secrets in the app.
+
+Authorization Code Flow with PKCE (RFC 7636)
+============================================
+1. PKCE code verifier and challange generated (Client side) 
+2  Authorization Code Request and code challange to /autorize (client sends)
+3. 302 Redirect to authentification prompt (Authorization server sends)
+4. Authentification and consent (client sends)
+5. Authorization Code response (Authorization server sends)
+6. Send Authorization Code and Code verifier to /token (client sends)
+      The server uses the verifier to regenerate the original challange and compares it to the original (send in step 2).
+7. Eval PKCE code (Authorization server)
+8. Access token (Authorization server sends)
+9. Request with access token to Resource server (Your application)
+10. Response (Your application)
+
+
+In OAuth 2.0 with PKCE (Proof Key for Code Exchange), a "code verifier" is a crucial component used to enhance the security of the authorization code flow. 
+It is a high-entropy cryptographic random string that the client generates at the beginning of the authorization process. 
+The code verifier serves as a secret that is never shared directly with the authorization server during the initial authorization request.
+
+Egentlig i stedet for client secret.
+
+Here are some key points about the code verifier:
+
+1. **Random and Secure**: The code verifier is a random string that should be securely generated to ensure unpredictability. It typically consists of a series of characters that can include letters, numbers, and symbols.
+
+2. **Length and Composition**: According to the PKCE specification, the code verifier should be between 43 and 128 characters long. It must be composed of characters from the unreserved URI characters set, which includes ASCII alphanumeric characters and the following:  `-` ,  `.` ,  `_` ,  `~` .
+
+3. **Role in PKCE**: The code verifier is used to generate the code challenge, which is sent to the authorization server during the initial authorization request. Later, when exchanging the authorization code for an access token, the client sends the code verifier to the authorization server. The server uses it to verify the code challenge and ensure the integrity and authenticity of the request.
+
+By using a code verifier, PKCE provides an additional layer of security, especially for public clients, by protecting against interception attacks in which an attacker might try to exchange an intercepted authorization code for an access token.
+
+
+When should you uses PKCE?
+==========================
+You cannot trust a client application to keep secrets for us.
+AppAuch appoiach: https://appauth.io/
+
+Do we have a user - yes
+Browser Available - yse
+Server side only - yes.  Use Authorization Code Flow
+Servider side only - no. Use Authorization Code Flow with PKCE.
+
+
+https://auth0.com/docs/quickstart/spa/vanillajs/interactive
+
+Example:
+Our application is to be running on localhost:3000
+
+Allowed Callback URL:
+Here is a safe URL, that we plan on redirecting the user to, and there fore the token, after the autentificatin flows.
+
+Allowed Logout URLs:
+After the user logs out, we will redirect him back to this URL.
+
+Allowed Web Origins:
+This is a safe URL, that this flow might start from.
+
+- **Public Clients**: Use this flow when developing public clients, such as mobile apps, desktop apps, or single-page applications (SPAs), where you cannot securely store a client secret. 
+These applications are considered "public" because they run in environments where keeping secrets secure is not feasible. 
+- **Enhanced Security**: PKCE (Proof Key for Code Exchange) adds an extra layer of security by requiring a dynamically generated code verifier and code challenge. 
+This helps prevent attacks such as 
+, even if the code is intercepted during the exchange process. 
+- **Browser-Based Applications**: If you're developing an application that runs in a web browser and needs to authenticate users, 
+using PKCE with the Authorization Code Flow is a secure choice. 
+
+2. **Authentication**: The client secret is used in conjunction with the client ID to authenticate the client application when it requests an access token from the authorization server. 
+This helps ensure that only authorized applications can obtain access tokens. 
+
+Authorization Code Interception attacks
+=======================================
+An "authorization code interception" attack is a security threat in the OAuth 2.0 authorization process, specifically targeting the Authorization Code Flow. 
+This type of attack occurs when an unauthorized party intercepts the authorization code that is sent from the authorization server to the client application. 
+Here's how it can happen and why it matters:
+
+### How It Happens:
+1. **Redirect URI Manipulation**: An attacker may manipulate the redirect URI to capture the authorization code intended for the legitimate client. 
+This can occur if the client application does not properly validate or restrict redirect URIs.
+
+2. **Network Interception**: If the authorization code is transmitted over an insecure channel (e.g., HTTP instead of HTTPS), 
+an attacker on the same network could intercept the code.
+
+3. **Malicious Apps or Scripts**: An attacker might use malicious apps or scripts to intercept the authorization code,
+ if the client application is running in an insecure environment.
+
+### Why It's a Problem:
+- **Impersonation**: Once an attacker has the authorization code, they can potentially exchange it for an access token at the authorization server, 
+allowing them to impersonate the legitimate client application and access protected resources on behalf of the user.
+
+### Mitigation Strategies:
+- **Use HTTPS**: Always use HTTPS to encrypt communications between the client and the authorization server to prevent interception by network attackers.
+  
+- **PKCE (Proof Key for Code Exchange)**: Implement PKCE, especially for public clients like mobile apps or single-page applications. 
+PKCE adds a layer of security by requiring the client to prove it is the legitimate recipient of the authorization code through a dynamically generated code verifier and code challenge.
+
+- **Strict Redirect URI Validation**: Ensure that the authorization server only redirects authorization codes to pre-registered and validated redirect URIs.
+
+- **Short-lived Codes**: Use short-lived authorization codes that expire quickly, reducing the window of opportunity for an attacker to use an intercepted code.
+
+By implementing these strategies, you can significantly reduce the risk of authorization code interception attacks 
+and protect user data and application integrity.
+
+
+Security Considerations
+=======================
+It is only open when we have received the auth code, but not yet used it.
+After the user autenticates, they get that auth code, which the server side app, then exchanges for the access token.
+The auth code can only be used once.
+The user or any other appplication in the browser cannot even see any of the resulting access tokens or refresh tokens.
+Be aware of the users session
+Protect your redirect_uri, which is where the oauh server will send tha auth code
+You must validate your access token, with RFC 7519 or your oauth provider.
+
+5. Grant Type. Resource Owner Code Flow
+=======================================
+Resource Owner Password Flow 
+============================
+1. Authenticates (User sends to client) - Wait What does that mean. The app as your credential!
+2. Access token request to /token (client sends)
+3. Access token (and optionally refresh token) (Authorization server sends)
+4. Request with access token to Resource server (Your application)
+5. Response (Your application)
+
+Never use it - except to bridge legacy systems to Oauth.
+
+
+
+Grant type Client Credential (no user - but backend service)
+======================================
+You will never use it for Open Id Connect
+
+
+Grant type Client Credential Flow
+=================================
+1. Access token request to /token (client system sends)
+   - using clientId and clientSecret. (These are the applications credentials)
+2. Access token (and optionally refresh token) (Authorization server sends)
+3. Request with access token to Resource server (Your application)
+4. Response (Your application)
+
+Benefits:
+
+Rotating credentials.
+Granular permissions by scope
+
+Alternative: Use API Keys
+
+Benefits of OAuth over API Keys
+1. Simplifies with consistent interface
+2. Credential rotation, scopes an better tools
+3. Fever components and implementations overall.
+
+The client secret is a passwaord (the systems password)
+
+curl -X "POST" "https://dev-cohwjw0vlospxg1v.us.auth0.com/oauth/token" \
+	-H "Content-Type: application/x-www-form-urlencoded" \
+	-H "Accept: 1.0" \
+	--data-urlencode "grant_type=client_credentials" \
+	--data-urlencode "client_id=MvLVZSH5k6TxOaDHIHLltnnAoW9FKJ5d" \
+	--data-urlencode "client_secret=BON9hb5fUf1ESgAf6w6n4JpcnxLl8yifer84ibOFmhBKKRXBYIdbtmR-CwYuZwg8" \
+	--data-urlencode "audience=linkedin-learning-api"
+
+Security Considerations
+=======================
+Use TLS
+The client secret is acredaentail -protect it
+Validate the access token
+Protect the access token
+Log and monitor the system
+Client Credential flow is not necessarily for all devices.
+Not on IOT devices. 
+
+
+In all the other Oauth flows, the applications sends the user to the authorization server or identitiprovider to autenticate and authorize the application
+
+This flow() captures the users credentials in the application itself, and sends them to the server on behalf of the user behind the scenes.
+
+This mean, that the application developer has your credentials.
+
+Your user is giving their credentails to the application.
+Do we want to train our uses to put their credentails anywhere
+Do we trust the applications and all the developers.
+The requested scopes will apply to the access token, and limit the users overall authorizations
+Scopes don't linit access here
+Revoking the token doesn't help either
+
+The only Valid Use Case:
+"Wrapping" legacy systems in an Oauth ibterface to bring them under the saeme security practices.
+
+Grant Type. Device type (Browser less systems)
+==============================================
+Do we have a user involved: Yes. (This also also means the we can use OpenIdConnect in addition to regular oauth (authozization))
+Do we have a browser available: No (or the browser does not supports redirects).
+
+It is not secuere to type a password in the airport for instance.
+
+Flow:
+1. The device request a device code. Make a POST request to the device code endpoint
+   The response code contains:
+   a .The device code is returned. This is effectiviely the device identity.
+   b. The user_code
+   c. The verification_uri. This is where the user will actually present their user code after authentification.
+   
+2. Tell the user to enter the user_code
+   You will have to present the user_code to the user. Just add it to the verification URL is the easiest.
+   We can present that entire url as a QR code, that the user just scans
+
+   The device uses the interval field is used to determine how often to pull the autorization server to see, if the user has completed their process.
+   
+3. Poll the token endpoint.   
+   The device gets back an access and a refresh token.
+   
+Now the device can use this access token to make API requests on behalf of the user.
+
+You will probably use a similar process for setting up multi factor authenfication with you bank or even GitHub.
+
+When you set up an autentification app, your are presented with a QR code, which you scan.
+The you provide the generated number back to the web site, which allows you to log in.
+It is not quite the divice gtant ype, but is is pretty close.
+
+Security Considerations
+=======================
+Always use SSL/TLS
+Use a trusted certificate authorothy.
+
+OAuth Recommended Practices
+===========================
+Always use SSL/TLS and a trusted certificate authoroty.
+
+Client Application or device
+	Chose the right grant type	
+	Use SSL
+	Validate your tokens
+	Secure your tokens
+	
+
+Potentially an API Gateway
+
+
+Authorization Server (OKTA)
+
+Resource server (api) - The thing we are protecting - The resource server or the API itself.
+The resource server should validate every access token, it receives and respect the expiration time.
+	If you validate locally, you will not know, if the authrization server has revoked it.
+	Remote validation adds latency to rquests.
+	
+	
+
+
+
+Confirm that the token grants the authorizations, that match the action requested.
+
+State of the Industry
+=====================
+OAuth Extensions
+
+RFC 6749 The OAuth 2.0 Authorization Framework
+RFC 7519 JSON Web Token (JWT)
+RFC 6750 The OAuth 2.0 Authorization Framework: Bearer Token Usage. Bearer tokens in the authorization header. To pass tokens around securely. Tkone should not be passed in the URL.
+RFC 7636 Proof Key for Code Exchange by OAuth Public Clients (Open Id connect)
+(RFC 8628 OAuth 2.0 Device Authorization Grant)
+RFC 7516 JSON Web Encryption (JWE). Pass sensitive information safely (healthcare and banking systems).
+RFC 7662 OAuth 2.0 Token Introspection. Usethe authorization server to check if a token is invalid.
+RFC 7009  OAuth 2.0 Token Revocation
+
+// App support
+RFC 7636 Proof Key for Code Exchange by OAuth Public Clients. Autorization code flow with PKCE. Better support for native apps and single page apps.
+RFC 8628 OAuth 2.0 Device Authorization Grant
+
+// 
+RFC 7591 OAuth 2.0 Dynamic Client Registration Protocol
+RFC 7592  OAuth 2.0 Dynamic Client Registration Management Protocol
+
+RFC 8414  OAuth 2.0 Authorization Server Metadata
+
+Indystry-specific Oauth Extensions
+==================================
+SMART on FHIR
+
+Next step
+=========
+Book: OAuth 2.0 Simplified by Aaron Pareecki.
+oahth.com (online version of the book).
+Do not build it yourself.
+https://s/www.aoth.com/oauth2-server/map-oauth-2-0-specs
+
+
+
+
+TODO 
+
+
+
+
+
+Tokens
+======
+In OAuth 2.0 and OpenID Connect, "access tokens" and "ID tokens" serve different purposes, and it's important to understand their roles in authentication and authorization processes:
+
+### Access Token
+- **Purpose**: An access token is used to authorize access to protected resources on behalf of the user. It is a credential that the client application uses to make API requests to the resource server.
+- **Usage**: When a client application wants to access a user's data from a resource server (like an API), it presents the access token in the request headers. 
+    The resource server validates the token to ensure that the request is authorized.
+- **Content**: Access tokens can contain information about the user and the permissions granted, but the specific content and format depend on the implementation. They are often opaque strings, but they can also be JSON Web Tokens (JWTs) with encoded claims.
+- **Lifespan**: Access tokens are typically short-lived to minimize the risk of misuse if they are intercepted.
+
+### ID Token
+- **Purpose**: An ID token is used to authenticate the user. It is a token that contains information about the user and is issued by the identity provider as part of the OpenID Connect protocol, 
+  which is an identity layer on top of OAuth 2.0.
+- **Usage**: The ID token is intended for the client application to verify the identity of the user who authenticated. 
+    It is not used to access resources or APIs.
+- **Content**: ID tokens are usually JSON Web Tokens (JWTs) that contain claims about the user, such as their unique identifier, name, email, and authentication time. 
+    These claims are digitally signed by the identity provider to ensure their integrity and authenticity.
+- **Lifespan**: ID tokens are typically valid for a short period, just long enough to authenticate the user to the client application.
+
+### Summary
+- **Access Token**: Used for authorizing access to APIs and resources on behalf of the user.
+- **ID Token**: Used for authenticating the user and providing information about their identity to the client application.
+
+These tokens play complementary roles in securing web applications and APIs, with access tokens focusing on authorization and ID tokens on authentication.
+
+Claims
+======
+In OAuth 2.0, a "claim" typically refers to a piece of information asserted about an entity, often a user, in the context of an access token or an ID token. Claims are a fundamental concept in JSON Web Tokens (JWT), which are often used as the format for tokens in OAuth 2.0 and OpenID Connect.
+
+Here are some key points about claims:
+
+1. **Information about the User or Client**: Claims can include various types of information about the user or client, such as the user's name, email address, roles, or any other relevant data.
+
+2. **Standard and Custom Claims**: There are standard claims defined by specifications (such as  `iss`  for issuer,  `sub`  for subject,  `aud`  for audience,  `exp`  for expiration time) and custom claims that can be defined by the application or identity provider to include additional information.
+
+3. **Token Types**:
+   - **Access Token**: In OAuth 2.0, an access token may include claims that specify the permissions or scopes granted to the client, as well as information about the user or client.
+   - **ID Token**: In OpenID Connect, which is an identity layer built on top of OAuth 2.0, the ID token is specifically designed to convey identity information about the user and includes claims such as  `sub`  (subject),  `name` , and  `email` .
+
+4. **Security and Privacy**: Claims need to be carefully managed to ensure security and privacy. Sensitive information should not be exposed unnecessarily, and claims should be signed and optionally encrypted to prevent tampering and unauthorized access.
+
+5. **Usage**: Claims are used by the client application to understand the identity of the user and the permissions granted, allowing it to make authorization decisions and customize the user experience.
+
+Overall, claims are a versatile way to convey information within tokens, enabling secure and efficient communication between identity providers, authorization servers, and client applications.
+
+Sign
+====
+To "digitally sign" a claim means to apply a cryptographic signature to the data, ensuring its authenticity and integrity. 
+This process involves using a cryptographic algorithm to generate a signature based on the content of the claim and a private key. 
+Here’s a breakdown of what this entails:
+
+1. **Authenticity**: A digital signature allows the recipient to verify the identity of the signer. 
+It confirms that the claim was issued by a trusted entity, such as an identity provider or an authorization server.
+
+2. **Integrity**: The digital signature ensures that the claim has not been altered or tampered with since it was signed. 
+If any part of the claim is changed, the signature will no longer be valid.
+
+3. **Verification**: To verify a digitally signed claim, 
+the recipient uses the public key corresponding to the private key used to sign the claim. 
+The verification process checks that the signature matches the claim's content and confirms the signer's identity.
+
+4. **Common Use in Tokens**: In the context of OAuth 2.0 and OpenID Connect, claims are often part of JSON Web Tokens (JWTs). 
+These tokens are typically signed using algorithms like RSA or ECDSA. 
+The signature is part of the token structure, allowing any party with the appropriate public key to verify the token's authenticity and integrity.
+
+5. **Security**: Digital signatures are a fundamental security measure in ensuring that data exchanged between parties in a digital environment is trustworthy. 
+They prevent unauthorized entities from impersonating legitimate issuers or modifying claims without detection.
+
+Overall, digitally signing a claim provides a robust mechanism for ensuring that the information conveyed is both genuine and unchanged, which is crucial in systems that rely on secure and reliable data exchange.
+
+Verify an token
+===============
+Verifying an OAuth 2.0 access token involves several steps to ensure that the token is valid, has not expired, and was issued by a trusted authorization server. Here’s a general approach to verifying an access token:
+
+1. **Token Format**: Determine the format of the access token. Access tokens can be opaque (where the contents are not visible to the client) or structured, such as JSON Web Tokens (JWTs), which are self-contained and include claims about the user and the token itself.
+
+2. **JWT Verification** (if applicable):
+   - **Signature Verification**: If the access token is a JWT, verify the token's signature using the public key of the authorization server. This step ensures that the token was issued by a trusted server and has not been tampered with.
+   - **Claims Verification**: Check the claims within the token, such as  `iss`  (issuer),  `aud`  (audience),  `exp`  (expiration), and any other relevant claims. Ensure that:
+     - The  `iss`  claim matches the expected authorization server.
+     - The  `aud`  claim matches your application or API.
+     - The  `exp`  claim indicates that the token has not expired.
+
+3. **Introspection Endpoint** (for opaque tokens):
+   - If the access token is opaque, you may need to use the token introspection endpoint provided by the authorization server. This endpoint allows you to send the access token and receive information about its validity, associated user, and any scopes or permissions granted.
+
+4. **Scope and Permissions**: Verify that the token includes the necessary scopes or permissions required for the requested resource or operation.
+
+5. **Revocation Check**: Ensure that the token has not been revoked. This may involve checking with the authorization server or maintaining a list of revoked tokens if the server provides such a capability.
+
+6. **Use a Library**: Consider using a library or SDK provided by the authorization server or a third party to handle token verification. These libraries can simplify the process and ensure compliance with best practices.
+
+By following these steps, you can ensure that an access token is valid and authorized to access the resources or perform the actions requested. The specific implementation details can vary depending on the OAuth 2.0 provider and the token format used.
+
+
+RFC 7519
+========
+RFC 7519 is the specification for JSON Web Tokens (JWT), which are often used in OAuth 2.0 for representing access tokens and ID tokens. 
+JWTs are a compact, URL-safe means of representing claims to be transferred between two parties. Here's how RFC 7519 is used in the context of OAuth 2.0:
+
+1. **Token Format**: JWT defines a standardized format for tokens that includes three parts: a header, a payload, and a signature, all encoded in Base64URL and separated by periods.
+
+2. **Claims**: The payload of a JWT contains claims, which are statements about an entity (typically, the user) and additional data. 
+These claims can include standard claims like  `iss`  (issuer),  `sub`  (subject),  `aud`  (audience),  `exp`  (expiration), and custom claims defined by the application.
+
+3. **Signature**: JWTs are often signed using a cryptographic algorithm specified in the header (e.g., HS256 or RS256). 
+The signature ensures the integrity and authenticity of the token, confirming that it was issued by a trusted source and has not been tampered with.
+
+4. **Self-Contained**: Because JWTs are self-contained, they can include all the information needed to authenticate a user and authorize access without needing to query a database or another service.
+
+5. **Interoperability**: RFC 7519 provides a standardized way to encode claims, making JWTs widely interoperable across different platforms and services that support OAuth 2.0.
+
+In OAuth 2.0, JWTs are commonly used as access tokens or ID tokens in OpenID Connect, providing a secure and efficient way to transmit claims between parties. 
+By following RFC 7519, developers can ensure that their implementation of JWTs is consistent with industry standards, enhancing security and compatibility.
+
+
+PHP Server remarks
+==================
+## Caveats and Warnings
+
+0. Our only user is hardcoded in `examples\Repositories\UserRepository.php` on line 27. 
+In a real implementation, that method would call a database or other user store for password verification.
+0. Our only OAuth Client is hardcoded in `examples\Repositories\ClientRepository.php` on line 42. 
+In a real implementation, that method would call a database or other list of OAuth clients to validate the client_id and client_secret.
+0. Our allowed scopes are hardcoded in `examples\Repositories\ScopeRepository.php` starting on line 21. 
+In a real implementation, that method would call a database or other list of scopes to grant.
+
+Token validation
+================
+using oauth2, how do you validate an access token on the resource server?
+
+To validate an access token on a resource server using OAuth2, you typically follow one of these approaches:
+
+### 1. Introspection Endpoint
+Many OAuth2 providers offer an introspection endpoint, which allows a resource server to query the authorization server to validate an access token. Here's a general process:
+
+1. **Send a Request to the Introspection Endpoint**: The resource server sends the access token to the introspection endpoint provided by the authorization server. This request usually includes client authentication (client ID and secret).
+
+2. **Receive Token Information**: The authorization server responds with a JSON object containing information about the token, such as whether it is active, its scope, expiration, and the associated user or client.
+
+3. **Validate the Token**: The resource server checks if the token is active and has the necessary scope for the requested resource.
+
+### Example Request
+http
+POST /introspect HTTP/1.1
+Host: authorization-server.com
+Authorization: Basic base64(client_id:client_secret)
+Content-Type: application/x-www-form-urlencoded
+
+token=access_token_here
+### Example Response
+{
+  "active": true,
+  "scope": "read write",
+  "client_id": "client123",
+  "username": "user1",
+  "exp": 1622499222
+}
+### 2. Self-Contained Tokens (JWT)
+If the access token is a JSON Web Token (JWT), it can be validated locally by the resource server without needing to communicate with the authorization server:
+
+1. **Decode the JWT**: Extract the header, payload, and signature from the JWT.
+
+2. **Verify the Signature**: Use the public key provided by the authorization server to verify the token's signature, ensuring it was issued by a trusted source.
+
+3. **Check Claims**: Validate the claims within the token, such as  `exp`  (expiration),  `iss`  (issuer),  `aud`  (audience), and any custom claims specific to your application.
+
+### Example JWT Header
+{
+  "alg": "RS256",
+  "typ": "JWT"
+}
+### Example JWT Payload
+{
+  "sub": "user1",
+  "scope": "read write",
+  "iss": "https://authorization-server.com",
+  "exp": 1622499222,
+  "aud": "resource-server"
+}
+### Best Practices
+- **Use HTTPS**: Always use HTTPS to protect sensitive information in transit.
+- **Cache Introspection Responses**: To improve performance, cache introspection responses when possible, but be mindful of token expiration.
+- **Regularly Update Public Keys**: If using JWTs, regularly update the public keys used for signature verification to handle key rotation.
+
+Choose the method that best fits your architecture and security requirements. If using a third-party OAuth2 provider, refer to their documentation for specific details on token validation.
+
+
+Token validation details
+========================
+
+In the context of JWT validation using the  `java-jwt`  library, let's break down the two aspects you're asking about:  `.withIssuer("https://your-issuer.com")`  and the use of the private key.
+
+### 1.  `.withIssuer("https://your-issuer.com")` 
+
+- **Purpose**: The  `.withIssuer("https://your-issuer.com")`  method is used to specify the expected issuer of the JWT. The issuer ( `iss`  claim) is a string or URI that uniquely identifies the party that issued the JWT. This is typically the authorization server or identity provider.
+
+- **Validation**: When you call  `.withIssuer()` , the library will check the  `iss`  claim in the JWT against the value you provide. If they don't match, the verification will fail. This ensures that the token was issued by a trusted source.
+
+- **Importance**: Validating the issuer is crucial for security, as it helps prevent tokens from unauthorized or malicious issuers from being accepted by your application.
+
+### 2. Use of the Private Key
+
+- **Private Key Role**: The private key is not used in the resource server during token validation. Instead, it is used by the authorization server to sign the JWT. The signing process ensures that the token cannot be altered without invalidating the signature.
+
+- **Public Key Use**: The public key, which corresponds to the private key, is used in the resource server to verify the JWT's signature. This is why, in the example, we use  `Algorithm.RSA256(publicKey, null)` . 
+
+The public key allows you to verify that the token was indeed signed by the expected issuer's private key.
+
+- **Security**: The separation of private and public keys is a fundamental aspect of asymmetric cryptography. The private key is kept secure by the issuer (authorization server), 
+while the public key is distributed to resource servers to verify tokens.
+
+In summary,  `.withIssuer()`  is used to validate the issuer of the JWT, while the private key is used by the issuer to sign the token. 
+The resource server uses the public key to verify the token's signature, ensuring its authenticity and integrity.
+
+Token Validation Code
+=====================
+import com.auth0.jwt.JWT;
+   import com.auth0.jwt.algorithms.Algorithm;
+   import com.auth0.jwt.interfaces.DecodedJWT;
+   import com.auth0.jwt.interfaces.JWTVerifier;
+
+   import java.security.interfaces.RSAPublicKey;
+   import java.security.PublicKey;
+   import java.security.KeyFactory;
+   import java.security.spec.X509EncodedKeySpec;
+   import java.util.Base64;
+
+   public class JWTValidator {
+
+       public static void main(String[] args) {
+           String token = "your_jwt_token_here";
+           String publicKeyPEM = "your_public_key_here";
+
+           try {
+               // Convert PEM string to PublicKey
+               byte[] decoded = Base64.getDecoder().decode(publicKeyPEM);
+               X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
+               KeyFactory kf = KeyFactory.getInstance("RSA");
+               RSAPublicKey publicKey = (RSAPublicKey) kf.generatePublic(spec);
+
+               // Create JWT Verifier
+               Algorithm algorithm = Algorithm.RSA256(publicKey, null);
+               JWTVerifier verifier = JWT.require(algorithm)
+                       .withIssuer("https://your-issuer.com")
+                       .build();
+
+               // Verify the token
+               DecodedJWT jwt = verifier.verify(token);
+
+               // Access JWT claims
+               String subject = jwt.getSubject();
+               System.out.println("Token is valid. Subject: " + subject);
+
+           } catch (Exception e) {
+               System.out.println("Invalid token: " + e.getMessage());
+           }
+       }
+   }
+
+Example 2
+=========
+Verify the signature of an access token on a resource server using OAuth 2.0, you typically follow these general steps. The exact implementation may vary depending on the OAuth 2.0 provider (e.g., Google, Auth0, Okta) and the type of token (e.g., JWT): 
+ 
+1. **Obtain the Public Key:** 
+   - Most OAuth 2.0 providers expose a URL where you can fetch their public keys. This is often a JSON Web Key Set (JWKS) endpoint. 
+   - Retrieve the public key that corresponds to the key ID ( kid ) in the token's header. 
+ 
+2. **Parse the Token:** 
+   - Decode the access token. If it's a JWT, it will consist of three parts: header, payload, and signature. 
+   - Extract the header and payload without verifying the signature initially to obtain the  kid . 
+ 
+3. **Verify the Signature:** 
+   - Use the public key obtained from the JWKS to verify the signature of the token. 
+   - Ensure you use the correct algorithm specified in the token's header (e.g.,  RS256 ). 
+ 
+4. **Validate the Claims:** 
+   - Check the token's claims (e.g.,  iss ,  exp ,  aud ) to ensure they match your expectations. 
+   - Verify that the token has not expired and is intended for your resource. 
+ 
+5. **Implement Error Handling:** 
+   - Handle cases where the token is invalid, expired, or the signature verification fails. 
+ 
+import com.auth0.jwk.Jwk;
+import com.auth0.jwk.JwkProvider;
+import com.auth0.jwk.JwkProviderBuilder;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.JWTVerifier;
+
+import java.net.URL;
+import java.security.interfaces.RSAPublicKey;
+import java.util.concurrent.TimeUnit;
+
+public class TokenVerifier {
+
+    public static DecodedJWT verifyToken(String token, String jwksUrl, String audience, String issuer) throws Exception {
+        // Create a JWK Provider for fetching the public keys
+        JwkProvider provider = new JwkProviderBuilder(new URL(jwksUrl))
+                .cached(10, 24, TimeUnit.HOURS)  // Cache up to 10 keys for 24 hours
+                .rateLimited(10, 1, TimeUnit.MINUTES)  // Limit to 10 requests per minute
+                .build();
+
+        // Decode the token to get the 'kid' from the header
+        DecodedJWT jwt = JWT.decode(token);
+        String kid = jwt.getKeyId();
+
+        // Fetch the JWK using the kid
+        Jwk jwk = provider.get(kid);
+        RSAPublicKey publicKey = (RSAPublicKey) jwk.getPublicKey();
+
+        // Create a verifier with the public key, audience, and issuer
+        Algorithm algorithm = Algorithm.RSA256(publicKey, null);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withAudience(audience)
+                .withIssuer(issuer)
+                .build();
+
+        // Verify the token
+        return verifier.verify(token);
+    }
+
+    public static void main(String[] args) {
+        String accessToken = "your_access_token_here";
+        String jwksUrl = "https://your-oauth-provider.com/.well-known/jwks.json";
+        String audience = "your-audience";
+        String issuer = "https://your-oauth-provider.com/";
+
+        try {
+            DecodedJWT decodedToken = verifyToken(accessToken, jwksUrl, audience, issuer);
+            System.out.println("Token is valid: " + decodedToken.getPayload());
+        } catch (JWTVerificationException e) {
+            System.out.println("Token verification failed: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+    }
+}
+
+
+Token validation.
+=================
+RFC 7519
+
+JWT - JWS (JSON  Web Signature). RFC 7515
+JWT - JWE (JSON Web Encryption). RFC 7516
+

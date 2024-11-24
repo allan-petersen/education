@@ -1,0 +1,368 @@
+Aplications are packaged with the required infrastructure at the build phase.
+curl localhost.8080/actuator/health
+brew ls tomcat
+
+A running image is called a container.
+
+We have the entire infrastructure all the way down to operating system encapsulated into one self-contained unit. Hence the name container
+
+Command line:
+docker images
+docker ps -a
+docker stop my-demo-app
+// Remove the container
+docker rm my-demo-app 
+// Remove the image
+docker rmi my-demo-app 
+
+
+# Se hvad der er i containere
+docker exec -t -i my-demo-app /bin/sh
+ls 
+java -version
+ls target
+ls /usr/local/tomcat
+ls /usr/local/tomcat/webapps
+
+Containerization
+================
+Software is bundled with all it needs as one immutable artifact called an image.
+The image defines all the dependencies it needs to run,
+including any operating system files and libraries.
+
+The image is identical, whether it is delivered to test staging or production.
+It follows a spcification so that the runtime platform on test staging and production understands how to deploy it.
+Identical images can be seamlessly swapped out or replicated at runtime,
+making deployments resilient (?) and expandable.
+
+OCI = Open Container Initiative
+OCI image specification. The original Docker format.
+
+OCI runtime specification: Docker and others.
+This is the platform that unbundles the image and runs its contens in an isolated environment.
+
+Comparing images to containers
+==============================
+
+Image:
+Immutable object composed of files.
+Operating environment and application run command.
+
+Container runtime ad Engine
+===========================
+Platform for running images that follow the OCI image specification.
+
+Container
+=========
+Also known as container image or Docker container.
+The actual image of a running image.
+A container is an instantiation of an image
+
+Docker files
+============
+Image recipe card.
+
+FROM base image
+ADD, COPY, FROM, RUN, USER, VOLUME, WORKDIR
+CMD or ENTRYPOINT
+
+Docker CLI
+==========
+docker build: Creates an image
+docker run: Instantiates an image as a container and runs it.
+
+docker images: List images in local registry
+docker ps: List active containers
+docker exec: Run a command within a running container
+docker system: General Docker system inspection
+
+docker rmi:Remove image (no active containers)
+docker stop. Stop a running contaner
+docker rm: Remove a stopped container
+docker system prune: Removed all unused or orphan images.
+
+https://docs.docker.com/reference
+
+docker --help
+
+docker [commad] -- help
+
+Learn Dockerfile instructions
+=============================
+alpine is a slimmed down image of a Linux operating system.
+
+There is a default Docker image registry called Docker Hub (Just like Maven Central).
+
+https://hub.docker.com
+https://hub.docker.com/_/alphine
+
+docker build .
+docker images
+docker run --name os-app [IMAGE_ID]
+
+docker ps -a
+docker rm os-app
+docker rmi [IMAGE_ID]
+docker images
+
+docker build -t hello .
+ducker run --name hello-app hello
+
+
+FROM openjdk:11-jdk
+ADD app /app
+WORKDIR /app
+RUN javac -cp lombok.jar Forever.java
+CMD ["java", "Forever", "-cp", "lombok.jar"]
+
+// Compile
+javac -cp lombok.jar Forver.java
+
+--detach
+
+Convert code to a Docker Image
+==============================
+
+docker logs foreverbuilder-app
+
+docker exec -t- i foreverbuilder-app ls /app
+
+docker exec -t- i foreverbuilder-app ls /bin/sh
+
+docker system prune -a  // Delete any a images that don not have a running image
+
+
+# Build the image
+docker build -t foreverbuilder -f Dockerfile-build .
+# Run the container
+docker run --detach -name foreverbuilder-app foreverbuilder
+
+C:\work\docker-for-java-developers-2452212\dockerfile-demos\runapp
+
+# Command to start a shell
+docker exec -t- i foreverbuilder-app ls /bin/sh
+
+# Example
+=========
+FROM openjdk:11-jdk
+ADD app /app
+WORKDIR /app
+RUN javac -cp lombok.jar Forever.java
+RUN rm Forever.java
+RUN if [ -f ./Forever.java ]; then \
+        echo "File exists!"; \
+    else \
+        echo "File does not exist!"; \
+    fi
+CMD ["java", "Forever", "-cp", "lombok.jar"]
+
+
+Best practices
+==============
+Import lightest (less alyers)( image possible
+Start with stable, verfied non changing version images
+Only add files you need.
+Order Dockerfile from least to most frequently changed.
+
+
+Bad
+===
+FROM alpine:latest
+ADD ./ /app/
+RUN apk add openjdk11 	// Pulls down the openjdk11
+WORKDIR /app
+CMD ["java", "-jar", "target/layerdemo-0.0.1-SNAPSHOT.jar"]
+
+Alpine; latest could changed
+Does not start with an image, that combineds the OS and Java
+We wre adding the entire app folder, instead of just the jar. Add only the JAR file, not the whoe project.
+Add JAR file right before the CMD. We add the folder before, we build the ja, so the folder needs to be build again
+Use JRE instead of JDK
+
+Good
+====
+# Best Practices
+
+# Using a version tagged starting image
+# Combined OS and Java Run Time
+# JRE instead of JDK
+FROM openjdk:11-jre-slim
+
+# Does not change, Moved to Second instruction
+WORKDIR /app
+
+# Added only Jar file
+# Added Jar file right before use
+ADD target/layerdemo-0.0.1-SNAPSHOT.jar /app/
+
+CMD ["java", "-jar", "layerdemo-0.0.1-SNAPSHOT.jar"]
+
+
+Multistage
+==========
+
+
+Volumes and ports
+=================
+1. Host volume: Shared host filesystem folder
+-v /host-folder-full-path:/container folder-name
+
+docker run -idt --name host-volume-app -v ${PWD}/my-host-folder:(copyntainer-folder alpine
+
+// Exec into that Container
+docker exec -it host-volume-app sh
+cat /container-folder//Host-hello.txt
+
+echo Hello from the Container >> /container-folder//Host-hello.txt // Reflected in the file outside thecontainer
+
+exit
+
+2. Anonymous volume: Shared Docker manages repository, name generated
+-v /container-folder-name
+
+docker run -idt --name anon-volume-app -v /container-folder alpine
+
+
+3. Named volume: Shared Docker-managed repositry, name provided
+-v name-of-the-volume:/container-folder-name
+
+docker run -idt --name named-volume-app -v bob:/container-folder alpine
+
+docker volume ls
+
+docker volume rm bob // ERROR. Volume in use
+
+docker exec -it named-volume-app touch /container-folder/named-file
+
+Ports
+======
+curl localhost:8080/actuator/health
+
+Dockerfile:
+FROM openjdk:11.0-jre
+RUN mkdir /app
+ADD target/portdemo-0.0.1-SNAPSHOT.jar /app/portdemo.jar
+CMD ["java", "-jar", "/app/portdemo.jar"]
+
+docker build -t portdemo .
+docker run -idt --name portdemo-app portdemo
+
+docker run -p 8080:8080-idt --name portdemo-app80 portdemo
+
+1. port: our host
+2. port: the default from the SpringBoot app in the Container.
+
+docker run -p 9090:8080-idt --name portdemo-app90 portdemo
+
+curl localhost:9090/actuator/health 
+
+
+Docker Registry
+===============
+hub.docker.com
+
+docker pull alpine:latest
+
+docker.io/library/alpine:latest
+docker.io - URL of the Registry
+library - the name space
+alpine - the repository
+latest - tadg
+
+Upload my version:
+
+docker tag docker.io/library/alpine:latest docker.io/mellenbowman/alpine:me
+
+docker login
+
+docker push docker.io/mellenbowman/alpine:me
+
+docker pull docker.io/mellenbowman/alpine:me
+
+Containter orchestration with Docker Compose
+============================================
+orchestration = Running related containers
+
+How do containers interact. 
+Example: Postgress container and Web app Container
+
+
+Example not best practice
+=========================
+Restcontroller is combined with the SpringBoot application in Appication.java
+
+RestControler that exposes endpoints
+
+Running related containers is called Orchestration
+This can be done in the following ways:
+
+Docker CLI (manually)
+Docker Compose
+Docker Swarm
+Kubernetes
+
+Manually
+========
+
+Docker-compose
+==============
+docker-compose.yml
+
+8080:8080
+
+Exposes 8080 as 8080.
+
+docker-compose up
+
+Dockerfile Alternatives
+=======================
+Opinionated
+Applies best practiices for layering
+Ateempts lightst inage possible
+Configureable to override defaults
+Out if the Docker workld and back to coding
+
+Cloud Native Buildpacks
+Sprog Boot Docker Maven and Gradle plugin
+Jib Maven and Gradle plugin
+
+Cloud Native Buildpacks
+=======================
+CNCF
+buildpacks.io/docs
+
+Pack
+====
+pack build suggest
+pack build --builder gcr.io/buiidpacks/builder:v1 webapp-ib:buildpack
+
+docker images
+
+Sprog Boot Build plugin
+=======================
+-- Here the application is built on our host machine, not within the image
+./mvnw package spring-boot:buiild image
+
+The Google Jib plugin
+=====================
+./mvnw package -DskipTests jib:build
+
+docker login docker.io
+
+docker images 
+does not find anything. It is not a local image
+
+it is in docker hub
+
+To build a local image do:
+./mvnw package -DskipTests jib:dockerBuild
+
+Uing jib, you do not need to hve the Docker runtime installed.
+
+
+
+
+
+
+
+

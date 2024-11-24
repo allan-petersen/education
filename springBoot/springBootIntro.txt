@@ -1,0 +1,132 @@
+
+HPPTie
+curl
+
+PostGress
+========
+Start:
+set HOME=C:\work\education\postgress
+
+if not exist "%HOME%\.local\docker\postgresql" mkdir "%HOME%\.local\docker\postgresql"
+
+docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=local -d -p 5432:5432 -e PGDATA=/var/lib/postgresql/data/pgdata -v "%HOME%\.local\docker\var/lib/postgresql/data" postgres
+
+Stop:
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+docker stop pg-docker
+
+
+
+docker ps
+
+docker cp C:\work\education\postgress\schema.sql pg-docker:/tmp/schema.sql
+
+docker exec -it pg-docker /bin/bash
+psql -d local postgres
+
+\i /tmp/schema.sql
+
+select * from lil.rooms;
+
+The part  -v "$HOME"/.local/docker//lib/postgresql/data postgres  in the Docker command is using the volume (-v) flag to create a persistent storage for the PostgreSQL data. Let's break it down: 
+ 
+1.  -v  is the flag for creating a volume. 
+ 
+2.  "$HOME"/.local/docker/postgresql/data  is the path on your host machine where the data will be stored.  $HOME  is an environment variable that typically points to the user's home directory. 
+ 
+3.  :  separates the host path from the container path. 
+ 
+4.  /var/lib/postgresql/data  is the path inside the Docker container where PostgreSQL stores its data by default. 
+ 
+5.  postgres  at the end specifies the image to use for creating the container. 
+ 
+This volume mapping ensures that the PostgreSQL data is stored persistently on your host machine, rather than being lost when the container is removed. It allows you to: 
+ 
+1. Preserve your database data between container restarts or removals. 
+2. Easily backup your data by accessing the files in the specified host directory. 
+3. Share the same data between multiple containers if needed. 
+ 
+This setup provides data persistence and easier management of your PostgreSQL database when using Docker.
+
+
+
+DRY - Do not repeat yourself
+
+Introduction to Spring
+======================
+Spring beans: POJOs configured in the application context.
+
+Data transfer objects (DTOs):
+JavaBeans used to move state between layers.
+
+Inversion of control (IoC)
+Configuration is building the IoC container.
+IoC provides the mechanism of dependency injection.
+Allowing a shift in object creation.
+The application context wraps the Bean Factory which serves the beans to the runtime of the application.
+Sprin Boot provides auto-configuration of the ApplicationContext, 
+based on the precense or absence of classes among other conditionals
+
+Introduction to Spring Boot
+===========================
+Embedded Apache Tomcat (or others).
+Auto-configuration of the ApplicationContext
+Automatic Servlet mappings
+Automatic Controller mapping.
+
+
+Annotations
+===========
+Metadata for your code
+Often the are used for compiler or runtime instructions.
+Greate leverage point for pointcuts (Spring Framework in Depth)
+
+Autoconfiguration
+=================
+@EnableAutoConfiguraion (or @SpringBootApplication per default enables AutoConfuguration)
+IoC container configured based on class path, via the depnedency jars included in the project as well as conbditions
+Exclusion proives customized behavior
+Spring AutoConfigure operations will stop trying to configure a Bean, if you have already defined that bean in your Configuration 
+or in components that are annotated.
+Beans in BeanFactory are proxied
+Annotation drive proxies
+Annotations are easy extension points - to trigger aspects on
+You can add behavior as well through the use of aspecting
+Order of method call
+In you call a metyod internally, the proxy behaviour isn't applied.
+Avoid class level internal method calls
+Example: Class has getX and getY methods
+If from external to that class you call getX, you will get the proxy behaviour
+If from external to that class you call getY, you will get the proxy behaviour
+If you call getX and within the getX method call, it call getY, you will not have the proxied behaviour, aroun that getY method call
+
+Repositories
+============
+https://docs.spring.io/spring-data/jpa/reference/repositories/query-keywords-reference.htmlhttps://docs.spring.oi/spring-data/jpa/docs/current/reference/html/#repository-query-keywords
+
+
+Branch 02_05_begin
+
+Guest entity, reservation
+
+GetAllReservationonResDate
+
+ 
+
+
+
+
+
+
+
+
+
+
+Recommended courses.
+Spring Framework in Depth
+Learning Spring with Spring Boot
+
+

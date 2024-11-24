@@ -1,0 +1,69 @@
+openapi: 3.0.0
+info:
+  title: H Sports Plus API   
+  version: 1.0.0
+tags:
+  - name: Article
+    description: Articles for the H Plus Sport Blog
+paths:
+  /product:
+    get:
+      tags:
+        - Article
+      responses:
+       200:
+         description: This is a list of the products
+         content:
+           application/json:
+             schema:
+               type: array
+               items:
+                 $ref: '#/components/schemas/product'          
+    post:
+      tags:
+        - Article
+      summary: Add a new product to the store
+      description: Add a product to the store
+      operationId: addProduct
+      requestBody:
+        description: Create a product in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product'
+        required: true
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'          
+        '405':
+          description: Invalid input
+components:
+  schemas:
+    product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 400
+        created:
+          type: string
+          format: date
+          example: 2023-09-26
+        tagline:
+          type: string
+          example: Lemon Water
+        content:
+          type: string
+          example: Bla bla
+        category:
+          type: string
+          example: My category
+        taglist:
+          type: array
+          items:
+            type: string
+            example: 1. tag, 2 tag
