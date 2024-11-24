@@ -1,0 +1,65 @@
+To create your own annotation in Java, you need to define an annotation type using the  @interface  keyword. 
+Here's a step-by-step guide on how to create a custom annotation: 
+ 
+1. **Define the Annotation:** 
+   Create a new Java interface and use the  @interface  keyword to define your annotation.
+   
+public @interface MyAnnotation {
+       String value() default "default value";
+       int number() default 0;
+}   
+
+In this example,  MyAnnotation  has two elements:  value  and  number , both with default values. 
+ 
+2. **Use the Annotation:** 
+   You can now use your custom annotation in your code. Annotations can be applied to classes, methods, fields, and other elements.
+   
+@MyAnnotation(value = "Example", number = 5)
+   public class MyClass {
+       // Class implementation
+} 
+
+3. **Process the Annotation:** 
+   To process annotations at runtime, you typically use reflection. Here's a simple example of how you might retrieve and use your custom annotation:  
+   
+import java.lang.reflect.Method;
+
+   public class AnnotationProcessor {
+       public static void main(String[] args) {
+           try {
+               Class<MyClass> obj = MyClass.class;
+
+               // Check if the class has the annotation
+               if (obj.isAnnotationPresent(MyAnnotation.class)) {
+                   // Retrieve the annotation
+                   MyAnnotation annotation = obj.getAnnotation(MyAnnotation.class);
+
+                   // Access annotation values
+                   System.out.println("Value: " + annotation.value());
+                   System.out.println("Number: " + annotation.number());
+               }
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
+       }
+   }
+
+4. **Retention Policy and Target:** 
+   You may want to specify when the annotation is available (e.g., at runtime or compile time) and where it can be applied (e.g., methods, fields).   
+
+import java.lang.annotation.ElementType;
+   import java.lang.annotation.Retention;
+   import java.lang.annotation.RetentionPolicy;
+   import java.lang.annotation.Target;
+
+   @Retention(RetentionPolicy.RUNTIME)
+   @Target(ElementType.TYPE)
+   public @interface MyAnnotation {
+       String value() default "default value";
+       int number() default 0;
+   }	   
+   
+Here,  @Retention(RetentionPolicy.RUNTIME)  specifies that the annotation is available at runtime, and  @Target(ElementType.TYPE)  specifies that it can be applied to types (classes, interfaces, etc.). 
+ 
+By following these steps, you can create and use your own annotations in Java, allowing you to add metadata to your code that can be processed at compile time or runtime.
+   
