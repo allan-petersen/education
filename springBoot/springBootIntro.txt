@@ -108,6 +108,34 @@ Repositories
 https://docs.spring.io/spring-data/jpa/reference/repositories/query-keywords-reference.htmlhttps://docs.spring.oi/spring-data/jpa/docs/current/reference/html/#repository-query-keywords
 
 
+Dependency Injection
+====================
+
+Why Build Service Abstractions
+==============================
+
+MVC 
+===
+Model is the data - typically assembled from different pieces of data.
+View is the visual display, that is populated - or the JSON structure returned.
+Controlloer wires the view with the model
+
+Thymeleaf - the string of the templatae name
+JSON - the response body
+
+Template Engine
+Rendered View
+
+Controller
+==========
+@Controller
+Annotated for the servlet mapping - That is the URL part, we will respond to
+
+
+
+
+
+
 Branch 02_05_begin
 
 Guest entity, reservation
@@ -125,7 +153,8 @@ GetAllReservationonResDate
 
 
 
-Recommended courses.
+Recommended courses:
+====================
 Spring Framework in Depth
 Learning Spring with Spring Boot
 
