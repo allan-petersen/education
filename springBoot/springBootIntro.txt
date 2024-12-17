@@ -128,31 +128,24 @@ Rendered View
 
 Controller
 ==========
+Web. HTML, Thymeleaf
+
 @Controller
 Annotated for the servlet mapping - That is the URL part, we will respond to
 Thymeleaf rovides a DSL for HTML, leaving raw HTML documents
 Placeholders for dhynamic data
 
 Angular and react are alternatives
-
-
-
-1. Create apage for rommm reservations on a given day
-2. Add top level navigation to all pages for Occupancy
-3. Call the RoomReservations service to get the data
-4. Use queryParam to pass the date
-5. Defaul to today
-6. Build the table to show data - if room is empty, show 'Vacant' instaead of name
-7. Bonus - provide a way to change the date.
-
-Branch 04_04_begin
-
-Guest entity, reservation
-
-GetAllReservationonResDate
-
  
+RestController
+==============
+Just another MVC, only our view is JSON.
 
+
+
+
+
+05_02 begin
 
 
 
