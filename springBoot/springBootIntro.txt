@@ -141,11 +141,15 @@ RestController
 ==============
 Just another MVC, only our view is JSON.
 
+Status codes matter with Rest.
 
 
 
+Guest
+Reservations
 
-05_02 begin
+
+05_03 begin
 
 
 
