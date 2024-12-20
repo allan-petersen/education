@@ -15,3 +15,48 @@
 ./java/com/frankmoley/lil/landonhotel/web/controller/WelcomeController.java
 ./java/com/frankmoley/lil/landonhotel/web/exception/BadRequestException.java
 ./java/com/frankmoley/lil/landonhotel/web/exception/NotFoundException.java
+
+RoomReservationService bruger repositories
+RoomReservationService bruges i OccupancyController.java
+OccupancyController returnerer RoomReservation instanser
+
+I controller ligger html controllers, der bruger Thymeleaf
+I web/api ligger Rest controllers. De returnerer aktuelt entity instanser, de burde returnere DTO som RoomReservation.
+
+Versioning
+==========
+1. URI Versioning: Include the version number in the URL.
+@RestController
+  @RequestMapping("/api/v1/users")
+  public class UserV1Controller {
+      @GetMapping("/{id}")
+      public UserV1DTO getUserV1(@PathVariable Long id) {
+          // Fetch user and map to UserV1DTO
+      }
+  }
+  
+2. Request Parameter Versioning: Use a query parameter to specify the version.
+@GetMapping(value = "/users", params = "version=1")
+  public UserV1DTO getUserV1(@RequestParam Long id) {
+      // Fetch user and map to UserV1DTO
+  }
+
+  @GetMapping(value = "/users", params = "version=2")
+  public UserV2DTO getUserV2(@RequestParam Long id) {
+      // Fetch user and map to UserV2DTO
+  }
+  
+3. Header Versioning: Use a custom header to specify the version.
+@GetMapping("/users/{id}")
+  public ResponseEntity<?> getUser(@PathVariable Long id, @RequestHeader("API-Version") String apiVersion) {
+      if ("1".equals(apiVersion)) {
+          // Fetch user and map to UserV1DTO
+      } else if ("2".equals(apiVersion)) {
+          // Fetch user and map to UserV2DTO
+      }
+  }
+  
+
+  
+  
+  
