@@ -143,13 +143,39 @@ Just another MVC, only our view is JSON.
 
 Status codes matter with Rest.
 
+Testing Spring Boot applications
+=================================
+
+Controller Testing 
+==================
+Servlet API Mocks
+Allows testing of request mappings
+
+ModelAndVeiwAssert -
+Allows testing of web pages
+
+MockMvc
+Test restful webservices
+
+Integration Testing
+===================
+To mange Spring IoC container caching between tests
+To provide dependency injection of test fixture instances
+To provide transaction managegement appropriate to integration testing - such that you are not destroying an actual database
+To supply Spring-specific base calsses, that assists develpers in writing integration tests
+
+Integration test support
+jdbc - ithout mucking with a real database
+Annotatyions
+TestContext
+MockMvc 
+TODO - Seee the Spring Documentation on testing
 
 
-Guest
-Reservations
 
 
-05_03 begin
+
+
 
 
 
@@ -163,5 +189,6 @@ Recommended courses:
 ====================
 Spring Framework in Depth
 Learning Spring with Spring Boot
+Spring Boot: Test Driven Development
 
 
