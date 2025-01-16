@@ -171,6 +171,15 @@ TestContext
 MockMvc 
 TODO - Seee the Spring Documentation on testing
 
+Spring Security Basics
+======================
+Filter-based authentication and Authprization framework
+Expolit prevension - CSRF 
+Robust library support - LDAP, Oatuh2, username/password etc.
+JWT fronting behind an NGINX controller - exist in Sprig Security.
+
+Other Topics
+============
 
 
 
@@ -183,6 +192,18 @@ TODO - Seee the Spring Documentation on testing
 
 
 
+CRSF
+====
+CSRF stands for Cross-Site Request Forgery. It is a type of security vulnerability found in web applications. CSRF attacks occur when a malicious website, email, or program causes a user's web browser to perform an unwanted action on a trusted site for which the user is currently authenticated. This can happen without the user's knowledge or consent, exploiting the trust that a site has in the user's browser. 
+
+For example, if a user is logged into their bank account and visits a malicious site in another tab, the malicious site could potentially send a request to transfer money from the user's bank account without their consent, if proper protections against CSRF are not in place.
+
+To prevent CSRF attacks, developers can implement measures such as:
+
+1. **Anti-CSRF Tokens**: Adding a unique, secret token to each form submission that the server verifies.
+2. **SameSite Cookies**: Setting cookies to be sent only in a first-party context.
+3. **Checking Referer Headers**: Ensuring that requests originate from trusted sources.
+4. **User Interaction Verification**: Requiring user interaction for sensitive actions, such as re-entering a password.
 
 
 Recommended courses:
@@ -190,5 +211,12 @@ Recommended courses:
 Spring Framework in Depth
 Learning Spring with Spring Boot
 Spring Boot: Test Driven Development
+Spring Security. CRSF
+
+
+
+
+
+
 
 
