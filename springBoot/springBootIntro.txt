@@ -180,6 +180,29 @@ JWT fronting behind an NGINX controller - exist in Sprig Security.
 
 Other Topics
 ============
+Spring:
+SpEL
+AOP
+Transactions
+i18n - multiple locales
+Websockets - TODO
+Reactive web 
+JMS, AMQP, Kafka
+Tasks
+Caching
+
+Spring Boot:
+Actuator
+Logging
+Dev tools -
+
+Additional:
+AMQP - TODO
+Batch
+Cloud
+GraphQL - TODO
+Session
+Integration - AIP
 
 
 
