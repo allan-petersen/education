@@ -1,0 +1,67 @@
+Filter based Authentication and Aithorization framework
+Spring Security also is a web-based exploit prvention
+CRSF - Corss-Site Request Forgery
+Encrypted secure headers and TLS support
+
+Provides Jakarta EE (previously J2EE) application security services
+
+Authentication Support
+======================
+HTTP basic and digest, x509 and form-based authentication.
+LDAP and Active Directory
+OpenId, Jasig CAS (Central Authentication Service) - Single Sign ON- and JAAS 
+OAuth and OAuth2, OpenID
+Kerberos and SAML
+
+Authorization Support
+=====================
+Web Request
+Method invocation
+Domain object access control
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Other courses
+=============
+Spring Spring Security
