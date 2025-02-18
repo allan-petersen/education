@@ -19,6 +19,9 @@ Web Request
 Method invocation
 Domain object access control
 
+Basic Authentication
+====================
+
 
 
 
