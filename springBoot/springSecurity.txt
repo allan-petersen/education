@@ -21,6 +21,45 @@ Domain object access control
 
 Basic Authentication
 ====================
+Passwords
+Use a cryptographically sound one-way hash.
+Sha 256 is no longer considred secure.
+
+BCrypt
+
+Install Spring CLI. TODO
+spring encodepassword password
+
+Athorization
+============
+WebErrorController implements Errorcontroller
+
+Form-based authentication
+=========================
+Create login form-based
+Implement controller and wiring
+Turn it on and test
+
+LDAP for Authentication
+=======================
+spring-security-ldap
+
+Internal LDAP
+=============
+Use Embedded LDAP
+OpenLDAP
+LDAP built into the OS
+
+AD is not LAP, but AD can use LDAP for authentication (through an LDAP API)
+
+
+
+
+
+
+
+
+
 
 
 
