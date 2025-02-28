@@ -52,6 +52,47 @@ LDAP built into the OS
 
 AD is not LAP, but AD can use LDAP for authentication (through an LDAP API)
 
+Spring LDAP
+===========
+LADP Use Cases:
+
+Authentication
+Not all uses og LADP re securiy related - use spring-ldap-core project
+Not always security focused
+
+LDAP Operations
+- Query LADP (filters) Use the LDAP template
+- Search and Dynamic DN creation
+-- Binding, update, delete
+
+Other tree-structured data
+
+Active Directory (AD) vs. LDAP for autentication
+================================================
+ADFS - SAML based
+Active Directory is not LDAP
+AD implemnts an LDAP API
+AD is much more than LDAP itself.
+
+Directoy Srvices is exposed by AD Lightweight
+Directory Services (AD LDS) as an LDAP interface
+
+Authentication with AD
+======================
+- Uses standard and non standard methods
+- Configuration should be very familiar (with LDAP), however
+- Nested groups - > SEC-1823 -- does ot work in Spring Security
+
+Authentication Provider
+- ActiveDirectoryLdapAutenticationProvider
+- Utilized via configure method of WebSecuriyConfigurationAdapter
+
+Introduction to OAuth2
+======================
+
+
+
+
 
 
 
