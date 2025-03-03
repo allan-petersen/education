@@ -89,7 +89,23 @@ Authentication Provider
 
 Introduction to OAuth2
 ======================
+Resource owner - often the user. 
+	Yy profile data in Goole would be the resource - the data being protected
+	But Goole is the owner
+Client - The application requesting access
+Resource server - posts protected data and accounts
+Autorization server - service that grans tokens
 
+Token types
+===========
+Access token - the secret and often short-lived token, that identifes a user
+Refresh token - longer-lived token used to renew access token, when it expires
+Scopes provide for right associated with the access token
+
+Grant types
+===========
+Several grant types that impact flows
+	
 
 
 
