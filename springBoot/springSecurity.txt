@@ -105,6 +105,16 @@ Scopes provide for right associated with the access token
 Grant types
 ===========
 Several grant types that impact flows
+1. Authorizazation code grant is most common (Facebook, Twitter etc.) - Grant access to someone else on your behalf.
+2. Implicit grant is common in web apps and mobile apps, where the security of that access token cannot be maintained. Often, these cdont't come with refresh tokens.
+And they ere very specific to the function of the application being granted access.
+3. Client credentials grant is useful insystem-to-system communications. Each system gets a client ID and a secret, that the system uses to get an access token.
+
+OAuth2 and Spring
+=================
+
+
+
 	
 
 
