@@ -112,6 +112,36 @@ And they ere very specific to the function of the application being granted acce
 
 OAuth2 and Spring
 =================
+CommonOAuth2Prrovider - Native support for Okta, Goodle, Githus and Facebook.
+- that are common OAuth Providers. We will use Github.
+Property-based configuration in Spring Boot
+Client-side OAuth integration
+It allows yoy to provide third-party support for the log in operations,
+so you don't have to keep that information in your sight, which is very attractive to a lot of companies,
+that don't want to mannage the overhead of bringing the authentication in, because after all,
+when the authentications leaks, that tends to make the news.
+
+1. Authorization server
+=======================
+One of the ext pieces, you might work with, is the Autohrization Server itself.
+This is something, that you woul do, if you are going to run yooyr authorization service for service-to-service calls.
+This is what provides authorization services to the system and authentication services to the system as a whole.
+
+Many companies, companies that I have worked for choose to have your own internal authorization server,
+and provide a utility to not olny mobile apllications, but also to internal services.
+
+Creating the authorization service really is as simple as using an annotation 
+
+@EnableAuthorizationServer
+AuthorizationServerConfigurerAdapter used to configure it.
+Support various grant types.
+
+2. Resource Server
+==================
+
+
+
+
 
 
 
