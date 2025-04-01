@@ -1,0 +1,63 @@
+Reactive programming
+====================
+Build async , non blocking and event-driven apps that scale.
+Work with async data streams.
+Streams emit values over time
+
+Angular
+=======
+Angular is a mature web and mobile framework, that can we uses with JavaScript of TypeScript.
+Build modern apps on web and mobile
+Angular CLI accelerates development
+Excellent docs and tooling:
+https://angular.io.docs
+https://github.com/angular/angular
+
+Angular is scalable for large data sets allowing you to
+build data models with RxJS or other reactive frameworks
+Write async or callback-based code
+ 
+RxJS
+==== 
+RxJS library is a JavaScript-specific
+RxJS Onserver Pattern
+RxJS is a JavaScrpt flavor of ReactiveX
+One of the core consepts of ReactiveX is:
+An observable representation of a set of values, that can push a notification upon state change.
+A subject is a specific flavor of observable, that can multicast to multiple observers.
+An observer implements an interface, that allows it to consume push notifications from an Oservable in a consistent mamnner.
+
+Subject - a fla vor of an Observable
+
+3 Observers (example)
+
+1. Each observer will subscribe to the subject
+2. Event - causes subject to change state
+3. The subject will notify all the subscribed observers of the change
+
+Reactive Spring Boot
+====================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Typescript
