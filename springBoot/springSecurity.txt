@@ -138,18 +138,67 @@ Support various grant types.
 
 2. Resource Server
 ==================
+Provides the resources being protected.
+@EnableResourceServer
 
+3. Oauth2 Client
+================
+@EnableOauth2Client
+Oauth2RestTemplate proives much of the scaffolding
 
+Using GitHub as an OAuth Provider
+=================================
+Use GitHub as an authorization provider
 
+Reactive Spring
+===============
+Reactive Spring refers to a set of features and tools within the Spring Framework that support building reactive applications. 
+Reactive programming is an approach to writing software that is designed to handle asynchronous data streams and the propagation of change. 
+It is particularly useful for applications that require high concurrency and scalability, such as those involving real-time data processing or handling a large number of simultaneous user requests.
 
+Spring WebFlux is the module within the Spring Framework that provides support for building reactive web applications. 
+It is built on Project Reactor, which is a reactive library for the Java Virtual Machine (JVM) that implements the Reactive Streams specification. 
+This specification provides a standard for asynchronous stream processing with non-blocking back pressure, allowing developers to build applications that are more resilient and responsive under load.
 
+Key features of Reactive Spring include:
 
+1. **Non-blocking I/O**: Reactive Spring applications use non-blocking I/O to handle requests and responses, 
+making it possible to handle many more concurrent requests with the same resources compared to traditional blocking I/O.
 
-	
+2. **Backpressure**: Reactive Streams provide a mechanism for controlling the flow of data, ensuring that producers do not overwhelm consumers, 
+which is essential for building robust and efficient applications.
 
+3. **Declarative Composition**: Reactive programming in Spring allows developers to compose complex asynchronous operations in a declarative manner, 
+making the code more readable and maintainable.
 
+4. **Functional APIs**: Reactive Spring promotes the use of functional programming techniques, 
+which can lead to more concise and expressive code.
 
+By leveraging these features, Reactive Spring enables developers to build applications that are more responsive, resilient, and scalable, particularly in scenarios
+ where traditional blocking architectures may struggle.
 
+Webflux
+=======
+Webflux is the way to do reactive Spring
+
+@EnableWebFkuxSecurity
+Basic config maps everythig to security
+SecurityWebFilterChain
+Everything in Spring Security is based on filters, and reactive Spring is no different.
+MapReactiveUserDetailsService provides handle to UserDetailService.
+
+Principal
+n the context of security, a "principal" refers to an entity that can be authenticated and authorized to access resources within a system
+You just put the principal itself into the method signature	
+In Webflux the Security Model is still based on principal.
+
+Inject the Mono<Principal> into methods, where you want to handle it.
+In the context of security, a "principal" refers to an entity that can be authenticated and authorized to access resources within a system
+ A Mono is a reactive type that can emit zero or one item, while a Flux can emit zero or more items.
+
+Reactive Web example
+====================
+TODO
 
 
 
