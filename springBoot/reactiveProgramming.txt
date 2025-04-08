@@ -37,11 +37,77 @@ Subject - a fla vor of an Observable
 
 Reactive Spring Boot
 ====================
+Spring 5.0 - Projecr Reactor
+Spring WebFlux allows you to expose fully non blocking reactive endpoints in your res API
+Spring 5 uses Netty as its web server
+
+Event loop -> Netty -- Mono --> Reactor (Web API --Mono --> WebFlux -- Mono --> Controller
+
+Event loop hands off incoming requests 
+The response is sent to the Spring reactive stack web framework calles WebFlux
+Last in the chain the controller handles the request in a non blocking manner
+
+When a reqauest is complete, the response is sent back up the chain.
+Event loop returns response sto the client.
+
+Fast en effiecient messaging: can sustain high througput rates of 15 million-plus messages per second
+Flexible non-blocking I/O. backuppressure-enabled network engines for HTTP, TCP/UDP, adn WebSockets
+
+Functional Endpints: Lambda-based, ligthweight functional model
+
+Benefits of using reactive programming with Spring
+==================================================
+Spring 5.0 leverages an indystri standard Reactive Streams implementation called Project Reactor.
+Spring WebFlux allows you to expose fully non blocking reactivre endpoints in your rest API.
+By default spring5 ued Nett as its  web server.
+
+Flexible non bocking I/o: Backpressure-enabled netwok engines for HTTP, TCP/UDP and Websockets.
+
+See; https://projectreactor.io
+
+Annotated controllers: Similar to annotations from Spring MVC.
+
+Functional Endpoints: Lambda based, lightweight functional model
+
+Integrate Angular and Spring
+============================
+Angular apps on mobile and web generally interact with Spring boot via HTTP
+Spring Boot exposes various endpoints via a REST API
+
+HTTP Verb	Domain		Version		Resource			Path parameter
+GET			/room		/v1			/reservation		/{id}	
+
+Resource: room reservation
+
+Angular Project
+1. Components: HTML, CSS, images and Typescript or JavaScript
+2. npm modules: Browserify, Babel etc.
+3. Content Committee: Unit Testing, Karma, Jasmine. 
+           Protractor (end to end testing). Bult on WebDriver JS, which is a part of Selenium
 
 
 
 
 
+
+
+
+
+Websockets
+==========
+WebSockets is a communication protocol that provides full-duplex communication channels over a single, long-lived connection between a client and a server. It is designed to work over the same ports as HTTP and HTTPS (typically ports 80 and 443), allowing it to easily pass through firewalls and proxies.
+
+Key features of WebSockets include:
+
+1. **Full-Duplex Communication**: Unlike HTTP, which is a request-response protocol, WebSockets allow for simultaneous, two-way communication between a client and server. This means both parties can send and receive messages independently at any time.
+
+2. **Persistent Connection**: Once a WebSocket connection is established, it remains open, allowing for continuous data exchange without the overhead of repeatedly opening and closing connections, which is common with traditional HTTP requests.
+
+3. **Low Latency**: Because the connection remains open, WebSockets have lower latency compared to HTTP, making them ideal for real-time applications like chat apps, live sports updates, gaming, and other interactive applications.
+
+4. **Efficiency**: WebSockets reduce the amount of data transmitted over the network by eliminating the need for HTTP headers with each message, which can lead to more efficient use of resources.
+
+WebSockets are initiated via an HTTP handshake, after which the connection is upgraded to the WebSocket protocol, allowing for the aforementioned benefits.
 
 
 
