@@ -85,8 +85,14 @@ Angular Project
 3. Content Committee: Unit Testing, Karma, Jasmine. 
            Protractor (end to end testing). Bult on WebDriver JS, which is a part of Selenium
 
+High-Level Angular and Spring Reactive Flows
+============================================
+Spring 5 Flux
+Reactive Streams Publisher
+Emits 0 to N elements
+Completes successfully after emitting all elements or with an error
 
-
+Bootstrap a Spring 5 App with Spring Initialzr
 
 
 
