@@ -94,10 +94,24 @@ Completes successfully after emitting all elements or with an error
 
 Bootstrap a Spring 5 App with Spring Initialzr
 
+Using Spring WebFlux
+====================
+Spring WebFlux vs. Spring MVC
 
 
 
 
+
+
+
+
+MongoDb
+=======
+In summary, a Docker image is like a blueprint or a snapshot of an application and its dependencies, 
+while a Docker container is the running instance of that image. 
+Images are static, whereas containers are dynamic and can be modified during their lifecycle.
+docker pull mongo
+docker run --name mongodb -d -p 27017:27017 mongo
 
 Websockets
 ==========
