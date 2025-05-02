@@ -7,3 +7,42 @@ See React.js Essential Training
 
 React for UI
 ============
+Thymeleaf: Renders every page serverside and powered by a Spring Boot Controller
+
+React: seep learningcurve.
+2 step build.
+
+Install react
+=============
+npx create-react-app src/ui
+cd src/ui
+npm install react-router-dom
+
+Setting up the build:
+
+Node server, that exposes the react application on port 3000
+(Static files and HTML pages and some JavaScript)
+Node is doing the serving of the application.'
+
+SpringBoot aapplication on port 8080.
+Sring web can also serve static files in src/main/resources/static
+(They get served at the root of tha appication context)
+
+We do not want to run 2 application server
+
+We need to get the output of the build cycle of the react application it src/main/resources/static
+
+We will use a Maven plugin to run the npm build 
+
+See 01_04b
+
+cd wisdom-pet
+set JAVA_HOME=C:\tools\Eclipse Adoptium\jdk-23.0.1.11-hotspot
+java -jar target/wisdom-pet-0.0.1-snapshot.jar
+
+
+
+
+
+
+
