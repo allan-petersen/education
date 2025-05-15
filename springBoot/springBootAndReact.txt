@@ -40,7 +40,28 @@ cd wisdom-pet
 set JAVA_HOME=C:\tools\Eclipse Adoptium\jdk-23.0.1.11-hotspot
 java -jar target/wisdom-pet-0.0.1-snapshot.jar
 
+Understanding the archetecture
+==============================
+React -> Sprng WEB ->Sring Data ->Data
+React ->SpringGraphQL ->Sring Data -> Data
 
+Spring Web. Rest
+================
+
+
+
+
+
+
+
+
+
+
+
+
+TODO: 
+GraphQL
+JFPC
 
 
 
