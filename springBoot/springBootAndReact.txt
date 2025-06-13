@@ -48,6 +48,23 @@ React ->SpringGraphQL ->Sring Data -> Data
 Spring Web. Rest
 ================
 
+Starting the UI
+===============
+Outlet is how we are going to load this as a common pattern acreoos all of our elements
+
+Start from terminal:
+
+C:\work\wisdom-pet\src\ui>
+npm start
+
+Start the backend
+=================
+run WisdomPetApplication
+
+Building a component
+====================
+
+
 
 
 
