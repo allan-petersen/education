@@ -64,6 +64,22 @@ run WisdomPetApplication
 Building a component
 ====================
 
+Create a list page for each resources
+Consider on product, how you will display vendor, try displaying the name instead of the id
+Don' forget to handle the routes
+
+Vendor
+Service
+Product
+
+Style thr app using Bootstrap or MUI.
+
+Security with React and Spring Boot is not an easy topic.
+Consider using external authentication where possible. So there are QAoth providers and SAML providers. Or yoy have LDAP available.
+I offload it to an NGINX instance, that fromts all of my applications with a JWT-based provider.
+In front of my Cubernetes cluster, that allows me to proxy request to private services.
+
+This is really a much more modern pattern of using JWT external to your application - as opposed to using traditional forms based autehntication.
 
 
 
