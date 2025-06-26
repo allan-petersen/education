@@ -1,0 +1,17 @@
+A query language for your API and is able to fulfill any queries across multiple databases
+
+GraphQL allows to decribe what type of data you can expect
+
+
+Setup
+====?
+npm init
+npm i express
+npm i --save-dev @babel/cli @babel/core @babel/node @babel/preset-env
+
+npm i nodemon
+
+Misc
+====
+RS-3 to restart the server
+babel-node -e js // Compile the javascript code.
