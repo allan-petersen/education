@@ -11,7 +11,26 @@ npm i --save-dev @babel/cli @babel/core @babel/node @babel/preset-env
 
 npm i nodemon
 
+npm i graphql express-graphql
+
+
 Misc
 ====
 RS-3 to restart the server
 babel-node -e js // Compile the javascript code.
+
+The Inital GraphQl setup:
+
+On the clinet side
+==================
+Define a query
+
+One the server side
+===================
+Define a resolver. Root
+So once we call into this resolver, which is of type query, we should get ea response
+Define the GrphQl server
+
+
+
+
