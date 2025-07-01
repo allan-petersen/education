@@ -29,7 +29,23 @@ One the server side
 ===================
 Define a resolver. Root
 So once we call into this resolver, which is of type query, we should get ea response
-Define the GrphQl server
+Define the GraphQl server
+
+The endpoint will use the express-GraphQL package to create a GraphQL server.
+
+graphiql is basically a fron end interface, that the GraphQL team has built. So we can actuallly see, when we make requests to the server,
+as supposed to go through an endpoint, we're going to use grahpiQL just to represent, what we're working on rigth now.
+
+Basic GraphQL schema
+====================
+To be be to make queries in GraphQL, you need to define a schema, like we started working on here.
+The schema defines the quury type, an then also what it is expecting.
+
+And then our resolver, will actually resolve the results from each API endpoint.
+
+So the type definition proivides what type of data we expect, and the resolver gets the data for us.
+
+Product type ...
 
 
 
