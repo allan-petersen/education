@@ -45,7 +45,8 @@ And then our resolver, will actually resolve the results from each API endpoint.
 
 So the type definition proivides what type of data we expect, and the resolver gets the data for us.
 
-Product type ...
+Object types and fields
+=======================
 
 
 
