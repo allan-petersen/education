@@ -48,6 +48,9 @@ So the type definition proivides what type of data we expect, and the resolver g
 Object types and fields
 =======================
 
+Query and mutation types
+========================
+
 
 
 
