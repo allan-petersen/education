@@ -51,6 +51,40 @@ Object types and fields
 Query and mutation types
 ========================
 
+Queries:
+
+Mutations: Create, update
+
+Resolvers
+=========
+Basically resolvers are the functions the respond to queries and mutations.
+They are the functions, that give us the result of the query.
+
+type is for query
+input is for mutation
+
+mutation {
+  createProduct(input: {name: "Widget2", description: "Another widget for your garden2", price: 44.99, soldout: false, stores: [{store: "Pasadana2"}, {store: "Loas Angeles2"}]}) {
+    price
+    name
+    description
+    id
+  }
+}
+
+5cb05b9b876bd083a6e4
+
+query {
+  getProduct(id: "5cb05b9b876bd083a6e4") {
+    price
+    name
+    description
+  }
+}
+
+Scalar types
+============
+
 
 
 
