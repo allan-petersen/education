@@ -64,7 +64,7 @@ type is for query
 input is for mutation
 
 mutation {
-  createProduct(input: {name: "Widget2", description: "Another widget for your garden2", price: 44.99, soldout: false, stores: [{store: "Pasadana2"}, {store: "Loas Angeles2"}]}) {
+  createProduct(input: {name: "Widget2", description: "Another widget for your garden2", price: 44.99, soldout: ONSALE, inventory: 2, stores: [{store: "Pasadana2"}, {store: "Loas Angeles2"}]}) {
     price
     name
     description
@@ -72,7 +72,23 @@ mutation {
   }
 }
 
-5cb05b9b876bd083a6e4
+mutation {
+  updateProduct(input: {
+    id: "5cb05b9b876bd083a6e4",
+	price: 50.99,
+	sores: [
+	{ store: "Orlando"},
+	{ store: "Los Angeles"},
+	]
+	}) {
+	  price
+	  name
+	}
+}
+
+mutation {
+  deleteProduct(id: "5cb05b9b876bd083a6e4")
+}  
 
 query {
   getProduct(id: "5cb05b9b876bd083a6e4") {
@@ -82,8 +98,11 @@ query {
   }
 }
 
-Scalar types
-============
+Mongo DB
+========
+npm install mongoose --force
+
+Now we need to apply that schema to the widgets connection (database) 
 
 
 
