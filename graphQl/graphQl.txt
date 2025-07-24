@@ -98,12 +98,52 @@ query {
   }
 }
 
+query {
+  getProducts {
+    price
+    name
+    inventory
+  }
+}
+
+
 Mongo DB
 ========
 npm install mongoose --force
 
 Now we need to apply that schema to the widgets connection (database) 
 
+Alias
+=====
+query {
+  widgetone: getPorduct(id: "5cb05b9b876bd083a6e4") {
+  name
+  description
+  }
+  widgettwo: getPorduct(id: "5cb05b9b876bd083a655") {
+  name
+  inventory
+  }
+}
 
+Fragments
+=========
+fragment_productFragment on Product {
+   name
+   description
+   price
+}
 
+query {
+  widgetone: getPorduct(id: "5cb05b9b876bd083a6e4") {
+     ...productFragment
+  }
+  widgettwo: getPorduct(id: "5cb05b9b876bd083a655") {
+     ...productFragment  
+  }
+}
+
+Usefull for frontends.
+
+GraphQL on Slack: https//graphql.slack.com
 
