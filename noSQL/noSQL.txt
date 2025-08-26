@@ -1,0 +1,12 @@
+NoSQL - Not only SQL
+
+Flexible, scalable, fast
+
+Relational databases. Reliable, consistent, excellent integrity
+
+NoSQL: Each row does not need to have the same columns
+
+CAP Theorem (Consisitency, Availablilty, Partition tolerance)
+=============================================================
+We can only have 2 of these 3 items.
+
