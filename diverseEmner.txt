@@ -1,0 +1,88 @@
+Søg. Modern trends in SWA
+
+1.  ThymeLeaf. GUI
+2.  Kafka
+3.  WebSub
+4.  Camel fire
+5.  OpenAI
+6.  Reactor
+7.  Weather stub.
+8.  WebSockets
+9.  Elastic search
+10. Bean-IO (Camel)
+11. JMeter - performance test
+12. Oxygen-XML
+13. Wiremock (mock web service)
+14. Wildfly
+15. J-Hipster
+16. Fabricate OSGI
+17. Jasmine
+18. Velocity template
+19. Spoock
+20. Mockito - spy
+21. ROS. Robot operativsystem.
+22. dependabot
+
+Ajax
+====
+https://www.programmersought.com/article/72824848189/
+
+Java
+====
+getThis(). http://www.angelikalanger.com/GenericsFAQ/FAQSections/ProgrammingIdioms.html#FAQ206
+
+LDAP
+====
+https://github.com/gocd/gocd/issues/1995
+
+Security
+========
+Digest, certificate, signature-method
+
+Spring
+======
+2. Spring init (se S497-Epic2MinLog2)
+
+Xpath
+=====
+https://dzone.com/articles/how-speed-apache-xalan%E2%80%99s-xpath
+
+Hapi-FHIR
+=========
+Slice support
+Slice[x]
+Customize
+Extension
+
+https://scandihealth.github.io/lpr3-docs/aspects.html
+
+Integrationsplatform: Mirth
+
+Schematron. https://www.schematron.com/document/2760.html?publicationid=
+
+Sikkherhed
+==========
+ssl
+
+Groovy
+======
+Se http://groovy-lang.org/learn.html     
+
+Java
+====
+4 nye java - se noter fra jdkIO
+http://www.java2s.com/Tutorials/Java/Java_Lambda/0070__Java_Functional_Interface.htm
+https://gist.github.com/tonvanbart/61f813c2aef3ab3c81728241ef0a86e2
+Runnable
+ThreadLocal. https://plumbr.eu/blog/locked-threads/how-to-shoot-yourself-in-foot-with-threadlocals
+
+Forklar nedenstående:
+Expression throttleExpression = new ExpressionAdapter() {
+    @Override
+    public Integer evaluate(final Exchange exchange) {
+        return Config.getInt(CONFIG_THROTTLE_BATCH_MESSAGES_PER_SECOND_KEY);
+    }
+};
+
+Se "forklarBillede1.png"
+ 
