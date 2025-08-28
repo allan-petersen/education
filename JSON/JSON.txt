@@ -1,0 +1,47 @@
+JSON stands for JavaScript Object Notation.
+It’s a lightweight data-interchange format that’s easy for humans to read and write, and easy for machines to parse and generate.
+
+Key Points:
+
+Text-based: Data is stored as plain text.
+
+Language-independent: Even though it’s derived from JavaScript, almost all programming languages can use it.
+
+Structure: Uses key-value pairs (like dictionaries in Python or objects in JavaScript) and arrays (lists).
+
+Basic Rules:
+
+Data is in name/value pairs:
+============================
+
+"name": "Alice"
+
+
+Data is separated by commas.
+
+Curly braces {} hold objects.
+=============================
+
+Square brackets [] hold arrays.
+===============================
+
+Example:
+{
+  "name": "Alice",
+  "age": 25,
+  "isStudent": false,
+  "skills": ["Python", "JavaScript", "SQL"],
+  "address": {
+    "city": "New York",
+    "zip": "10001"
+  }
+}
+
+
+In this example:
+
+"name", "age", "isStudent", etc., are keys.
+
+"Alice", 25, false, etc., are the corresponding values.
+
+JSON is widely used for APIs, config files, and data storage.
