@@ -10,3 +10,62 @@ CAP Theorem (Consisitency, Availablilty, Partition tolerance)
 =============================================================
 We can only have 2 of these 3 items.
 
+
+Query a NoSQL database
+======================
+{
+property_type:"Appartment"
+}
+
+Find houses with 2 bedrooms and one bath and a minimum night stay of 2.
+{
+property_type:"House",
+bedrooms:2
+bathrooms:1
+minimum_nights:"2"
+}
+
+Different Types of noSQL Storage
+================================
+1. Key-value
+============
+Suited for: Caching, Session-management, Leaderboards, real-time inventory systems, fraud mitigation, claims processing
+Products: DynamoDB, Redis, Oracle NoSQL 
+MSET firstname "Mel" lastname "McGee"
+MGET firstname lastname1 
+1) "Mel"
+2) "Mcgee"
+
+2. Document
+===========
+Similar to Key-value, but the value is stored as a document (MongoDB stores the document in a format called BSON - binary JSON)
+Suited for: Flexibility, but no a lot of complex queries, CMS, Large document Stores, Websites, User profiles, Real-Time Analytics, Big Data
+Products: MongoDB, Apache's CouchDB, Azure Cosmos DB
+
+db.biod.find( {"name.last": "McGee" } )
+db.biod.find( {"name.first": "Mel" } )
+
+3. Wide-column
+===============
+Subset of key-value, They are like relational database in some ways.
+The use tables, rows and columns, but columns can vary
+Tables can be created, altered even dropped at runtime
+It is best to yse these, whe you know the queries, and model your tables around queries,
+instead of how we would do it in relational databse modelling, where you are modelling your tables around the data.
+Wide-colunm stores can be used for very fast querying of specific parts of data, but not whole rows
+Large volmes of data.
+Suited for: For dealing with extremely large amount of data, where speed is of utmost importance, big data, petrabytes f data, inventory management, analytics systems 
+Products: Cassandra, HBase
+
+CQL example
+"Bonuses"  {
+row1 : {"ID":1, "Last":"McGee", "First":"Mel", "Bonus:8000},
+row2 : {"ID":2, "Last":"Smith", "First":"Jane", "Bonus:4000},
+}
+
+UPDATE Customer SET branch = 'main' WHERE custage >2;
+
+4. Graph
+========
+Suited for:
+Products: 
