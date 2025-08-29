@@ -67,5 +67,29 @@ UPDATE Customer SET branch = 'main' WHERE custage >2;
 
 4. Graph
 ========
-Suited for:
-Products: 
+Stored data in nodes taht inherently show relationships via edges.
+Wen you want to show multidimansional relation ships.
+Suited for: Relationship-type analysis. Social networks, fraud detection, recommandation engines
+Products: Neo4j, JanusGraph
+
+Cipher is Neo4j's query langauage.
+
+CREATE (P:PERSON) - [:likes] -> (t:Technology)
+MATCH (P:PERSON) - [:likes] -> (t:Technology)
+
+Challange:
+1. Graph
+2. Key value
+3. Wide column
+4. Document
+
+
+
+
+
+
+
+
+
+
+5. Vector Databases
