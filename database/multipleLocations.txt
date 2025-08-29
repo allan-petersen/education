@@ -1,34 +1,31 @@
 SELECT soridentifier, provideridentifier, eanlocationcode, entityname, aliasnames
 FROM spo_provider_new
-WHERE enddate IS NULL
+WHERE  enddate IS NULL
 AND eanlocationcode IN (
-   -- Eanlocationcode, provideridentifier repeated once
    SELECT eanlocationcode
    FROM spo_provider_new
-   WHERE enddate IS NULL 
+   WHERE enddate IS NULL
    AND provideridentifier IN (
-      -- ProviderIdentifier repeated more than once
       SELECT provideridentifier
       FROM spo_provider_new
-      WHERE enddate IS NULL 
+      WHERE enddate IS NULL
       AND provideridentifier IS NOT NULL
       GROUP BY provideridentifier
       -- Number of group members
-      HAVING COUNT(provideridentifier) > 1
-   )
-   GROUP BY eanlocationcode, provideridentifier
-   -- Number of group members
-   HAVING COUNT(*) = 1
+      HAVING COUNT(DISTINCT eanlocationcode) > 1
+    )
 )
 -- REF AND provideridentifier = 407674  
--- ERROR 537802
 -- REF SJ provideridentifier = 090263
-AND provideridentifier = 537802
+-- ERROR 537802
+-- AND provideridentifier = 537802
 -- AND eanlocationcode IN (
 -- REF 5790002412783, 5790002634574
 -- REF SJ 5790002269813, 5790002762338, 5790002762901
--- 5790002269813, 5790002762338, 5790002762901
---)
+-- ERROR 5790000178513
+-- 5790000178513
+-- )
 -- ORDER BY provideridentifier, eanlocationcode
-ORDER BY eanlocationcode, provideridentifier DESC
-;
+ORDER BY
+    eanlocationcode,
+    provideridentifier DESC;
