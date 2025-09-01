@@ -1,0 +1,84 @@
+How do you define a custom annotation in Java? 
+How do you write an annotationprocessor in java? 
+How do you assure, that the annotation processor find the custom annotation?
+Answer : 
+
+
+Below is an explanation covering the three questions:
+
+1. Defining a Custom Annotation in Java
+=======================================
+To define a custom annotation, you create an interface annotated with meta-annotations such as @Retention and @Target. For example:
+
+java
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+@Retention(RetentionPolicy.SOURCE) // Or CLASS/ RUNTIME depending on your needs
+@Target(ElementType.TYPE)          // This annotation is applicable to types (classes, interfaces, etc.)
+public @interface MyCustomAnnotation {
+    String value() default "";
+}
+Key points:
+
+@Retention: Determines at what point the annotation is discarded. Use SOURCE if you only need it at compile time, CLASS for bytecode inclusion, or RUNTIME if you need reflection.
+@Target: Specifies the kinds of program element to which the annotation is applicable (e.g., TYPE, METHOD, FIELD).
+
+2. Writing an Annotation Processor in Java
+==========================================
+An annotation processor is written by extending the AbstractProcessor class. In your processor, you override the process method to examine and handle the elements annotated with your custom annotation. For example:
+
+java
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import java.util.Set;
+@SupportedAnnotationTypes("com.example.MyCustomAnnotation")
+// Alternatively, override getSupportedAnnotationTypes.
+@SupportedSourceVersion(SourceVersion.RELEASE_8) // Or your relevant source version
+public class MyAnnotationProcessor extends AbstractProcessor {
+    @Override
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        // Iterate through elements annotated with your custom annotation
+        for (Element element : roundEnv.getElementsAnnotatedWith(MyCustomAnnotation.class)) {
+            // Perform processing logic here, e.g., generate supporting files, validations, etc.
+            processingEnv.getMessager().printMessage(javax.tools.Diagnostic.Kind.NOTE, 
+                                                     "Processing: " + element);
+        }
+        return true; // Indicate that the annotations have been claimed
+    }
+}
+Additional notes:
+
+You can also override the getSupportedAnnotationTypes() method if you prefer not to use the annotation.
+Using tools like Google's AutoService can simplify registration. For example, annotate your processor with @AutoService(Processor.class) so that it is automatically discovered.
+
+3. Assuring the Annotation Processor Finds the Custom Annotation
+================================================================
+To ensure your annotation processor finds your custom annotation:
+
+Retention Policy:
+Make sure the custom annotation has a retention policy that permits its availability during annotation processing. Typically, use RetentionPolicy.SOURCE or RetentionPolicy.CLASS (or RUNTIME if needed for runtime reflection) so that the annotation is present in the source code or bytecode when the processor runs.
+
+Correctly Specify Supported Annotation Types:
+In your processor, specify the fully qualified name of your custom annotation in the @SupportedAnnotationTypes annotation or override getSupportedAnnotationTypes(). If the qualifier is missing or incorrect, the processor will not be triggered for that annotation.
+
+Registration:
+Ensure that your annotation processor is correctly registered so that the Java compiler can discover it:
+
+
+If you’re not using a tool like AutoService, create a file named
+META-INF/services/javax.annotation.processing.Processor
+in your processor’s resources directory. This file should contain a single line with the fully qualified name of your processor class:
+
+com.example.MyAnnotationProcessor
+Include the annotation processor’s jar on the annotation processing path (or classpath during compilation).
+Compilation Environment:
+When compiling your code, ensure that both your custom annotation and the processor are in the compilation classpath and that annotation processing is enabled. Most build tools (Maven, Gradle, etc.) manage this automatically, but if you are compiling manually, you might need to add the processor jar via appropriate compiler options.
+Following these best practices will ensure that your annotation processor discovers and processes your custom annotation as expected.
