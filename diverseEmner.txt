@@ -3,25 +3,27 @@ Søg. Modern trends in SWA
 1.  ThymeLeaf. GUI
 2.  Kafka
 3.  WebSub
-4.  Camel fire
-5.  OpenAI
-6.  Reactor
-7.  Weather stub.
-8.  WebSockets
-9.  Elastic search
-10. Bean-IO (Camel)
-11. JMeter - performance test
-12. Oxygen-XML
-13. Wiremock (mock web service)
-14. Wildfly
-15. J-Hipster
-16. Fabricate OSGI
-17. Jasmine
-18. Velocity template
-19. Spoock
-20. Mockito - spy
-21. ROS. Robot operativsystem.
-22. dependabot
+4.  Vector DB
+5.  Camel fire
+6.  OpenAI
+7.  Reactor
+8.  Weather stub.
+9.  WebSockets
+10.  Elastic search
+11. Bean-IO (Camel)
+12. JMeter - performance test
+13. Oxygen-XML
+14. Wiremock (mock web service)
+15. Wildfly
+16. J-Hipster
+17. Fabricate OSGI
+18. Jasmine
+19. Velocity template
+20. ROS. Robot operativsystem.
+21. Dependabot
+22. Artemis
+23. Vecor DB
+24. Security
 
 Ajax
 ====
