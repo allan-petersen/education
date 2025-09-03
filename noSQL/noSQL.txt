@@ -83,10 +83,28 @@ Challange:
 3. Wide column
 4. Document
 
+Where NoSQL thrives
+===================
+Scalable
+Flexible
+Fast
+Caching
+Storing user sessions
+Real-time inventory
+Fraud mitigation
 
+Where NoSQL fails
+=================
+When consistency is required
+When complex SQL queries are required
 
+Banking Systems
+Accounting
+Smaller Systems
 
-
+Is NoSQL Right for you?
+======================
+TODO
 
 
 
