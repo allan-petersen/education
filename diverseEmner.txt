@@ -1,15 +1,15 @@
-Søg. Modern trends in SWA
+. Modern trends in SWA
 
 1.  ThymeLeaf. GUI
 2.  Kafka
-3.  WebSub
+3.  WebSub. Web hook
 4.  Vector DB
 5.  Camel fire
 6.  OpenAI
 7.  Reactor
 8.  Weather stub.
 9.  WebSockets
-10.  Elastic search
+10. Elastic search
 11. Bean-IO (Camel)
 12. JMeter - performance test
 13. Oxygen-XML
@@ -88,3 +88,8 @@ Expression throttleExpression = new ExpressionAdapter() {
 
 Se "forklarBillede1.png"
  
+Diverse
+=======
+Matematik. Java funktioner.
+Parsing Object Tree
+Netværk. Hierarcial DB.
