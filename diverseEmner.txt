@@ -1,5 +1,6 @@
 Søg. Modern trends in SWA
 
+Rust - programmeringssprog
 1.  ThymeLeaf. GUI
 2.  Kafka
 3.  WebSub
