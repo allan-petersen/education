@@ -1,0 +1,65 @@
+The "after" in the TriConsumer's default method (commonly called andThen) is there to allow you to chain operations. Here’s why it’s useful:
+
+Chaining Operations:
+With andThen, you can define a sequence of TriConsumer operations that run one after the other on the same inputs. This lets you build more complex processing pipelines without having to nest or write multiple separate calls.
+
+
+Functional Composition:
+Following the design of standard functional interfaces in Java (like Consumer, which also has an andThen method), providing an "after" method fits into the functional programming paradigm. 
+It makes it easy to compose multiple operations in a fluent and declarative style.
+
+
+Better Readability:
+Instead of manually invoking one TriConsumer and then the next, you can combine them into one single composite operation. This can lead to cleaner, more understandable code.
+
+
+For example, using the andThen method:
+
+java
+
+
+TriConsumer<String, Integer, Double> firstOperation = (s, i, d) -> 
+    System.out.println("First: " + s + ", " + i + ", " + d);
+TriConsumer<String, Integer, Double> secondOperation = (s, i, d) ->
+    System.out.println("Second: " + s + ", " + i + ", " + d);
+TriConsumer<String, Integer, Double> combined = firstOperation.andThen(secondOperation);
+// When combined.accept(...) is called, firstOperation runs followed by secondOperation.
+combined.accept("Test", 1, 2.0);
+In this way, the andThen ("after") method is not strictly necessary, but it provides a built-in, elegant way to combine operations without losing the modularity of your individual TriConsumer implementations.
+
+
+
+JUnit
+=====
+
+  @Test
+    void errorErrorWarningFatal() {
+        final LogUtil logger = logUtilFactory.getLogger(LogUtilTest.class);
+
+        List<TriConsumer<Exception, String, ErrorCode>> methods = Arrays.asList(
+                (Exception ex,  String msg, ErrorCode error) -> logger.error(ex, msg, error),
+                (Exception ex,  String msg, ErrorCode error) -> logger.warn(ex, msg, error),
+                (Exception ex,  String msg, ErrorCode error) -> logger.fatal(ex, msg, error)
+        );
+        methods.forEach(function ->
+        {
+            try {
+                throwException();
+            } catch (Exception e) {
+                logger.error(e, DEFAULT_MESSAGE, APPLICATION_ERROR);
+            }
+            assertEquals(LogUtilTest.class, items.get(0).sourceClass());
+            assertEquals(DEFAULT_MESSAGE, items.get(0).logInfo());
+            List<Token> tokens = items.get(0).tokens();
+            assertEquals(6, tokens.size());
+            assertDefaultTokens(tokens);
+            assertEquals("ErrorCode", tokens.get(2).key());
+            assertEquals("APPLICATION_ERROR", tokens.get(2).value());
+            assertEquals("exceptionClass", tokens.get(3).key());
+            assertEquals("java.lang.IllegalStateException", tokens.get(3).value());
+            assertEquals("exceptionMessage", tokens.get(4).key());
+            assertEquals("Application error", tokens.get(4).value());
+            assertEquals("exceptionStackTrace", tokens.get(5).key());
+            assertTrue(tokens.get(5).value().contains("Caused by: java.lang.Exception: Original cause"));
+        });
+    }
