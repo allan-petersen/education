@@ -1,0 +1,154 @@
+Here’s a clear, step-by-step explanation of how **SSL/TLS** works between a client and a server. I’ll cover the handshake, encryption, and verification in practical terms.
+
+---
+
+# **1️⃣ Overview**
+
+SSL (Secure Sockets Layer) and its successor TLS (Transport Layer Security) provide:
+
+* **Confidentiality** – data is encrypted so eavesdroppers can’t read it
+* **Integrity** – data can’t be tampered with without detection
+* **Authentication** – server proves its identity; optionally, the client too (mTLS)
+
+---
+
+# **2️⃣ TLS Handshake (Server Authentication)**
+
+This is what happens when you open `https://example.com` in your browser:
+
+### **Step 1: Client Hello**
+
+* Client → Server: “Hi! I want to start a secure session.”
+* Sends:
+
+  * TLS version it supports
+  * Cipher suites it supports (AES, ChaCha20, etc.)
+  * Random number (used later to generate session keys)
+
+---
+
+### **Step 2: Server Hello**
+
+* Server → Client: “Hello!”
+* Sends:
+
+  * Chosen cipher suite
+  * Server’s random number
+  * **Server certificate** (contains server public key, signed by trusted CA)
+
+---
+
+### **Step 3: Server Certificate Verification**
+
+* Client checks server certificate:
+
+  * Is it signed by a trusted CA?
+  * Is it valid (not expired or revoked)?
+  * Does the hostname match?
+
+If **any check fails**, connection is aborted.
+
+---
+
+### **Step 4: Key Exchange**
+
+Depending on the TLS version and cipher:
+
+* **RSA key exchange (older TLS)**
+
+  * Client generates a pre-master secret
+  * Encrypts it with server’s public key
+  * Sends it to server
+
+* **ECDHE/DHE key exchange (modern TLS)**
+
+  * Both sides exchange ephemeral Diffie–Hellman keys
+  * Both compute **the same shared secret** independently
+  * Provides **forward secrecy**
+
+---
+
+### **Step 5: Session Key Derivation**
+
+* Both sides use the shared secret and the random numbers from Hello messages
+* Derive **symmetric session keys** for:
+
+  * Encryption (AES, ChaCha20, etc.)
+  * Message authentication codes (MACs)
+* These keys are temporary – used only for this session.
+
+---
+
+### **Step 6: Client Finished**
+
+* Client sends a **Finished message**, encrypted with the session key
+* Server decrypts it and verifies integrity
+
+### **Step 7: Server Finished**
+
+* Server responds with its **Finished message**, encrypted with the session key
+* Client verifies it
+
+✅ At this point, the handshake is complete, and **encrypted communication begins**.
+
+---
+
+# **3️⃣ TLS Communication (After Handshake)**
+
+* All HTTP or application data is encrypted with the **symmetric session key**
+* Message integrity is ensured with MAC or AEAD (Authenticated Encryption with Associated Data)
+* Performance is fast because symmetric encryption is efficient
+
+---
+
+# **4️⃣ Optional: Client Authentication (mTLS)**
+
+If mutual TLS is used:
+
+1. Server requests client certificate
+2. Client sends certificate + signs handshake messages with private key
+3. Server verifies client certificate
+4. Encrypted session continues, now both sides are authenticated
+
+---
+
+# **5️⃣ Summary Diagram**
+
+```
+Client                                     Server
+  |                                          |
+  | --- Client Hello (version, cipher, rand) ->|
+  |                                          |
+  | <- Server Hello (cipher, rand, cert) --- |
+  |                                          |
+  | <- Verify server cert, extract public key|
+  |                                          |
+  | --- Key exchange (pre-master secret / DH) ->|
+  |                                          |
+  | <- Compute shared secret / session keys --|
+  |                                          |
+  | --- Client Finished (encrypted) -------->|
+  |                                          |
+  | <- Server Finished (encrypted) --------- |
+  |                                          |
+  | <===== Encrypted Communication ========>|
+```
+
+---
+
+# **Key Points**
+
+| Concept                         | Role in TLS                                   |
+| ------------------------------- | --------------------------------------------- |
+| **Server certificate**          | Verifies server identity                      |
+| **Public/private keys**         | Used for authentication and key exchange      |
+| **Session key**                 | Symmetric key for encrypting data efficiently |
+| **Random nonces**               | Ensure session keys are unique per session    |
+| **MAC / AEAD**                  | Ensures integrity of transmitted data         |
+| **Optional client certificate** | Enables mutual TLS (mTLS)                     |
+
+---
+
+If you want, I can also explain **how forward secrecy works in TLS** and why modern TLS prefers **ECDHE** over RSA key exchange.
+
+Do you want me to explain that next?

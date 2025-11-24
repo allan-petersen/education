@@ -1,0 +1,57 @@
+SEND
+====
+I am the sender of an electronical document.
+How do I in software sign the document using a private kye and a certficate?
+
+How Digital Signing Works (Conceptual Overview)
+
+You hash the document (e.g., SHA-256).
+
+You encrypt the hash with your private key → this becomes the signature.
+
+You attach your certificate (public key) so others can verify it.
+
+The recipient uses your public key (from your certificate) to validate the signature.
+
+
+PdfReader reader = new PdfReader("input.pdf");
+FileOutputStream out = new FileOutputStream("signed.pdf");
+
+PrivateKey key = ...;            // your private key
+Certificate[] chain = ...;       // your cert chain
+
+PdfSigner signer = new PdfSigner(reader, out, false);
+IExternalSignature pks = new PrivateKeySignature(key, "SHA256", "BC");
+IExternalDigest digest = new BouncyCastleDigest();
+
+signer.signDetached(digest, pks, chain, null, null, null, 0, PdfSigner.CryptoStandard.CMS);
+
+
+RECEIVE 
+=======
+I am the receiver of an electronical document.
+How do I in software verify the sender of the document using the signature,
+and that the contens of the document has not been tampered with?
+
+When you verify a digital signature, software performs two checks:
+
+1. Integrity Check (Has the document been modified?)
+
+The software recomputes a hash of the document (SHA-256, etc.).
+
+It decrypts the signature using the public key from the sender’s certificate.
+
+If the two hashes match → the document is untampered.
+
+2. Authenticity Check (Is the signature from the real sender?)
+
+The sender’s certificate is validated:
+
+Is it issued by a trusted CA?
+
+Is it valid (not expired, not revoked)?
+
+Does it match the signature?
+
+If both checks pass → the document is authentic and intact.
+
