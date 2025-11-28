@@ -1,0 +1,68 @@
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-jms</artifactId>
+  <version>5.3.23</version> <!-- use the appropriate version -->
+</dependency>
+<dependency>
+  <groupId>org.apache.activemq</groupId>
+  <artifactId>activemq-client</artifactId>
+  <version>5.17.3</version>
+</dependency>
+
+
+
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import javax.jms.ConnectionFactory;
+@Configuration
+public class JmsConfig {
+    // Replace these values with your actual connection details
+    private static final String BROKER_URL = "tcp://your-host:61616";
+    private static final String USERNAME = "yourUsername";
+    private static final String PASSWORD = "yourPassword";
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(USERNAME, PASSWORD, BROKER_URL);
+        // Additional configuration (if needed) can be done here
+        return connectionFactory;
+    }
+    @Bean
+    public org.springframework.jms.core.JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
+        return new org.springframework.jms.core.JmsTemplate(connectionFactory);
+    }
+}
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.stereotype.Component;
+@Component
+public class MessageSender {
+    @Autowired
+    private JmsTemplate jmsTemplate;
+    // Replace this with your actual queue name
+    private static final String QUEUE_NAME = "yourQueueName";
+    public void sendMessage(String messageText) {
+        jmsTemplate.send(QUEUE_NAME, session -> session.createTextMessage(messageText));
+        System.out.println("Message sent to queue: " + QUEUE_NAME);
+    }
+}
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+@SpringBootApplication
+public class JmsApplication implements CommandLineRunner {
+    @Autowired
+    private MessageSender messageSender;
+    public static void main(String[] args) {
+        SpringApplication.run(JmsApplication.class, args);
+    }
+    @Override
+    public void run(String... args) throws Exception {
+        messageSender.sendMessage("Hello, this is a test message!");
+    }
+}
