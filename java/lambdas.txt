@@ -1,0 +1,3 @@
+public Bucket resolveBucket(String ipAddress) {
+   return buckets.computeIfAbsent(ipAddress, key -> newBucket());
+}
