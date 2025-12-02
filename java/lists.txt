@@ -1,3 +1,31 @@
-private final List<ApplicationListener<? super IKCommonEvent>> listeners
+Your list is declared as
 
-The above list will accept any listener, that handles an event that is a subclass of IKCommonEvent
+  List<ApplicationListener<? super IKCommonEvent>>
+
+whereas your ErrorEventListener is defined as
+
+  public class ErrorEventListener implements ApplicationListener<ErrorEvent>
+
+with:
+
+  public class ErrorEvent extends IKCommonEvent
+
+Even though ErrorEvent extends IKCommonEvent, note that Java generics are invariant. That is, ApplicationListener<ErrorEvent> is not automatically a subtype of ApplicationListener<IKCommonEvent> or ApplicationListener<? super IKCommonEvent> (even though ErrorEvent is an IKCommonEvent). The wildcard ? super IKCommonEvent means that the list can hold listeners for some unknown type that is a supertype of IKCommonEvent. For example, the list might be holding an ApplicationListener<IKCommonEvent> or even an ApplicationListener<Object>.  
+
+Because of that, if you try to write this:
+
+  listeners.add(new ErrorEventListener());
+
+the compiler will complain because it cannot guarantee that ErrorEventListener (which is an ApplicationListener<ErrorEvent>) is a valid ApplicationListener for some supertype of IKCommonEvent.  
+
+One common solution is to perform an unchecked cast. For example:
+
+  listeners.add((ApplicationListener<? super IKCommonEvent>) new ErrorEventListener());
+
+This tells the compiler “trust me, I know that an ErrorEventListener is acceptable here.” (Be aware that this cast is unchecked and may hide potential type-safety issues.)  
+
+Alternatively, you might consider revisiting the generics design. For example, if your intent is to store listeners that handle various kinds of events that all inherit from IKCommonEvent, you might decide to declare your list as
+
+  List<ApplicationListener<? extends IKCommonEvent>>
+
+or use another design pattern that avoids the need for an unchecked cast.
