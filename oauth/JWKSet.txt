@@ -1,0 +1,14 @@
+Why do I have to expose my JWKSet here .well-known/jwks.json  ?
+
+When using JSON Web Tokens (JWTs), the tokens are typically signed with a private key and verified using the corresponding public key. Exposing your JWKSet at the well-known endpoint (e.g., .well-known/jwks.json) serves several important purposes:
+
+- **Token Validation:**  
+  It allows other parties (such as resource servers or clients) to fetch the public keys they need to validate the JWTs issued by your system. Without access to the public keys, these parties wouldn’t be able to verify that a token is authentic.
+
+- **Interoperability (OpenID Connect and OAuth2):**  
+  Standards like OpenID Connect require a JWKS endpoint so that relying parties can automatically retrieve the key set. This simplifies configuration and ensures that clients always have the correct keys, even when they are rotated.
+
+- **Security and Trust:**  
+  Exposing the JWKSet is safe because it contains only public keys. There’s no risk of compromising your private key, which is used to sign the tokens. The public keys alone enable token verification without exposing any sensitive data.
+
+In summary, exposing your JWKSet via a well-known endpoint is part of adhering to best practices and relevant standards for securely sharing the information needed to validate your tokens.
