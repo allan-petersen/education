@@ -104,10 +104,10 @@ Smaller Systems
 
 Is NoSQL Right for you?
 ======================
-TODO
+Pick between
 
-
-
-
+ACID: Atomic, Consistent, Isolated, Durable
+BASE: Basic availablilty, Soft state, Eventual consistency
 
 5. Vector Databases
+===================
