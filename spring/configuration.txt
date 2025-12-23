@@ -68,3 +68,29 @@ public class AppConfig {
 }
 
 In summary, Java records are fully compatible with Spring's bean model as long as you are using constructor injection and do not need mutable properties.
+
+Example
+=======
+   public record Processing(String id) {
+    }
+
+    public record Hl7(Processing processing) {
+    }
+
+    @Bean
+    public Hl7 hl7(Processing processing) {
+        return new Hl7(processing);
+    }
+
+    @Bean
+    public Processing processing(@Value("${hl7.processing.id}") String id) {
+        return new Processing(id);
+    }
+
+    public record Integration(String name) {
+    }
+
+    @Bean
+    public Integration integration(@Value("${integration.name}") String name) {
+        return new Integration(name);
+    }
