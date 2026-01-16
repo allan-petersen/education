@@ -1,0 +1,60 @@
+/**
+ * Spring component responsible for finding person info in DPR via the 3197 DPR Service REST API.
+ *
+ * <p>
+ * This client acts as a thin wrapper around the generated {@link ServiceApiApi}
+ * and provides a domain-oriented interface for searching persons based on
+ * {@link FindSuplDprIn} input and mapping the response into {@link FindSuplDprOut}.
+ * </p>
+ *
+ * <p>
+ * The client performs the following responsibilities:
+ * <ul>
+ *   <li>Invokes the DPR service endpoint with the required cpr parameters</li>
+ *   <li>Applies domain-specific constraints and assumptions required by the 3197 API</li>
+ *   <li>Maps {@link SuplOplType} object returned from DPR into {@link FindSuplDprOut} output object</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * NOTE:
+ * The underlying DPR API is sensitive to enum values and numeric ranges.
+ * Callers must ensure that all input values comply with the constraints documented
+ * on {@link FindSuplDprIn}.
+ * </p>
+ *
+ */
+
+
+ 
+  /**
+     * Searches for persons in DPR based on the supplied search criteria.
+     *
+     * <p>
+     * The method delegates the actual REST call to the generated DPR search client
+     * and converts the result into a {@link SearchPersonsOut} structure compatible
+     * with existing downstream consumers.
+     * </p>
+     *
+     * <p>
+     * Important domain constraints enforced by the DPR (3197) API:
+     * <ul>
+     *   <li>Lastname and firstname match types must be one of: ER, BEGYNDERMED, INDEHOLDER</li>
+     *   <li>Sex must be one of: BEGGE, MAND, KVINDE</li>
+     *   <li>Date values must be provided as numeric strings with a maximum of 8 digits</li>
+     *   <li>House numbers must be between 0 and 999</li>
+     *   <li>Postal codes must be between 1000 and 9999</li>
+     * </ul>
+     * </p>
+     *
+     * <p>
+     * The search is executed with status value {@code "ALLE"}, meaning that both
+     * active and inactive persons may be returned. This may be changed to
+     * {@code "AKTUELT"} if only persons with status {@code <= 30} should be included.
+     * </p>
+     *
+     * @param patientSearchIn input object containing validated search parameters
+     * @return search result containing a list of mapped {@link SPERSON} objects
+     * @throws ArithmeticException                                if numeric values cannot be safely converted to {@code int}
+     * @throws org.springframework.web.client.RestClientException if the underlying REST call fails
+     */
