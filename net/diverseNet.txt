@@ -1,0 +1,10 @@
+Load balancer
+=============
+Kalder uden port, dvs. default https port 443 eller 8443 anvendes 
+
+Service
+=======
+Kald med portnummer
+
+F.eks. 
+https://tlnxint02.unix.regionh.top.local:23197/
