@@ -1,0 +1,9 @@
+Runtime exception
+=================
+Rollback
+
+
+
+Checked Exception
+=================
+Du håndterer.
