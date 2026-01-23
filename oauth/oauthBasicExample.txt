@@ -1,0 +1,6 @@
+1. Ud fra en nøgle i integrationens JWK set
+2. Integrationen bygger en accessTtoken request (bearer token)
+3. Integrationen sender denne accessTtoken reques til Epic Interconnect
+4. Epic Interconnect verificerer, that the request is from us calling this JWK set URL: spn2sbint2t010.sp.local:28401/S401-Epic2PRO/.well-known/jwks.json
+5. Epic Interconnect returnerer et accessToken til os. Dette token indeholder vores rettigheder på Epic Interconnect
+6. Integrationen kalder en service på Epic Interconnect  
