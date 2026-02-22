@@ -1,0 +1,12 @@
+Idag har vi flere skemaer inden for samme instans
+Grant readOnly til andre skewmaer.
+
+Fremover:
+https://oracle-base.com/articles/12c/multitenant-overview-container-database-cdb-12cr1
+
+
+Container Database (CDB)
+
+Pluggable database (PDB)
+
+PDB giver bedere opsplitning af data mellem databaser
