@@ -1,0 +1,22 @@
+
+
+Index
+=====
+column1      column2      column3      column4      rowId      ---> tabel      
+1            0            67
+1            0            67
+
+
+Slå op i index med en af nedenstående:
+
+column1
+column1, column2
+column2, column2, column3
+column1, column2, column3, column4
+
+
+
+Flere rækker med samme værdier.
+
+
+
