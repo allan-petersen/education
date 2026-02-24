@@ -1,0 +1,8 @@
+Beans i spring boot:
+ 
+- Dine egne beans i dit projekt
+- Dine @Imports.... 
+- Dine BeanRegsitrations  (her skriver man CF beans)
+- Auto-konfiguration       (her skriver man customizer, xa or not)
+- BeanPostProcessFactories...
+- refhreshed..
