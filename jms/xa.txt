@@ -1,0 +1,10 @@
+I have 2 XA enabled resources.
+A database and an ActiveMQ instance
+
+I first send 1 message to an ActiveMQ queue, which is empty from the start, and next the database is updated.
+
+Will the ActiveMQ queue be left empty, if the databse update fails?
+
+When using XA transactions, both the database update and the message send are part of a single distributed transaction coordinated by a transaction manager (typically via a two-phase commit protocol). This means that if the database update fails, the transaction manager will roll back the entire transaction—including the operation that sent the message to the ActiveMQ queue.
+
+So, the ActiveMQ queue will be left empty, because the message send will be rolled back.
