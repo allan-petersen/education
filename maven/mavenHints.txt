@@ -1,0 +1,98 @@
+Versions nummer
+===============
+Når du skal tilføje en ny dependency, så start med at lade være med at sætte versions nummeret.
+Det kan være, at det allerede er sat i en inkluderet BOM
+
+
+
+Maven BOM
+=========
+A Maven BOM (Bill Of Materials) is a special type of Maven POM file designed to manage and control dependency versions for a project or a set of related projects. Here are the key points:
+
+- **Centralized Dependency Versions:**  
+  A BOM provides a central list of dependencies and their specific versions. This allows you to maintain consistency across multiple modules or projects without having to specify version numbers in each individual module.
+
+- **Usage in Dependency Management:**  
+  Instead of declaring versions for every dependency in your project's POM, you import the BOM into your project's dependencyManagement section. Once imported, you can include the dependencies without specifying version information, because Maven will inherit the versions from the BOM.
+
+- **Simplifying Upgrades:**  
+  When you need to upgrade a set of related dependencies, you only have to update the BOM. This reduces the risk of version conflicts and makes dependency management more straightforward, especially in large projects or ecosystems.
+
+- **Example:**  
+  Suppose you have a BOM named "my-bom" which defines version numbers for dependencies like "library-a" and "library-b". You can import it in your POM like this:
+
+  ```xml
+  <dependencyManagement>
+      <dependencies>
+          <dependency>
+              <groupId>com.example</groupId>
+              <artifactId>my-bom</artifactId>
+              <version>1.0.0</version>
+              <type>pom</type>
+              <scope>import</scope>
+          </dependency>
+      </dependencies>
+  </dependencyManagement>
+  ```
+
+  After importing the BOM, you can add dependencies without specifying versions:
+
+  ```xml
+  <dependencies>
+      <dependency>
+          <groupId>com.example</groupId>
+          <artifactId>library-a</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>com.example</groupId>
+          <artifactId>library-b</artifactId>
+      </dependency>
+  </dependencies>
+
+
+
+Example - Ik-common
+===================
+
+ik-common-base-parent - anvendes som parent definition i diverse moduler
+========================================================================
+   Maven plugin versions numre
+   Build
+      Maven plugins
+	  Profiles
+
+
+
+ik-common-base-dependencies - importeres af diverse moduler
+===========================================================
+   Versions numre for Spring, Camel osv.
+   Spring Boot BOM
+   Camel BOM
+   Camel Srping Boot BOM
+   HL7
+   osv.
+
+
+   
+ik-common-bom - Importeres kun af functional-tests modulet
+==========================================================
+  importerer ik-common-base-dependencies
+  Lister alle ik-common moduler
+
+
+ik-common-camel - et eksempel på et modul
+=========================================
+   parent: ik-common-base-parent
+   importerer ik-common-base-dependencies
+   
+
+
+pom.xml - Top level
+===================
+   Lister alle moduler
+   Github settings
+   Repository skal
+
+
+   
+   
