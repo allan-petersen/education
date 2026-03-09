@@ -94,3 +94,23 @@ Example
     public Integration integration(@Value("${integration.name}") String name) {
         return new Integration(name);
     }
+
+
+
+What does the following code do?Which objects are constructed?   
+
+@Bean 
+NoopOutInterceptor noopOutInterceptor() { 
+   return new NoopOutInterceptor(); 
+}
+
+What the Code Does
+The method is annotated with @Bean, which means that Spring will call this method during context initialization and register the returned object as a bean in the application context.
+The method name (noopOutInterceptor) acts as the bean's identifier in the Spring container.
+Inside the method, a new instance of NoopOutInterceptor is created by calling its constructor using new NoopOutInterceptor().
+Objects Constructed
+An object of type NoopOutInterceptor is constructed. This is the sole object built by this method.
+The constructed NoopOutInterceptor instance is then managed by the Spring container as a bean.
+
+In summary, this code defines a Spring bean named "noopOutInterceptor" that is an instance of NoopOutInterceptor, 
+and it is constructed when the application context is initialized.
