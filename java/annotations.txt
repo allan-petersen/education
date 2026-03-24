@@ -82,3 +82,7 @@ Include the annotation processor’s jar on the annotation processing path (or c
 Compilation Environment:
 When compiling your code, ensure that both your custom annotation and the processor are in the compilation classpath and that annotation processing is enabled. Most build tools (Maven, Gradle, etc.) manage this automatically, but if you are compiling manually, you might need to add the processor jar via appropriate compiler options.
 Following these best practices will ensure that your annotation processor discovers and processes your custom annotation as expected.
+
+MetaAnnotations
+===============
+https://dzone.com/articles/what-are-meta-annotations-in-java
