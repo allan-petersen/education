@@ -10,3 +10,7 @@ Container Database (CDB)
 Pluggable database (PDB)
 
 PDB giver bedere opsplitning af data mellem databaser
+
+Lås  bruger opsplitning
+=======================
+alter user CAMEL_SERVICE account unlock;
