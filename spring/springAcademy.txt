@@ -4,5 +4,17 @@ lav brugerkonto
 
 Spring Framework essentials
 
-3 moduler
+3 moduler: 4, 5 og 6
 
+
+
+MetaAnnotations
+===============
+Annotation, der dækker flere annoteringer
+
+Rentention: Hvornår skal den bruges
+Target: Hvor må den sidde
+
+Attribut på annotering
+@AliasFor
+String value() default "Dev";
