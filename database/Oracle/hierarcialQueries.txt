@@ -1,0 +1,305 @@
+See https://www.orafaq.com/node/2038
+
+Hierarchical queries
+dwarak.k's pictureSubmitted by dwarak.k on Thu, 2008-06-26 01:48
+Attachment	Size
+Image icon hierarchical tree.GIF	4.52 KB
+articles: 
+SQL & PL/SQL
+A relational database does not store data in a hierarchical way. Then how do I get the data in a hierarchical manner? Here we get to know about how to use the hierarchical querying feature which Oracle has given. This article talks about how you can interpret the hierarchical query conceptually and build hierarchical queries catering your needs.
+
+Using hierarchical queries, you can retrieve records from a table by their natural relationship. Be it a family tree or a employee/manager tree or what ever.
+
+Tree walking enables you to construct a hierarchical tree if the relationship lie in the same table. For instance, a manager column which exists in the emp table which defines the managerial hierarchy.
+
+We shall take up an example of the emp table in Scott schema. Here King is top most in the hierarchy
+
+empno	ename	job	mgr	hiredate
+7369	SMITH	CLERK	7902	17-Dec-80
+7499	ALLEN	SALESMAN  7698	20-Feb-81
+7521	WARD	SALESMAN  7698	22-Feb-81
+7566	JONES	MANAGER	7839	2-Apr-81
+7654	MARTIN	SALESMAN  7698	28-Sep-81
+7698	BLAKE	MANAGER	7839	1-May-81
+7782	CLARK	MANAGER	7839	9-Jun-81
+7788	SCOTT	ANALYST	7566	19-Apr-87
+7839	KING	PRESIDENT	17-Nov-81
+7844	TURNER	SALESMAN  7698	8-Sep-81
+7876	ADAMS	CLERK	7788	23-May-87
+7900	JAMES	CLERK	7698	3-Dec-81
+7902	FORD	ANALYST	7566	3-Dec-81
+7934	MILLER	CLERK	7782	23-Jan-82
+If we have to query the employees reporting to King directly,
+
+SELECT empno, 
+       ename, 
+       job, 
+       mgr, 
+       hiredate 
+FROM   emp 
+WHERE  mgr = 7839
+
+7566	JONES	MANAGER	7839	2-Apr-81
+7698	BLAKE	MANAGER	7839	1-May-81
+7782	CLARK	MANAGER	7839	9-Jun-81
+But if we have to walk down the tree and check who all are reporting to Jones, Blake and Clark (recursively)
+
+SELECT empno, 
+       ename, 
+       job, 
+       mgr, 
+       hiredate 
+FROM   emp 
+START WITH mgr IS NULL 
+CONNECT BY PRIOR empno = mgr
+We will quickly see what are all the key words used in this query.
+
+START WITH – Specifies the root rows of the hierarchy or in other words, where to start parsing from. This clause is necessary for true hierarchical queries
+
+CONNECT BY PRIOR – This explains the relationship between the parent and the child.
+
+PRIOR – This is used to achieve the recursive condition (The actual walking)
+
+Direction of walking the tree
+To explain more on the CONNECT BY clause, this is used to determine if you are walking from top to bottom or bottom to top.
+
+CONNECT BY PRIOR col_1 = col_2
+
+If walking from top to bottom
+=============================
+col_1 is the parent Key(One which identifies the parent) and col_2 is the child key (this identifies the child)
+And here it is
+
+CONNECT BY PRIOR empno = mgr
+
+SELECT empno, 
+       ename, 
+       job, 
+       mgr, 
+       hiredate,
+ level 
+FROM   emp 
+START WITH mgr IS NULL 
+CONNECT BY PRIOR empno = mgr
+Gets me this result
+
+7839	KING      PRESIDENT 	           17-Nov-81	1
+7566	JONES     MANAGER   7839	2-Apr-81	2
+7788	SCOTT     ANALYST   7566	19-Apr-87	3
+7876	ADAMS     CLERK     7788	23-May-87	4
+7902	FORD      ANALYST   7566	3-Dec-81	3
+7369	SMITH     CLERK     7902	17-Dec-80	4
+7698	BLAKE     MANAGER   7839	1-May-81	2
+7499	ALLEN     SALESMAN  7698	20-Feb-81	3
+7521	WARD      SALESMAN  7698	22-Feb-81	3
+7654	MARTIN    SALESMAN  7698	28-Sep-81	3
+7844	TURNER    SALESMAN  7698	8-Sep-81	3
+7900	JAMES     CLERK     7698	3-Dec-81	3
+7782	CLARK     MANAGER   7839	9-Jun-81	2
+7934	MILLER    CLERK     7782	23-Jan-82	3
+
+If walking from bottom to top
+=============================
+Col_1 should be the child key and col_2 should be the parent key
+
+CONNECT BY PRIOR mgr = empno
+Using Level
+LEVEL psedo column shows the level or rank of the particular row in the hierarchical tree. If you see the below query, It shows the level of KING and the level of the guys reporting directly to him
+
+SELECT empno, 
+       ename, 
+       job, 
+       mgr, 
+       hiredate, 
+       LEVEL 
+FROM   emp 
+WHERE  LEVEL <= 2 
+START WITH mgr IS NULL 
+CONNECT BY PRIOR empno = mgr
+empno	ename	job	mgr	hiredate	level
+7839	KING	PRESIDENT		17-Nov-81	1
+7566	JONES	MANAGER	7839	2-Apr-81	2
+7698	BLAKE	MANAGER	7839	1-May-81	2
+7782	CLARK	MANAGER	7839	9-Jun-81	2
+
+Here The level is used in the where clause to restrict the records till the second level.
+
+Level also can be used to format the Output to form a graph structure
+
+SELECT Lpad(ename,Length(ename) + LEVEL * 10 - 10,'-') 
+FROM   emp 
+START WITH mgr IS NULL 
+CONNECT BY PRIOR empno = mgr
+
+KING
+----------JONES
+--------------------SCOTT
+------------------------------ADAMS
+--------------------FORD
+------------------------------SMITH
+----------BLAKE
+--------------------ALLEN
+--------------------WARD
+--------------------MARTIN
+--------------------TURNER
+--------------------JAMES
+----------CLARK
+--------------------MILLER
+
+Pruning branches/children
+There might be business requirements to partially retrieve a hierarchical tree and to prune branches.
+If you do not want to do so, use the where condition to restrict the branch but process the child row
+
+SELECT empno, 
+       ename, 
+       job, 
+       mgr, 
+       hiredate 
+FROM   emp 
+WHERE  ename <> 'JONES' 
+START WITH mgr IS NULL 
+CONNECT BY PRIOR empno = mgr
+This will restrict the value Jones in the result set but will still will retrieve Scott and Ford.
+
+Please refer to the attached Picture to get a complete understanding.
+
+To Restrict the value clark and its children, you should be adding the condition after the CONNECT BY
+
+SELECT empno, 
+       ename, 
+       job, 
+       mgr, 
+       hiredate 
+FROM   emp 
+START WITH mgr IS NULL 
+CONNECT BY PRIOR empno = mgr 
+                 AND ename <> 'CLARK'
+				 
+Examples
+========
+-- Top down
+ SELECT LEVEL, sor.sorIdentifier, sor.providerIdentifier, entityname 
+       FROM po_orgunitrelationship rel
+       LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+       WHERE rel.organizationdimension = (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+       -- Parent
+       START WITH sor.soridentifier = 62821000016003
+       -- Child = parent
+       CONNECT BY PRIOR rel.orgunitchild = rel.orgunitparent
+                  AND PRIOR rel.organizationdimension = rel.organizationdimension
+;
+
+LEVEL;SORIDENTIFIER;PROVIDERIDENTIFIER;ENTITYNAME
+1;62821000016003;;Lægerne Frederiksværksgade
+2;62831000016001;;Lægerne Frederiksværksgade
+3;62851000016006;000086;Alexander Von Wallfeld
+3;62861000016009;000086;Dorthe Hanghøj
+3;62871000016004;000086;Charlotte Husfeldt
+3;62841000016008;000086;Thøger Frøsig Sørensen
+
+
+
+-- Buttom up
+ SELECT LEVEL, sor.sorIdentifier, sor.providerIdentifier, entityname 
+       FROM po_orgunitrelationship rel
+       LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+       WHERE rel.organizationdimension = (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+       -- Parent = child
+       START WITH sor.soridentifier IN (62851000016006, 62861000016009, 62871000016004, 62841000016008)
+       CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+               AND PRIOR rel.organizationdimension = rel.organizationdimension
+;
+
+LEVEL;SORIDENTIFIER;PROVIDERIDENTIFIER;ENTITYNAME
+1;62851000016006;000086;Alexander Von Wallfeld
+2;62831000016001;;Lægerne Frederiksværksgade
+3;62821000016003;;Lægerne Frederiksværksgade
+1;62861000016009;000086;Dorthe Hanghøj
+2;62831000016001;;Lægerne Frederiksværksgade
+3;62821000016003;;Lægerne Frederiksværksgade
+1;62871000016004;000086;Charlotte Husfeldt
+2;62831000016001;;Lægerne Frederiksværksgade
+3;62821000016003;;Lægerne Frederiksværksgade
+1;62841000016008;000086;Thøger Frøsig Sørensen
+2;62831000016001;;Lægerne Frederiksværksgade
+3;62821000016003;;Lægerne Frederiksværksgade
+				 
+				 
+START WITH manager_id IS NULL:
+This clause identifies the root record(s) in the hierarchy (e.g., the top-level employees or executives).
+
+CONNECT BY PRIOR employee_id = manager_id:
+This clause defines the relationship between parent and child rows.
+
+CONNECT_BY_ROOT employee_name:
+Regardless of the depth in the hierarchy, this function returns the employee_name of the root row from which the hierarchical traversal began.				 
+
+WHERE CONNECT_BY_ISLEAF = 1:
+This filters the result set to only include rows that are leaf nodes (i.e., employees who do not have any subordinates).
+
+Conditions
+==========
+Here’s an example query that demonstrates conditions for top nodes, intermediate nodes, and leaf nodes:
+
+sql
+
+SELECT employee_id,
+       employee_name,
+       LEVEL,
+       CASE
+         WHEN CONNECT_BY_ISLEAF = 1 THEN 'Leaf'
+         WHEN LEVEL = 1 THEN 'Top'
+         ELSE 'Intermediate'
+       END AS node_type
+FROM employees
+START WITH manager_id IS NULL              -- Only rows with no manager are top nodes.
+CONNECT BY PRIOR employee_id = manager_id
+-- Optionally, you can add a WHERE clause to further filter:
+-- WHERE (For top nodes: conditions in START WITH,
+--        For leaf nodes: CONNECT_BY_ISLEAF = 1,
+--        For intermediate: LEVEL > 1 AND CONNECT_BY_ISLEAF = 0)
+;
+
+Condtions on all
+================
+Below are a couple of approaches to force a condition to apply to all nodes (top, intermediate, or leaf) in an Oracle hierarchical query.
+
+1. Pre-filtering in a Subquery
+One common method is to filter the table data first (in an inline view) before applying the hierarchical query. This way the condition is enforced on every row before the hierarchy is built.
+
+For example, if you need every node to have status = 'ACTIVE', you can write:
+
+SELECT employee_id,
+       employee_name,
+       LEVEL
+FROM (
+  SELECT *
+  FROM employees
+  WHERE status = 'ACTIVE'  -- condition applies to all rows
+)
+START WITH manager_id IS NULL
+CONNECT BY PRIOR employee_id = manager_id;
+In this approach, every row considered by the hierarchical query already meets the status condition.
+
+2. Including the Condition in the CONNECT BY Clause
+Another approach is to incorporate the condition directly into your CONNECT BY clause (by adding an AND condition). This forces every parent–child relationship to honor the condition. For instance:
+
+
+SELECT employee_id,
+       employee_name,
+       LEVEL
+FROM employees
+START WITH manager_id IS NULL
+CONNECT BY PRIOR employee_id = manager_id AND status = 'ACTIVE';
+This ensures that a child row is only linked to its parent if the child also meets the status condition. Note that if a row fails the condition, its branch will be pruned from the hierarchy.
+
+Additional Considerations
+WHERE Clause on the Final Result:
+While you could also put a condition in the final WHERE clause, remember that the WHERE clause is applied after the hierarchy is built. This means that if a row (or even an entire branch) does not meet the condition, it will be filtered out from the final result—but it might have already affected the hierarchical structure (and pseudo columns like LEVEL).
+
+
+Choice of Method:
+If the condition should determine the structure (i.e., which rows get linked), it’s often better to include it in the CONNECT BY clause or pre-filter using a subquery. If it’s solely for the final output, then placing it in the WHERE clause might be acceptable.
+
+
+By pre-filtering the rows or integrating the condition into the CONNECT BY clause, you ensure that your condition (for example, status = 'ACTIVE') applies consistently to all nodes—top nodes, intermediate nodes, and leaf nodes—in your hierarchical query.
