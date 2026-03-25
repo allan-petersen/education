@@ -303,3 +303,29 @@ If the condition should determine the structure (i.e., which rows get linked), i
 
 
 By pre-filtering the rows or integrating the condition into the CONNECT BY clause, you ensure that your condition (for example, status = 'ACTIVE') applies consistently to all nodes—top nodes, intermediate nodes, and leaf nodes—in your hierarchical query.
+
+
+
+sys_connect_by_path
+===================
+Below is a breakdown of what the expression does:
+
+sys_connect_by_path(sor.eanlocation, '|'):
+This function is used in Oracle hierarchical queries. It concatenates the values of the column sor.eanlocation along the hierarchy using the pipe (|) as a delimiter. For example, if the hierarchy has values A, B, C, then this expression would return something like:
+│A│B│C
+(with a leading pipe)
+
+
+ltrim(sys_connect_by_path(sor.eanlocation, '|'), '|'):
+This removes the leading pipe character from the string. So from │A│B│C you would get:
+A│B│C
+
+
+ltrim(sys_connect_by_path(sor.eanlocation, '|') || '|', '|'):
+This part appends an extra pipe to the string before performing further operations. In our example, it would result in:
+A│B│C|
+This ensures that even if sor.eanlocation is the only element (i.e., no pipes occur later), there will be a delimiter to find.
+
+
+instr(ltrim(sys_connect_by_path(sor.eanlocation, '|') || '|', '|'), '|', 1):
+The INSTR function is used here to locate the position of the first occurrence of the pipe (|) in the string (after left-trimming). Given our example "A│B│C|", this returns the position of the first pipe after "A". This position tells us where the first token ends.	   
