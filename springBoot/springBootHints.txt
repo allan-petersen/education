@@ -6,3 +6,14 @@ Beans i spring boot:
 - Auto-konfiguration       (her skriver man customizer, xa or not)
 - BeanPostProcessFactories...
 - refhreshed..
+
+
+Boot-jars
+=========
+Autoconfigurering sker efter beans
+
+JmsAutoConfiguration
+
+Conditional on.
+1. klasse 
+2. metode
