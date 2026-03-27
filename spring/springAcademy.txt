@@ -18,3 +18,13 @@ Target: Hvor må den sidde
 Attribut på annotering
 @AliasFor
 String value() default "Dev";
+
+Aspects
+=======
+
+Expressions:
+
+Format: TODO
+
+*  matches one (return type, package, class methodname, argument)
+.. matches zero or more(arguments or packages
