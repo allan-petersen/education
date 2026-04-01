@@ -1,0 +1,74 @@
+I have a table with columns PID;SID;PARENT containing these data:
+PID1;SID1;PARENTA
+PID1;SID2;PARENTA
+PID1;SID3;PARENTA
+PID2;SID4;PARENTB
+PID2;SID5;PARENTB
+PID3;SID6;PARENTC
+PID4,SID7;PARENTD
+
+Is it possible to writhe a query returning these columns:
+
+PARENT;PID;listsids;action
+PARENTA;PID1;SID1,SID2,SID3;move2parent
+PARENTB;PID2;SID4,SID5;unhandled
+PARENTC;PID3;SID6;unique
+PARENTD;PID4;SID7;unique
+
+where 
+
+action is set to move2parent for the PID group having most members
+action is set to unique for PID groups having 1 member
+action is set to unhadled for other PID groups
+
+Please provide Oracle syntax.
+
+WITH aggregated AS (
+  SELECT
+    parent,
+    pid,
+    LISTAGG(sid, ',') WITHIN GROUP (ORDER BY sid) AS listsids,
+    COUNT(*) AS cnt
+  FROM your_table
+  GROUP BY parent, pid
+),
+max_count AS (
+  SELECT MAX(cnt) AS max_cnt
+  FROM aggregated
+)
+SELECT
+  a.parent,
+  a.pid,
+  a.listsids,
+  CASE
+    WHEN a.cnt = (SELECT max_cnt FROM max_count) THEN 'move2parent'
+    WHEN a.cnt = 1 THEN 'unique'
+    ELSE 'unhandled'
+  END AS action
+FROM aggregated a;
+
+Explanation
+CTE (aggregated):  
+
+
+This part aggregates the rows by PID (and parent) so that for each group you get:
+A comma-separated list of SIDs (using LISTAGG).
+The total count of rows in the group.
+
+
+CTE (max_count):  
+
+
+This simply calculates the maximum value of the aggregated counts.
+
+Final Select with CASE:  
+
+
+The final SELECT pulls from the aggregated data.
+The CASE expression sets the action:
+'move2parent' for groups whose count matches the maximum count.
+'unique' for groups with a single member.
+'unhandled' for all other groups.
+
+
+Replace "your_table" with your actual table name. This Oracle query should provide the desired results.
