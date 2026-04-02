@@ -80,3 +80,83 @@ For outer joins (LEFT JOIN, RIGHT JOIN), putting conditions in the ON clause ver
 
 Summary
 There is no functional difference between the two queries when using an INNER JOIN—they both will return the same rows. The choice of where to place the condition (c.country = 'USA') is mostly a matter of style and clarity for inner joins.	
+
+
+
+Yes, it's possible to write a hierarchical (recursive) query that returns the number of nodes on each level and collects the nodes on each level in a list. One common method to accomplish this is by using a recursive Common Table Expression (CTE) along with an aggregate function to build the list of nodes. Note that the exact syntax may vary depending on your SQL dialect (e.g., PostgreSQL, SQL Server, Oracle, etc.).
+
+Below is an example using PostgreSQL syntax. Suppose you have a table named Nodes with columns: id, parent_id, and name. In this example, nodes with a NULL parent_id represent root nodes.
+
+WITH RECURSIVE node_cte AS (
+    -- Anchor: select root nodes (level 1)
+    SELECT 
+        id,
+        parent_id,
+        name,
+        1 AS level
+    FROM 
+        Nodes
+    WHERE 
+        parent_id IS NULL
+    UNION ALL
+    -- Recursive part: select child nodes and increment the level
+    SELECT 
+        n.id,
+        n.parent_id,
+        n.name,
+        c.level + 1 AS level
+    FROM 
+        Nodes n
+    JOIN 
+        node_cte c ON n.parent_id = c.id
+)
+SELECT 
+    level,
+    COUNT(*) AS num_nodes,
+    ARRAY_AGG(name) AS node_list
+FROM 
+    node_cte
+GROUP BY 
+    level
+ORDER BY 
+    level;
+	
+	
+The same using Oracle:
+
+sql
+
+
+SELECT 
+    LEVEL AS hierarchy_level,
+    COUNT(*) AS num_nodes,
+    LISTAGG(name, ', ') WITHIN GROUP (ORDER BY id) AS node_list
+FROM 
+    Nodes
+START WITH 
+    parent_id IS NULL
+CONNECT BY 
+    PRIOR id = parent_id
+GROUP BY 
+    LEVEL
+ORDER BY 
+    LEVEL;	
+	
+	
+SELECT 
+    LEVEL AS hierarchy_level,
+    COUNT(*) AS num_nodes,
+    CASE 
+        WHEN LEVEL IN (2, 3) THEN LISTAGG(name, ', ') WITHIN GROUP (ORDER BY id)
+        ELSE NULL 
+    END AS node_list
+FROM 
+    Nodes
+START WITH 
+    parent_id IS NULL
+CONNECT BY 
+    PRIOR id = parent_id
+GROUP BY 
+    LEVEL
+ORDER BY 
+    LEVEL;	
