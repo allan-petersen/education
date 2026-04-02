@@ -299,7 +299,8 @@ While you could also put a condition in the final WHERE clause, remember that th
 
 
 Choice of Method:
-If the condition should determine the structure (i.e., which rows get linked), it’s often better to include it in the CONNECT BY clause or pre-filter using a subquery. If it’s solely for the final output, then placing it in the WHERE clause might be acceptable.
+If the condition should determine the structure (i.e., which rows get linked), it’s often better to include it in the CONNECT BY clause or pre-filter using a subquery. 
+If it’s solely for the final output, then placing it in the WHERE clause might be acceptable.
 
 
 By pre-filtering the rows or integrating the condition into the CONNECT BY clause, you ensure that your condition (for example, status = 'ACTIVE') applies consistently to all nodes—top nodes, intermediate nodes, and leaf nodes—in your hierarchical query.

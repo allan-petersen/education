@@ -1,0 +1,82 @@
+
+What is the difference between these 2 select statements?
+SELECT 
+    c.name,
+    o.order_date
+FROM 
+    customers AS c
+INNER JOIN 
+    orders AS o
+ON 
+    c.id = o.customer_id
+WHERE 
+    c.country = 'USA';
+	
+and
+
+SELECT 
+    c.name,
+    o.order_date
+FROM 
+    customers AS c
+INNER JOIN 
+    orders AS o
+ON 
+    c.id = o.customer_id AND c.country = 'USA';
+
+Both queries will return the same set of rows when using an INNER JOIN, but they structure the filtering condition differently. Here’s a breakdown:
+
+First Query
+
+
+SELECT 
+    c.name,
+    o.order_date
+FROM 
+    customers AS c
+INNER JOIN 
+    orders AS o
+ON 
+    c.id = o.customer_id
+WHERE 
+    c.country = 'USA';
+Join Condition:
+The JOIN pairs rows from the customers and orders tables based solely on c.id = o.customer_id.
+
+
+Filtering:
+After the JOIN is executed, the WHERE clause filters the rows where c.country = 'USA'.
+
+
+Second Query
+
+
+SELECT 
+    c.name,
+    o.order_date
+FROM 
+    customers AS c
+INNER JOIN 
+    orders AS o
+ON 
+    c.id = o.customer_id AND c.country = 'USA';
+Join Condition:
+The JOIN pairs rows using a combined condition: it requires both c.id = o.customer_id and c.country = 'USA' to be true.
+Comparison
+Result:
+Since both statements use an INNER JOIN, they will produce the same result set. For the inner join, joining with an extra condition in the ON clause versus filtering in the WHERE clause does not change the final outcome.
+
+
+Execution Order:  
+
+
+In the first query, the join is computed first; then the resulting dataset is filtered using the WHERE clause.
+In the second query, the filter c.country = 'USA' is applied during the join.
+For INNER JOINS, this difference in order does not affect the final set of rows.
+
+Outer Joins Note:
+For outer joins (LEFT JOIN, RIGHT JOIN), putting conditions in the ON clause versus the WHERE clause can change the result. However, when only using an INNER JOIN, the two approaches are equivalent.
+
+
+Summary
+There is no functional difference between the two queries when using an INNER JOIN—they both will return the same rows. The choice of where to place the condition (c.country = 'USA') is mostly a matter of style and clarity for inner joins.	
