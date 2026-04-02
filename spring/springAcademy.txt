@@ -4,7 +4,10 @@ lav brugerkonto
 
 Spring Framework essentials
 
-3 moduler: 4, 5 og 6
+3 moduler: 7, 8 og 9
+
+Spring Boot
+
 
 
 
@@ -22,9 +25,21 @@ String value() default "Dev";
 Aspects
 =======
 
-Expressions:
+execution(<method pattern>
 
-Format: TODO
+execution(<pattern1>) || execution(<pattern2>)
+
+Method pattern 		
+[Modifiers]	      Public fr example
+ReturnType:   
+[ClassType with package prefix]
+MethodName (Arguments) [throws Exception Type]          *
+
+ReturnType and MethodName with argumens are mandatory
 
 *  matches one (return type, package, class methodname, argument)
-.. matches zero or more(arguments or packages
+.. matches zero or more(arguments or packages)
+
+Example:
+                                            // rewards.internal.account.AccountRepository
+	@AfterThrowing(value = "execution(public * rewards.internal.*      .*Repository.*(..))", throwing = "e")
