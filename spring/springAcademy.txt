@@ -43,3 +43,30 @@ ReturnType and MethodName with argumens are mandatory
 Example:
                                             // rewards.internal.account.AccountRepository
 	@AfterThrowing(value = "execution(public * rewards.internal.*      .*Repository.*(..))", throwing = "e")
+	
+
+
+Testing
+=======	
+
+IntegrationTesting
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes={SystemTestConfig.class})
+
+@SpringJunitConfig(SystemTestConfig.class) combines the 1 annotations above
+
+(@Autowired TransferService transferService ) 
+
+Override test configuration
+
+@Configueation
+@Import(SystemTestConfig.class)
+static class TestConfiguration {
+   @Bean public Datasource datasource() {...}
+   
+@TestPropertySource
+
+
+   
+}
+
