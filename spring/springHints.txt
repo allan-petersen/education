@@ -27,3 +27,18 @@ Here’s what happens in detail:
 
 In summary, the @Import is needed to wire in the additional configuration logic (via BrokerBeanDefinitionRegistrar) so that when @EnableBroker is used, 
 the necessary bean definitions for the broker are automatically registered within the Spring application context.
+
+
+
+Below is a description of the three parameters for the Spring method getMergedRepeatableAnnotationAttributes:
+
+- **annotationType**  
+  This parameter is the type of the repeatable annotation you are interested in. It tells Spring which annotation attributes to look for and merge, whether they occur directly on an element or within a container. For example, if you have defined a repeatable annotation like @MyAnnotation, you’d pass MyAnnotation.class here.
+
+- **containertype**  
+  In Java, a repeatable annotation is accompanied by a container annotation that holds an array of the individual annotations. The containertype parameter specifies the container annotation type. Spring will look for this container on the target element and extract its contents if present, so that multiple declared annotations can be merged into a coherent set of attributes.
+
+- **classValuesAsString**  
+  This boolean flag controls how class attribute values (if any) are represented. When set to true, any attributes of type Class (or arrays of Class) are converted to their fully qualified class name strings rather than returning the raw Class objects. This can be useful in scenarios where you want to avoid triggering class loading, or you need a more portable and serializable representation of the classes referenced in the annotation attributes.
+
+In summary, by providing the repeatable annotation type, its container, and the flag for how to handle class values, Spring is able to locate and merge all instances of the annotation on a given element, processing the attribute values as specified.
