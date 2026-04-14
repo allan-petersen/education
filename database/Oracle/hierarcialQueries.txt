@@ -330,3 +330,62 @@ This ensures that even if sor.eanlocation is the only element (i.e., no pipes oc
 
 instr(ltrim(sys_connect_by_path(sor.eanlocation, '|') || '|', '|'), '|', 1):
 The INSTR function is used here to locate the position of the first occurrence of the pipe (|) in the string (after left-trimming). Given our example "A│B│C|", this returns the position of the first pipe after "A". This position tells us where the first token ends.	   
+
+
+Recursive with
+==============
+Basic Syntax
+A recursive CTE in Oracle typically has two parts:
+
+Anchor Member: The initial (base) query that provides the first set of rows.
+Recursive Member: A query that references the CTE itself, which is repeatedly executed until no new rows are produced.
+The overall form looks like this:
+
+sql
+
+
+WITH cte_name (column1, column2, ...) AS (
+  -- Anchor member
+  SELECT ... FROM ... WHERE ...
+  
+  UNION ALL
+  
+  -- Recursive member
+  SELECT ... FROM cte_name, ... WHERE ...
+)
+SELECT * FROM cte_name;
+Use UNION ALL to combine the anchor member with the recursive member.
+Ensure that both parts return the same number of columns and similar data types.
+The recursion stops when the recursive member produces no new rows.
+Example: Generating a Fibonacci Sequence
+The following example creates a CTE to generate the first 10 Fibonacci numbers:
+
+sql
+
+
+WITH fib (n, f1, f2) AS (
+  -- Anchor member: Start with the first Fibonacci number
+  SELECT 1, 0, 1 FROM dual
+  
+  UNION ALL
+  
+  -- Recursive member: Calculate next Fibonacci number
+  SELECT n + 1, f2, f1 + f2
+  FROM fib
+  WHERE n < 10
+)
+SELECT n, f2 AS fibonacci_value FROM fib;
+Explanation:
+
+Anchor Member:
+SELECT 1, 0, 1 FROM dual
+This sets the base with n = 1, f1 = 0 (previous Fibonacci value), and f2 = 1 (current Fibonacci value).
+
+
+Recursive Member:
+SELECT n + 1, f2, f1 + f2 FROM fib WHERE n < 10
+This step increments n by one, shifts f2 into f1, and calculates the new f2 as f1 + f2. The recursion stops once n reaches 10.
+
+
+The final SELECT retrieves the Fibonacci sequence.
+
