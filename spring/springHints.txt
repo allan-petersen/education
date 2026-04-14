@@ -1,0 +1,29 @@
+Why is the @Import needed in the annotation below: @Target(ElementType.TYPE) 
+@Retention(RetentionPolicy.RUNTIME) 
+@Repeatable(EnableBrokers.class) 
+@Import(BrokerBeanDefinitionRegistrar.class) 
+public @interface EnableBroker { 
+    String value(); 
+}
+
+
+
+When you add the @Import annotation to an annotation like @EnableBroker, you’re telling Spring’s configuration processing that, whenever someone uses @EnableBroker, 
+it should also process and register additional beans or configuration defined by the imported class—in this case, BrokerBeanDefinitionRegistrar.
+
+Here’s what happens in detail:
+
+- **Dynamic Bean Registration:**  
+  The BrokerBeanDefinitionRegistrar (which likely implements ImportBeanDefinitionRegistrar) contains logic to register beans programmatically. 
+  When @EnableBroker is placed on a class (commonly on a configuration class), Spring will invoke the registrar during the startup phase, allowing it to add the necessary bean definitions to the application context.
+
+- **Encapsulation of Configuration:**  
+  By using the @Import annotation, you encapsulate all the broker-related configuration behind a single annotation. 
+  Developers using @EnableBroker don’t need to be aware of the underlying bean registration logic; they simply enable the broker functionality with one annotation.
+
+- **Separation of Concerns:**  
+  The annotation-based approach delegates the responsibility of configuring the broker-related beans to BrokerBeanDefinitionRegistrar. 
+  This keeps the main configuration clean and focused, while the registrar handles the complexity of setting up the required beans.
+
+In summary, the @Import is needed to wire in the additional configuration logic (via BrokerBeanDefinitionRegistrar) so that when @EnableBroker is used, 
+the necessary bean definitions for the broker are automatically registered within the Spring application context.
