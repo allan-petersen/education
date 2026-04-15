@@ -287,3 +287,38 @@ Though not an analytic function, Oracle provides ROWNUM as a pseudo column that 
 Each of these functions has its use case depending on how you want to handle rows with equivalent values in your ordering criteria.
 
 In summary, your query is indeed using an Oracle ranking function with ROW_NUMBER() to generate an ordered sequence, and Oracle provides several other ways to rank or number rows depending on your specific requirements.
+
+JOINS
+=====
+
+When reading an SQL query with a JOIN, the "left" table is typically the one mentioned first in the FROM clause, and the "right" table is the one mentioned after the JOIN keyword. Here’s how to tell:
+
+In a query like:
+
+
+SELECT ...
+FROM tableA AS a
+LEFT JOIN tableB AS b ON a.id = b.id;
+
+
+• The left table is tableA (aliased as "a").
+• The right table is tableB (aliased as "b").
+
+
+The table that appears immediately after FROM is considered the left table; any table being joined to it (via LEFT, RIGHT, INNER, etc.) is the right table in the join.
+
+
+This order determines which table's rows are always retained in the result (depending on the type of join, e.g., in a LEFT JOIN, all rows from the left table are retained, even if there's no corresponding row in the right table).
+
+In the statement:
+
+SELECT ...
+FROM tableA AS a
+LEFT JOIN tableB AS b ON a.id = b.id
+LEFT JOIN tableC AS c ON c.id = b.id;
+
+the join of tableC is evaluated as follows:
+
+The "left table" for the tableC join is the result set from the previous join, which includes tableA joined with tableB.
+The "right table" for this join is tableC.
+Thus, when the SQL engine processes the join with tableC, it starts with the combined result of tableA and tableB (the left side) and then performs a LEFT JOIN with tableC (the right side) using the condition c.id = b.id.
