@@ -160,3 +160,85 @@ GROUP BY
     LEVEL
 ORDER BY 
     LEVEL;	
+	
+	
+I have a table with columns PID;SID;PARENT containing these data:
+PID1;SID1;PARENTA
+PID1;SID2;PARENTA
+PID1;SID3;PARENTA
+PID2;SID4;PARENTB
+PID2;SID5;PARENTB
+PID3;SID6;PARENTC
+PID4,SID7;PARENTD
+PID5;SID8;PARENTE
+PID5;SID9;PARENTE
+PID5;SID10;PARENTE
+
+Is it possible to writhe a query returning these columns:
+
+PARENT;PID;action
+PARENTA;move2parent
+PARENTB;unhandled
+PARENTC;unique
+PARENTD;unique
+PARENTE;unhandled
+
+where 
+
+action is set to move2parent for the PID group having "most members". Note if 2 or more groups have "most members", the only set action to "move2parent" for one of the groups, and set action to "unhandled" for the rest of the groups having "most members"
+action is set to unique for PID groups having 1 member
+action is set to unhandled for other PID groups
+
+Please provide Oracle syntax.
+
+
+WITH agg AS (
+  SELECT 
+    PID,
+    MIN(PARENT) AS parent,  -- assuming the same parent for each PID
+    LISTAGG(SID, ',') WITHIN GROUP (ORDER BY SID) AS listsids,
+    COUNT(*) AS cnt
+  FROM MYTABLE
+  GROUP BY PID
+),
+rnk AS (
+  SELECT 
+    a.*,
+    MAX(cnt) OVER () AS maxcnt,
+    ROW_NUMBER() OVER (ORDER BY cnt DESC, PID) AS rn
+  FROM agg a
+)
+SELECT 
+  parent,
+  PID,
+  listsids,
+  CASE
+    WHEN cnt = 1 THEN 'unique'
+    WHEN cnt = maxcnt AND rn = 1 THEN 'move2parent'
+    ELSE 'unhandled'
+  END AS action
+FROM rnk;
+
+Explanation
+===========
+Aggregation (CTE "agg"):
+We aggregate the table by PID. We use MIN(PARENT) to retrieve the parent (you could also use MAX or any other aggregate function if you know they’re the same), LISTAGG to build a comma‐separated list of SIDs, and COUNT(*) to know how many rows the PID has.
+
+
+Rank Calculation (CTE "rnk"):  
+We compute MAX(cnt) OVER () to get the maximum group size.
+We use ROW_NUMBER() OVER (ORDER BY cnt DESC, PID) to rank the groups in descending order by count (and by PID to break ties). Only the first such group with maximum count will be given the move2parent action.
+
+Final SELECT:
+The CASE expression assigns:
+
+
+“unique” when the group has only one member,
+“move2parent” when it is the unique group with the highest count,
+and “unhandled” for all other groups.
+
+This query returns the columns: PARENT, PID, listsids, and action as requested.	
+
+Note:
+In this specific query, the LISTAGG function is used solely to combine the SID values for a given PID into a single string under the "listsids" column. It is not required for the other parts of the query that determine the "action" column (unique, move2parent, unhandled).  
+In other words, if you don't need to see the concatenated SIDs as part of your result, you can simply remove that part from your SELECT list and the aggregate query. The logic that calculates the action is independent of the LISTAGG function.
