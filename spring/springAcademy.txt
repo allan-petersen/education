@@ -65,9 +65,20 @@ static class TestConfiguration {
    @Bean public Datasource datasource() {...}
    
 @TestPropertySource
-
-
    
 }
+
+Transactions
+============
+Rollback is only triggered from RuntimeExceptions
+
+rollbackfo½r =MyCheckedException
+
+@Test
+@Transactional
+
+Will alway rollback at the end of the test
+Only the outer most transaction is rolled back.
+
 
 
