@@ -72,3 +72,6 @@ The CASE expression sets the action:
 
 
 Replace "your_table" with your actual table name. This Oracle query should provide the desired results.
+
+
+CTE (Common Table Expression)
