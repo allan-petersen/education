@@ -1,5 +1,9 @@
 . Modern trends in SWA
 Reverse proxy
+Spring testcontainers
+Spring ai
+Srpint integrtion
+
 
 Rust - programmeringssprog
 1.  ThymeLeaf. GUI
