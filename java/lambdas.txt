@@ -2,6 +2,7 @@ public Bucket resolveBucket(String ipAddress) {
    return buckets.computeIfAbsent(ipAddress, key -> newBucket());
 }
 
+// In summary, the Supplier interface is suitable for encapsulating any computation or value generation that should be performed on-demand without requiring any input parameters.
 // Supplier example
     // Create a Supplier that returns a UUID by calling IdGenerator.getUUID()
         Supplier<String> uuidSupplier = IdGenerator::getUUID;
@@ -10,7 +11,8 @@ public Bucket resolveBucket(String ipAddress) {
         Stream.generate(uuidSupplier)
                 .limit(11)
                 .forEach(System.out::println);
-                
+            
+// In summary, a Consumer is well-suited for scenarios where you need to perform an action using a provided value, especially when that action involves side effects and does not need to produce a return value.            
 // Consumer example
         Consumer<String> printConsumer = message -> System.out.println(message);
         // Use the Consumer to print a message
