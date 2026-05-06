@@ -11,3 +11,5 @@ spring-boot-starter-jdbc or spring-boot-starter-jpa starters try to pull in a co
 2.x: Hikari
 Set spring.datasource.type to pick a pool explicitly.
 
+CommandLineRunner
+
