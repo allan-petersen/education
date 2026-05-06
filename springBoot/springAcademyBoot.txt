@@ -1,0 +1,13 @@
+@ConfigurationProperties
+The application.properties file is loaded before all other configuration
+
+Dependencies managed by Spring:
+See: TODO
+
+spring-boot-starter-web contains tomcat 
+
+spring-boot-starter-jdbc or spring-boot-starter-jpa starters try to pull in a connection pool by default.
+1.x: Tomcat connection pool
+2.x: Hikari
+Set spring.datasource.type to pick a pool explicitly.
+
