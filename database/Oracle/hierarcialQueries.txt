@@ -389,3 +389,21 @@ This step increments n by one, shifts f2 into f1, and calculates the new f2 as f
 
 The final SELECT retrieves the Fibonacci sequence.
 
+
+Examples
+========
+-- Collect names
+
+SELECT MAX(soridentifier), LISTAGG(DISTINCT entityname, ',') WITHIN GROUP(ORDER BY entityname) AS namelist
+FROM (
+   SELECT CONNECT_BY_ROOT ( soridentifier ) AS soridentifier, entityname
+   FROM po_orgunitrelationship rel
+   LEFT JOIN sor_organizationunit   sor ON sor.organizationunit = rel.orgunitchild
+   WHERE rel.organizationdimension = (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+   START WITH sor.soridentifier = 62821000016003
+   -- START WITH sor.soridentifier = 62831000016001
+   -- START WITH sor.soridentifier = 62851000016006
+    CONNECT BY PRIOR rel.orgunitchild = rel.orgunitparent
+               AND PRIOR rel.organizationdimension = rel.organizationdimension
+);    
+
