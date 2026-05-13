@@ -1,0 +1,13 @@
+Version 3.5 supporteres nu.
+
+spring-boot-dependencies
+
+starters er rene pom projekter
+
+En bean har altid en afhængighed til den klasse, den er defineret i.
+
+Autoconfiguation el almindelig konfiguration med en masseh hvis'er
+
+Man kan læse annoteringer uden at loade klassen.
+
+Egne beans læses for autoconfiguration
