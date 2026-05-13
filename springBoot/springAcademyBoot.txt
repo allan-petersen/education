@@ -13,3 +13,31 @@ Set spring.datasource.type to pick a pool explicitly.
 
 CommandLineRunner
 
+Spring Data
+===========
+DataSource
+EntityManagerFactoryBean -- define packages to scan for entities
+JpaTransactionManager
+
+@EntitySncan -- Where are the entities
+
+sprig.jpa.hibernate.ddl-aut0=none /// For production
+
+Instant Repositories
+
+Marker Interface: it does not have any methods
+public interface Repository<T, ID> {}
+
+public interface CrudRepository<T, ID extends Serializable> extends Repository<T, ID> 
+
+PagingAndSortingRepository<T, K> extends CrudRepository
+- adds Iterable<T> findAll (Sort)
+- adds Page<T> findAll (Pageable)
+
+@Query  - JPQL Parameter = ?1
+
+2EnableJpaRepositories(basePackages=" ")
+
+Spring Data implemens your repositories at run time
+Create instanses as Spring beans (proxy)
+
