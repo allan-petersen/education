@@ -41,3 +41,18 @@ PagingAndSortingRepository<T, K> extends CrudRepository
 Spring Data implemens your repositories at run time
 Create instanses as Spring beans (proxy)
 
+REST
+====
+@RequestParam("userId" int userid)
+/account?userId=1234
+
+@PathVariable("accountId" long id)
+/accounts/98765
+
+@RequestHeader("user-agent")
+
+@GetMapping("orders/{id}/items/{itemId}")
+
+@RequestParam(required=false) Integer location,
+Principla user,
+HttpSession session)
