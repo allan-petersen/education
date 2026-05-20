@@ -54,5 +54,45 @@ REST
 @GetMapping("orders/{id}/items/{itemId}")
 
 @RequestParam(required=false) Integer location,
-Principla user,
+Principal user,
 HttpSession session)
+
+Message Converters
+Attached to a mime type.
+@ResponseBody
+
+ResponseEntity supports a "fluent" API for creating a response
+Used to initialize a HttpDervlerResponse
+
+Tomcat is the default ServletContainer
+
+Spring Boot Developer Tools
+
+spring-boot-dev-tools
+scope: runtime
+optional: true
+
+Multiple class loaders
+Your own classes will be in this class loader
+When you change anyting, only this classloader will be recreated
+
+MVC Quick Start
+===============
+spring-boot-maven-plugin    // Makes "fat2 executable jars
+
+@RestController
+
+@GetMpping("/rewards/{id}")
+public Reward show(@PathVariable("id") long id) {
+   return lookupService.lookupReward(id);
+}
+
+
+
+
+
+
+
+
+
+
