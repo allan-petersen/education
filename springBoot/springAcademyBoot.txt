@@ -87,11 +87,46 @@ public Reward show(@PathVariable("id") long id) {
    return lookupService.lookupReward(id);
 }
 
+RestPriciples
+=============
+RESTful responses contain thelinks you nedd - just like the HTMP pages do. (Hypermedia)
 
+Stateless architecture
+No HttpSession usage.
 
+HTTP headers and status coes communicte result to clients.
 
+Jakarta RESTful WEB Services (JAX-RS) is one of the varios Jakarta EE specifications.
 
+Spring MVC provedes REST support as well.
+   Spring MVC doe not implement JAX-RS
+   
+RestTemplate for building REST clinets in Java   
 
+@GetMapping("/store/orders) is equivalent to´
+@RequestMapping(pth="store/orders", method=RequestMthhod.GET)
+
+Spring MVC resolves disired content type  -usually based on Accept reqauest header.
+
+@ResponseBody
+No ViewResoler and View involved sny more.
+
+Use @Controller, GetMapping @ResponseBody or @RestController, GetMapping (No nedd for @ResponseBody on GET methods).
+
+Use @ResponseEntity to generate a Response
+
+@ResponseStatus(HttpStatus.NO_CONTENT) // 204
+Use it to retuen a status code other than 200.
+
+@RequestBody
+
+@PutMapping("/store/orders/{id})
+@ResponseStatus(HttpStatus.NO_CONTENT) // 204
+// Order object could be mapped from JSOM, XML etc
+public void updateOeder(@RequestBody Order updateOrder, @PathVariable long id) {
+   // process updated order data and return empty response
+   orderManger.updateOrder(id, updatedOrder)  // Find hte order and update it
+}
 
 
 
