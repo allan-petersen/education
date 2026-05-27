@@ -11,3 +11,62 @@ Autoconfiguation el almindelig konfiguration med en masseh hvis'er
 Man kan læse annoteringer uden at loade klassen.
 
 Egne beans læses for autoconfiguration
+
+@Entity
+@EnityMnanagerFactory
+@EntityManager
+
+
+Spring
+======
+LocalContainterEntityManagerFactory
+Vebdor Adapter
+Properties
+Datasource
+Entities
+
+HibernateJpaVendorAdapter
+
+Spring Data
+===========
+Repository interface
+
+JPQL
+
+EnitityMannagerFacrotyBuilder - Brug denne hvis der er flere datasources.
+
+Controller der - Se video
+
+@ResponseBody - Intet view 
+
+@RestContrller - HttpMessageConverter
+
+ViewResolver - navn på view.
+
+// Typisk per controller
+@ExceptionHandler
+
+
+RestTemplate
+  Eller en RestClient.
+  Migrerer til WebClient i frmtiden.
+
+
+
+RestClient med HttpExchange
+Annoteringsbaseret, interface baseret klient til at tilgå REST resourcer.
+
+RestClientBuilder
+HttpServiceProxyFacroty
+
+Static resources.
+F.eks.: src/main/resources/static
+
+webjars.com
+
+serverside-rendering eller clientside-rendering
+
+Spring Developer Tools
+
+
+Husk tabs i bunden af Intellij (f.eks. Beans), hvis du har actuators med inde.
