@@ -1,0 +1,14 @@
+Find klasse
+
+Ctrl + N
+Husk at vælge "Project and libraries" i stedet for "Project" i drop down.
+
+Stop på constructor variabel.
+Tast på "alt enter" fir at tilføje felt.
+Du kan også gøre det omvendte.
+
+
+
+Debug:
+F8 step over
+F7 step into
