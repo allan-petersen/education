@@ -128,6 +128,33 @@ public void updateOeder(@RequestBody Order updateOrder, @PathVariable long id) {
    orderManger.updateOrder(id, updatedOrder)  // Find hte order and update it
 }
 
+POST request
+============
+Generate Location header URI for newly created resource.
+
+How to create this URI?
+
+UriComponentsBuilder
+ServletUriComponemtsBuilder
+
+POST http://server/store/orders/12345/items/
+
+Framework puts request URL in current thread- which builder can access
+
+URI = ServletUriComponentsBuilder
+.fromCurrrentRequestUri()
+.path("/{itmeId}")  // Note leading/         Placeholder
+.buildAndExpend("item A")    // Note Space   Placeholder will be replaced by the value "item A"
+.toUri()
+return ResponseEntity.created(location).build()
+
+// http://server/store/orders/12345/items/item%20A
+
+Delete request
+==============
+@DeleteMapping(/store/orders/{orderId}/items/{itemId}"))
 
 
 
+THTE CLIENT SIDE - RestTemplate
+===============================
