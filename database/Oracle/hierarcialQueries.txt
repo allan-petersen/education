@@ -407,3 +407,15 @@ FROM (
                AND PRIOR rel.organizationdimension = rel.organizationdimension
 );    
 
+-- Top down exampleeanlocation_code AS (
+      SELECT CONNECT_BY_ROOT sor.sorIdentifier AS sorIdentifier,
+      CONNECT_BY_ROOT sor.eanlocation AS inheritedLocationNumberId,
+      sor.soridentifier as childsoridentifier,
+      LEVEL AS sorLevel
+      FROM po_orgunitrelationship rel
+      LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+      WHERE rel.organizationdimension = (SELECT sorDimension FROM dimension)
+      START WITH sor.soridentifier IN (SELECT soridentifier FROM has_locationcode)
+      CONNECT BY PRIOR rel.orgunitchild = rel.orgunitparent
+                 AND PRIOR rel.organizationdimension = rel.organizationdimension
+   ),
