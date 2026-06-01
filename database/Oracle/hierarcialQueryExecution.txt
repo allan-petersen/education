@@ -1,0 +1,61 @@
+For an Oracle hierarcial query like this:
+
+ has_providerid_or_child_has_providerid_and_has_loc_or_inherits_loc AS (
+      SELECT DISTINCT sor.soridentifier 
+      FROM sor_organizationunit sor 
+      LEFT JOIN po_orgunitrelationship rel ON rel.orgunitchild = sor.organizationunit
+      WHERE rel.organizationdimension = (SELECT sorDimension FROM dimension)
+      AND (eanlocation IS NOT NULL OR eanlocationinherited = 1)
+      START WITH sor.provideridentifier IN (SELECT provideridentifier FROM sororgunit_provideridnotnull)
+      CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+                 AND PRIOR rel.organizationdimension = rel.organizationdimension
+                 
+                 
+will the 
+
+WHERE rel.organizationdimension = (SELECT sorDimension FROM dimension)
+AND (eanlocation IS NOT NULL OR eanlocationinherited = 1)
+
+caluse be performed for each level?
+
+Below is an explanation of how Oracle processes the WHERE clause in a hierarchical query.
+
+### How Oracle Evaluates the Query
+
+1. **FROM and JOINs:**  
+   Oracle first reads the tables and performs the joins. In your query, this means that the join between SOR and REL is handled first.
+
+2. **START WITH Clause:**  
+   Next, Oracle determines the “root” rows by using the START WITH clause. Only rows where sor.provideridentifier is in the list from sororgunit_provideridnotnull qualify as roots.
+
+3. **CONNECT BY Clause (Recursive Step):**  
+   Oracle then recursively walks the rows using the CONNECT BY clause. In your query, a row’s children are identified based on the condition:  
+   ‒ PRIOR rel.orgunitparent = rel.orgunitchild  
+   ‒ AND PRIOR rel.organizationdimension = rel.organizationdimension  
+   Note that the CONNECT BY clause governs which rows can be connected (i.e. which rows are considered as descendant candidates).
+
+4. **WHERE Clause (Filtering):**  
+   Finally, the WHERE clause is applied. This clause:
+   ‒ Filters the joined data (for example, ensuring rel.organizationdimension equals (SELECT sorDimension FROM dimension)  
+   ‒ And checks that either eanlocation is not null or eanlocationinherited equals 1.  
+
+### Is the WHERE Clause Evaluated for Each Level?
+
+**Yes—but with an important nuance.**
+
+- The WHERE clause condition is applied to every row that is output from the hierarchical processing regardless of its level in the hierarchy. That means that for each generated row (whether it’s a root or a descendant), Oracle checks the conditions in the WHERE clause.
+
+- **However,** the WHERE clause is not used to determine the connectivity (i.e. it does not govern the recursion itself). The recursion is solely controlled by the START WITH and CONNECT BY clauses. In practical terms:
+  - A row might be generated as part of the hierarchy even if it does not meet the WHERE criteria.
+  - If the row fails the WHERE filter, it will be excluded from the final output.
+  - But it potentially could still serve as a “bridge” in the recursive process if the query internally picks it up for connecting to lower levels. (Keep in mind that in many cases – especially when using LEFT JOINs – Oracle’s internal processing may still use such rows for building the hierarchy even if they don’t appear in the final result.)
+
+### Summary
+
+- **Yes,** the filtering in the WHERE clause is applied at each generated row (i.e. for each level in the hierarchy).  
+- **But note:** The WHERE clause does not restrict the recursion—it only filters out rows from the final result after all levels have been processed. If you need to constrain the recursion itself, you have to include those conditions directly in the CONNECT BY clause.
+
+This explanation should clarify why and how the condition  
+  WHERE rel.organizationdimension = (SELECT sorDimension FROM dimension)  
+  AND (eanlocation IS NOT NULL OR eanlocationinherited = 1)  
+is indeed evaluated for every row resulting from the hierarchical query.
