@@ -42,3 +42,6 @@ Below is a description of the three parameters for the Spring method getMergedRe
   This boolean flag controls how class attribute values (if any) are represented. When set to true, any attributes of type Class (or arrays of Class) are converted to their fully qualified class name strings rather than returning the raw Class objects. This can be useful in scenarios where you want to avoid triggering class loading, or you need a more portable and serializable representation of the classes referenced in the annotation attributes.
 
 In summary, by providing the repeatable annotation type, its container, and the flag for how to handle class values, Spring is able to locate and merge all instances of the annotation on a given element, processing the attribute values as specified.
+
+
+getBean insyantierer en bean, hvis den ikke findes. Brug getBeanDefition, hvis instantiering ikke ønskes.
