@@ -98,3 +98,5 @@ pom.xml - Top level
 Coverage
 ========
 mvn verify -Pcoverage
+
+mvn test jacoco:report  
