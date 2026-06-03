@@ -123,7 +123,7 @@ Use it to retuen a status code other than 200.
 @PutMapping("/store/orders/{id})
 @ResponseStatus(HttpStatus.NO_CONTENT) // 204
 // Order object could be mapped from JSOM, XML etc
-public void updateOeder(@RequestBody Order updateOrder, @PathVariable long id) {
+public void updateOrder(@RequestBody Order updateOrder, @PathVariable long id) {
    // process updated order data and return empty response
    orderManger.updateOrder(id, updatedOrder)  // Find hte order and update it
 }
@@ -150,11 +150,91 @@ return ResponseEntity.created(location).build()
 
 // http://server/store/orders/12345/items/item%20A
 
+/**
+	 * Creates a new Account, setting its URL as the Location header on the
+	 * response.
+	 */
+	// ODO-06: Complete this method. Add annotations to:
+	// a. Respond to POST /accounts requests
+    // b. Use a proper annotation for creating an Account object from the request
+	@PostMapping(path="/accounts")
+	@ResponseStatus(HttpStatus.CREATED) // 201
+	public ResponseEntity<Void> createAccount(@RequestBody Account newAccount) {
+		// Saving the account also sets its entity Id
+		Account account = accountManager.save(newAccount);
+
+		// Return a ResponseEntity - it will be used to build the
+		// HttpServletResponse.
+		return entityWithLocation(account.getEntityId());
+	}
+
+	/**
+	 * Return a response with the location of the new resource. 
+	 *
+	 * Suppose we have just received an incoming URL of, say,
+	 *   http://localhost:8080/accounts and resourceId is "1111".
+	 * Then the URL of the new resource will be
+	 *   http://localhost:8080/accounts/1111.
+	 */
+	private ResponseEntity<Void> entityWithLocation(Object resourceId) {
+
+		// ODO-07: Set the 'location' header on a Response to URI of
+		//          the newly created resource and return it.
+		// a. You will need to use 'ServletUriComponentsBuilder' and
+		//     'ResponseEntity' to implement this - Use ResponseEntity.created(..)
+		// b. Refer to the POST example in the slides for more information
+
+		final URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{resourceId}") // Note leading/         Placeholder
+				.buildAndExpand(resourceId)
+				.toUri();
+		return ResponseEntity.created(location).build();
+	}
+	
+	/**
+	 * Adds a Beneficiary with the given name to the Account with the given id,
+	 * setting its URL as the Location header on the response.
+	 */
+	// ODO-10: Complete this method. Add annotations to:
+	// a. Respond to a POST /accounts/{accountId}/beneficiaries
+	// b. Extract a beneficiary name from the incoming request
+	// c. Indicate a "201 Created" status
+	@PostMapping(path="/accounts/{accountId}/beneficiaries")
+	@ResponseStatus(HttpStatus.CREATED) // 201
+	public ResponseEntity<Void> addBeneficiary(@PathVariable long accountId, @RequestBody String beneficiaryName) {
+		
+		// TODO-11: Create a ResponseEntity containing the location of the newly
+		// created beneficiary.
+		// a. Use accountManager's addBeneficiary method to add a beneficiary to an account
+		// b. Use the entityWithLocation method - like we did for createAccount().
+		accountManager.addBeneficiary(accountId, beneficiaryName);
+		
+		return entityWithLocation(beneficiaryName);  // Modify this to return something
+	}
+
+
 Delete request
 ==============
-@DeleteMapping(/store/orders/{orderId}/items/{itemId}"))
+@DeleteMapping("/store/orders/{orderId}/items/{itemId}"))
 
 
 
 THTE CLIENT SIDE - RestTemplate
 ===============================
+RestTemplateBuilder // REST related properties in application.properties file such as Jackson preferences will be honored.
+new RestTemplate. The above does not apply.
+
+getForObject
+getForEntity // You can access body and headers from the ResponseEntity object.
+
+RequestEntity. // Use exchange
+
+WebClient // Reactive non blocking clients
+
+
+
+Add
+===
+String addUrl = BASE_URL + "/accounts/{accountId}/beneficiaries";
+URI newBeneficiaryLocation = restTemplate.postForLocation(addUrl, "David", 1);
