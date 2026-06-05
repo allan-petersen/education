@@ -218,10 +218,25 @@ Delete request
 ==============
 @DeleteMapping("/store/orders/{orderId}/items/{itemId}"))
 
+ExceptionHandler
+================
 
+// ODO-17 (Optional): Add a new exception-handling method
+	// - It should map DataIntegrityViolationException to a 409 Conflict status code.
+	// - Use the handleNotFound method above for guidance.
+	// - Consult the lab document for further instruction
+	/**
+	 * Maps ConstraintViolationException to a 409 Conflict HTTP status code.
+	 */
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ExceptionHandler({ ConstraintViolationException.class })
+	public void handleConstraintViolation(Exception ex) {
+		logger.error("Exception is: ", ex);
+		// just return empty 409
+	}
 
-THTE CLIENT SIDE - RestTemplate
-===============================
+THE CLIENT SIDE - RestTemplate
+==============================
 RestTemplateBuilder // REST related properties in application.properties file such as Jackson preferences will be honored.
 new RestTemplate. The above does not apply.
 
