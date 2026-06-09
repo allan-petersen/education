@@ -253,3 +253,51 @@ Add
 ===
 String addUrl = BASE_URL + "/accounts/{accountId}/beneficiaries";
 URI newBeneficiaryLocation = restTemplate.postForLocation(addUrl, "David", 1);
+
+TESTING
+=======
+TestrestTemplate
+Configures to ignore cookies and redirects.
+
+MockMVC
+=======
+@SpringBootTest(webEnvironment = WebEnviroment.MOCK)
+@AutoconfigureMockMvc
+
+@Autowired mockMvc;
+
+jsonPath
+
+Test Slicing
+============
+Part of the application context.
+Mock the rest.
+
+@SpingApplication test will use the whole applicationContext.
+
+@WebMvcTest
+
+@Mock
+From Mickito framework
+Use it when Sprng context is not needed
+
+@MockBean
+From Spring Boot FrameworkUse it when Spring Context is needed.
+Creates a new mock bean, when it is not present in the Spring context, or replacec a bean with a mock bean, when it is present.
+
+@WebMvcTest
+@Autowiredprivate MockMvc mockMvc;
+
+@MockBeanprivate AccountManager accountManager
+@Test
+
+// arrange
+given
+// act and assert
+mockMvc.perform
+andExpect
+
+//Verify
+verify(accountManager).getAccount(=L) // Has our mock been called?
+
+
