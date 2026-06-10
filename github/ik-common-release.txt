@@ -1,0 +1,93 @@
+ik-common 6
+===========
+
+ik-common-5
+===========
+ik-common5.x/feature/XXX fra ik-common5.x/main
+
+ik-common-5.x/main
+1. Merge din branch XXX ind i ik-common5.x/main. SLET IKKE DIN BRANCH
+
+2. Bygger det.
+
+3. Kør testen
+
+4. Release. 
+Eksempel: ik-common5.x/main peger nu på 5.1.5. Release ændrer til 5.1.6
+
+ik-common5.0/main
+1. Opret branch ik-common5.0/feature/XXX fra ik-common5.0/main
+
+2. Check branch ud
+
+3.Cherry pick 
+Gå in på Pull requesten for branch XXX på GitHub.com.
+Find de relevante commits på siden commits. "Merge" commits er ikke relevante
+Cherrypick alle commits. Start med den ældste først.
+446103c7f91e74d3d10dcc260d88f12bbd2eadfa
+340f97d3ad3e34d9f164c8ee607a292b16e08ca0
+e3d4bec9fd6a39623cbc082fbaa89920fe3f190f
+
+hint: After resolving the conflicts, mark them with
+hint: "git add/rm <pathspec>", then run
+hint: "git cherry-pick --continue".
+hint: You can instead skip this commit with "git cherry-pick --skip".
+hint: To abort and get back to the state before "git cherry-pick",
+hint: run "git cherry-pick --abort".
+
+Brug git status til at se, om det rigtige antal commits er picked.
+
+4. Løs merge konflikter
+
+5. Kør eventuelt test
+
+6. Commit og push
+
+7. Opret pull request.
+
+8. Merge Pull request 
+
+9. Release 
+Eksempel: ik-common5.0/main peger nu på 5.0.13. Release ændrer til 5.1.14
+
+
+
+IK-Common-4
+===========
+Samme procedure som i ik-common5.0/main ik-common5.0/main
+
+Opret branch ik-common4.x.main/feature/XXX fra ik-common4.x.main
+
+26902fe0ab8aa2e73b48add61207edd19eb3e612
+6817463844a77ebda5da569bb7d396f0a6669713
+70fcb2531657646bf94aa46c976ce03234fa3143
+2bd94d0ba5bc7ef9b5f6499b19250caaf6e62fc8
+
+X. Release  
+Eksempel: ik-common4.x/main peger nu på 4.3.3. Release ændrer til 4.3.4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
