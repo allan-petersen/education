@@ -8,3 +8,75 @@ Will the ActiveMQ queue be left empty, if the databse update fails?
 When using XA transactions, both the database update and the message send are part of a single distributed transaction coordinated by a transaction manager (typically via a two-phase commit protocol). This means that if the database update fails, the transaction manager will roll back the entire transaction—including the operation that sent the message to the ActiveMQ queue.
 
 So, the ActiveMQ queue will be left empty, because the message send will be rolled back.
+
+
+
+If have this scenario
+
+Read a message from the sourceJMS, write the message to a database, write the message to the targetJMS.
+
+I use XA.
+
+What happens, if the targetJMS is unavailable?
+
+Now I try the same without using XA.
+
+What happens, if the targetJMS is unavailable?
+
+
+Below is an answer comparing the two cases:
+
+## XA Transaction Case
+
+- **Outcome:**  
+  When using XA transactions, all the participating resources (the source JMS, the database, and the target JMS) are coordinated under a single global transaction.  
+  - If the target JMS is unavailable during the commit phase, the XA transaction manager will trigger a rollback across all participants.
+  - This means the message read from the sourceJMS will not be acknowledged. As a result, it will be “rolled back” (or, in other words, it will remain on or be redelivered from the sourceJMS, depending on its redelivery settings).
+
+## Non-XA (Local Transactions) Case
+
+- **Outcome:**  
+  When using non-XA transactions, each operation is handled independently:
+  - The source JMS read typically occurs in its own (local) transaction.
+  - The database write occurs in its own transaction.
+  - The target JMS send is handled separately.
+  
+  If the target JMS is unavailable:
+  - The local transaction that read from the source JMS may already have been committed (acknowledging the message), and the database write might also have committed its change.
+  - Only the final operation (sending to target JMS) fails. There is no coordinated rollback to “undo” the source JMS message acknowledgement.
+  - As a consequence, the source JMS message will not be rolled back; it has already been removed (or acknowledged) from the source queue.
+
+## Summary
+
+- **With XA:** The message from the source JMS is rolled back (i.e., not acknowledged and available for redelivery) because the failure in the target JMS triggers a rollback across all participants.
+- **Without XA:** The source JMS message often is not rolled back because its acknowledgement (and the database update) may have already been committed, leading to potential inconsistencies when the target JMS operation fails.
+
+
+
+Below is an explanation regarding message redelivery in the non-XA case:
+
+## Key Points on Non-XA Redelivery
+
+- **Transactional Boundaries Matter:**  
+  With non-XA transactions, each operation (reading from sourceJMS, writing to the database, sending to targetJMS) is handled in its own local transaction. Depending on how these boundaries are set up, you might or might not get redelivery of the source message.
+
+- **Typical Scenario:**  
+  In many non-XA scenarios, the consumption (acknowledgment) of the sourceJMS message happens in its own transaction. If that transaction commits before attempting the subsequent operations, then even if the send to targetJMS fails, the source message will not be rolled back—and thus it won't be re-delivered.
+
+- **Possibility of Redelivery:**  
+  It is possible to design your non-XA system so that the sourceJMS message processing (acknowledgment) is only committed after all operations succeed. This might involve:
+  
+  - Using a transactional JMS session (local transaction) where the message is not acknowledged until the whole processing flow is complete.
+  - Explicitly managing message acknowledgments such that if the subsequent send to the targetJMS fails, you throw an exception and cause the session's transaction to roll back.
+  
+  In such an approach, the sourceJMS message would not be acknowledged and, as a result, would be available for redelivery according to the JMS provider's redelivery policy.
+
+## Summary
+
+- **Default Non-XA Behavior:**  
+  Typically, in a non-XA setup where each operation is committed independently, the sourceJMS message is acknowledged before attempting the targetJMS send. If the targetJMS is unavailable, the failure won’t trigger a rollback of the already acknowledged message. Thus, by default, the message would not be re-delivered.
+
+- **Custom Handling for Redelivery:**  
+  However, you can structure your non-XA approach so that the acknowledgement of the sourceJMS message is delayed until *all* operations succeed. In that case, if the targetJMS is unavailable and an exception causes the encompassing local transaction to roll back, the source message will be left unacknowledged and made available for redelivery.
+
+So, while the default non-XA configuration usually results in the message not being redelivered when the targetJMS is unavailable, it is possible to configure your non-XA workflow for redelivery by managing transaction boundaries and message acknowledgments appropriately.
