@@ -70,3 +70,50 @@ Spring Developer Tools
 
 
 Husk tabs i bunden af Intellij (f.eks. Beans), hvis du har actuators med inde.
+
+
+Test
+====
+@SpringJunitConfig
+@SpringBootTest
+
+@MockitoBean  /// Før @MockBean
+
+Security
+========
+HttpSecurity Kongiguration
+
+SecurityFilterChain
+
+Actuators
+=========
+/actuator/info
+/actuator/health
+/actuator/metrics
+/actuator/metrics/http.server.requests
+
+enabled -- alle undtager shutdown
+exposed -- default kun health
+
+Vores egne:
+integration
+simple
+status
+
+Info bean
+Health bean
+
+/actuator/prometheus  // Scraper data fra integrationer.
+Grafana kan ovenstående visualisere data.
+
+@Observed
+
+
+Aspect oriented pointcuts. Syntaks
+
+
+
+
+
+
+
