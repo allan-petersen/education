@@ -1,0 +1,57 @@
+WITH epic_registration AS (
+  SELECT c.sorIdentifier, 
+         c.providerIdentifier, 
+         c.numberOfChildren, 
+         c.activeSorIds,
+         CASE
+           WHEN c.numberOfChildren = 1 THEN 'unique'
+           WHEN c.numberOfChildren > 1 AND rn = 1 THEN 'pidToParent'
+           ELSE 'unhandled'
+         END AS epicRegistration,
+         c.childNames,
+         locations.numberOfLocations,
+         locations.latestUpdatedLocation,
+         clinics.numberOfClinics,
+         clinics.latestUpdatedClinic
+    FROM number_of_children c
+    JOIN rank_children 
+      ON rank_children.sorIdentifier = c.sorIdentifier 
+     AND rank_children.provideridentifier = c.providerIdentifier
+    LEFT JOIN locations 
+      ON locations.providerIdentifier = c.providerIdentifier 
+    LEFT JOIN clinics 
+      ON clinics.providerIdentifier = c.providerIdentifier 
+)
+SELECT er.sorIdentifier,
+       er.providerIdentifier,
+       er.numberOfChildren,
+       -- Here we split the ACTIVESORIDS list, prefix each token,
+       -- and then reassemble it with LISTAGG.
+       (
+         SELECT LISTAGG(er.epicRegistration || '-' || token, '¤')
+                WITHIN GROUP (ORDER BY token)
+         FROM (
+           SELECT TRIM(REGEXP_SUBSTR(er.activeSorIds, '[^¤]+', 1, LEVEL)) AS token
+           FROM dual
+           CONNECT BY LEVEL <= REGEXP_COUNT(er.activeSorIds, '¤') + 1
+         )
+       ) AS activeSorIds,
+       er.epicRegistration,
+       er.childNames,
+       er.numberOfLocations,
+       er.latestUpdatedLocation,
+       er.numberOfClinics,
+       er.latestUpdatedClinic
+  FROM epic_registration er
+ WHERE er.sorIdentifier = 62831000016001;
+
+
+ 
+Explanation
+The subquery in the SELECT list:
+Uses REGEXP_SUBSTR(er.activeSorIds, '[^¤]+', 1, LEVEL) to extract one token (i.e. one active sor id) at a time.  
+The hierarchical query (CONNECT BY LEVEL <= REGEXP_COUNT(er.activeSorIds, '¤') + 1) loops through each token present in the delimited string.
+
+Each token is then concatenated with the epicRegistration value followed by a hyphen.
+Finally, LISTAGG reassembles the tokens into the final delimited string using the delimiter (¤).
+You can adjust or extend this approach depending on your exact requirements. This method avoids the need for a stored procedure or a custom function by keeping everything within a SQL query.
