@@ -345,5 +345,28 @@ WebUser -> Delegaing FilterProxy -> SpringSecurityFilterChain -> Filter 1 -> Fil
 SecurityContextPersitenceFilter - Remove the SecurityContext form the ThreadLocal and put id back to the Http Session, so we can used it in the next request.
 
 
+Ant-style pattern matching
+/admin/* only matches /admin/xxx
+/admin/** matches any path under /dmin
 
+reQuestMatchers // from more specific to less specific
 
+Configuring Web Autthentication
+===============================
+AuthenticationProvider
+UserDetailsService
+
+Option 1: Implement custom UserDetailsService (using pre-configured DaoAutenticationProvider)
+Option 2: Implement custom AutenticationProvider
+
+Hashing of passwords
+
+DelegatingPasswordEncoder
+
+Method security and testing
+===========================
+Usualy the servicelyer is protected.
+Spring Security Proxy
+
+@PreAuthorize
+@PostAutorize
