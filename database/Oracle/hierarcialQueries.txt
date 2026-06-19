@@ -419,3 +419,62 @@ FROM (
       CONNECT BY PRIOR rel.orgunitchild = rel.orgunitparent
                  AND PRIOR rel.organizationdimension = rel.organizationdimension
    ),
+   
+   
+Inherited
+=========
+sor_organizationunit has an attribute locationInherited
+
+How do I assure, that sor_organizationunit.locationInherited = 1 on all levels of the hierarchy in the following query?
+
+SELECT LEVEL, sor.sorIdentifier, sor.providerIdentifier, entityname 
+       FROM po_orgunitrelationship rel
+       LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+       WHERE rel.organizationdimension = (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+       -- Parent = child
+       START WITH sor.soridentifier IN (62851000016006, 62861000016009, 62871000016004, 62841000016008)
+       CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+               AND PRIOR rel.organizationdimension = rel.organizationdimension   
+			   
+Below is one acceptable solution. The idea is to force the condition sor_organizationunit.locationInherited = 1 not only on the overall query (via the WHERE clause) 
+but also on the START WITH and on each “step” in the hierarchy via the CONNECT BY clause. For example, you can write your query as follows:			   
+
+SELECT LEVEL,
+       sor.sorIdentifier,
+       sor.providerIdentifier,
+       entityname 
+FROM   po_orgunitrelationship rel
+       LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+WHERE  rel.organizationdimension = (SELECT id
+                                    FROM   po_orgdimension
+                                    WHERE  name = 'SOROrgDimension')
+       AND sor.locationInherited = 1
+START WITH sor.soridentifier IN (62851000016006,
+                                 62861000016009,
+                                 62871000016004,
+                                 62841000016008)
+       AND sor.locationInherited = 1
+CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+           AND PRIOR rel.organizationdimension = rel.organizationdimension
+           AND         sor.locationInherited = 1;
+		   
+WHERE Clause:
+The condition
+• AND sor.locationInherited = 1
+makes sure that only rows with locationInherited = 1 appear in the final result.
+
+
+START WITH Clause:
+Adding
+• AND sor.locationInherited = 1
+here guarantees that the starting nodes of the hierarchy also have locationInherited set to 1.
+
+
+CONNECT BY Clause:
+By adding
+• AND sor.locationInherited = 1
+in the CONNECT BY clause, every child node in the hierarchical “walk” is required to have locationInherited = 1 before it is connected, thereby ensuring the condition on every level.
+
+
+Any solution that forces sor.locationInherited=1 at every step of the hierarchical path is acceptable.		   
+
