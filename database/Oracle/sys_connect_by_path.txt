@@ -1,3 +1,20 @@
+-- Extract the first non-NULL eanlocation from the path
+REGEXP_SUBSTR(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'),
+                                                      '[^|]+', -- Match any sequence of non | characters
+                                                      1, -- Start from the first character of the path
+                                                      1 -- Extract only the first match (non-NULL eanlocation)
+)
+
+
+-- Extract the last non-NULL eanlocation from the path
+REGEXP_SUBSTR(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'),
+                                                      '([^|]+)[|]*$', -- Match one or more characters that are not |. Match any trailing |. $ forces the match to occur at the end of the string.
+                                                      1, -- Start from the first character of the path
+                                                      1, -- Extract only the first match (non-NULL eanlocation)
+                                                      NULL,
+                                                      1 -- Return the first group only          
+)
+
 What does this Oracle expression do: rtrim(substr(ltrim(sys_connect_by_path(sor.eanlocation, '|'), '|'), 0, instr(ltrim(sys_connect_by_path(sor.eanlocation, '|') || '|', '|'), '|', 1)), '|')
 
 This expression is designed to extract the first (or topmost) eanlocation value from a hierarchical path built by SYS_CONNECT_BY_PATH. Let’s break it down step-by-step:
