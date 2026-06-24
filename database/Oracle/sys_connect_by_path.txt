@@ -1,3 +1,6 @@
+FIRST
+=====
+
 -- Extract the first non-NULL eanlocation from the path
 REGEXP_SUBSTR(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'),
                                                       '[^|]+', -- Match any sequence of non | characters
@@ -5,6 +8,30 @@ REGEXP_SUBSTR(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'),
                                                       1 -- Extract only the first match (non-NULL eanlocation)
 )
 
+	  -- Extract the first non-NULL eanlocation from the path
+      TO_NUMBER(                                             
+         RTRIM(                                          
+            SUBSTR(                                         
+               -- Remove any leading pipe '|' from the generated path
+               LTRIM(sys_connect_by_path(sor.eanlocation, '|'), '|'),
+               0,
+               -- Find the position of the first delimiter in the path
+               INSTR(                                        
+                  -- Append a trailing pipe '|' to ensure a delimiter exists, 
+                  -- then remove any leading '|' from the concatenated string
+                  LTRIM(sys_connect_by_path(sor.eanlocation, '|') || '|', '|'),
+                  '|', 
+                  1                                       -- Start search at position 1
+                ) + 1 --INSTR end. +1 to move past the delimiter
+            ), '|' -- SUBSTR functionend. Remove any trailing delimiter
+         ) -- RTRIM end
+      ) -- TO_NUMBER end
+      AS inheritedLocationNumberId,   
+
+
+	  
+LAST
+====	  
 
 -- Extract the last non-NULL eanlocation from the path
 REGEXP_SUBSTR(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'),
@@ -15,98 +42,16 @@ REGEXP_SUBSTR(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'),
                                                       1 -- Return the first group only          
 )
 
-What does this Oracle expression do: rtrim(substr(ltrim(sys_connect_by_path(sor.eanlocation, '|'), '|'), 0, instr(ltrim(sys_connect_by_path(sor.eanlocation, '|') || '|', '|'), '|', 1)), '|')
-
-This expression is designed to extract the first (or topmost) eanlocation value from a hierarchical path built by SYS_CONNECT_BY_PATH. Let’s break it down step-by-step:
-
-1. sys_connect_by_path(sor.eanlocation, '|')  
-   • This function generates a delimited string path of eanlocation values from your hierarchy.  
-   • The resulting string looks like: "|location1|location2|…", with each level separated by a vertical bar.
-
-2. ltrim(sys_connect_by_path(sor.eanlocation, '|'), '|')  
-   • This removes the leading '|' from the path so that the string becomes: "location1|location2|…".
-
-3. ltrim(sys_connect_by_path(sor.eanlocation, '|') || '|', '|')  
-   • This appends an extra '|' at the end of the path, ensuring there is at least one delimiter, and then it removes any leading '|' (though there typically won’t be one at this point).  
-   • The result will be something like "location1|location2|…" with a guaranteed trailing delimiter.
-
-4. instr(..., '|', 1)  
-   • This finds the position of the first occurrence of '|' in the modified string.  
-   • Since the string now starts with "location1|...", the first '|' will occur immediately after "location1".
-
-5. substr(ltrim(sys_connect_by_path(sor.eanlocation, '|'), '|'), 0, instr(...))  
-   • This takes a substring from the cleaned-up path, starting at position 0 (which Oracle treats like position 1 in a one-indexed manner) and ending at the position of the first '|'.  
-   • Essentially, it extracts "location1" from "location1|location2|…".
-
-6. rtrim(..., '|')  
-   • Finally, rtrim removes any trailing '|' characters from the substring.  
-   • This ensures that if for some reason the substring ended with a delimiter, it will be removed (though in this example, it typically doesn’t).
-
-**Overall:**  
-The entire expression extracts the first eanlocation value (the first element of the hierarchical path) by:
-- Building the full hierarchical path separated by '|'.
-- Cleaning off the leading and trailing delimiters.
-- Taking only the first segment up to the first delimiter.
-
-In short, it returns the first (topmost) location from a potentially multi-level hierarchical path.
-
-
-How do I extract the last eanlocation value instead?
-===================================================
-
-You can extract the last token (or last eanlocation value) from a delimited hierarchical path in a couple of ways. One straightforward method is to use the REGEXP_SUBSTR function. For example:
-
-SELECT REGEXP_SUBSTR(
-         LTRIM(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'), '|'),  -- remove the leading delimiter
-         '[^|]+                                               -- pattern to capture the last token
-         1, 
-         1
-       ) AS last_eanlocation
-FROM   <your_table>
-START WITH <your_root_condition>
-CONNECT BY PRIOR <parent_column> = <child_column>;
-
-Explanation
-SYS_CONNECT_BY_PATH(sor.eanlocation, '|')
-This function builds a delimited path using the '|' character.
-
-
-LTRIM(..., '|')
-Removes the leading '|' from the generated path so that your string starts with the first value.
-
-
-REGEXP_SUBSTR(..., '[^|]+ 1, 1)  
-
-
-The regular expression pattern '[^|]+$' matches one or more characters that are not a '|' starting from the end of the string (i.e. the last token).  
-The function returns that substring, which is your last eanlocation value.
-
-
-
-Alternative Method Using SUBSTR and INSTR
-=========================================
-If you prefer to use standard string functions, you can rely on INSTR with a negative start position to find the last occurrence of the delimiter:
-
-SELECT SUBSTR(
-         LTRIM(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'), '|'),
-         INSTR(LTRIM(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'), '|'), '|', -1) + 1
-       ) AS last_eanlocation
-FROM   <your_table>
-START WITH <your_root_condition>
-CONNECT BY PRIOR <parent_column> = <child_column>;
-
-Explanation
-LTRIM(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'), '|')
-Removes the leading '|' from the hierarchical path.
-
-
-INSTR(..., '|', -1)
-With a negative start position, INSTR searches from the end of the string, returning the position of the last '|' character.
-
-
-SUBSTR(..., last_delimiter_position + 1)
-Extracts the substring starting right after the last delimiter up to the end of the string.
-
-
-Both methods are effective—the REGEXP_SUBSTR approach tends to be more concise and readable, while the SUBSTR/INSTR method sticks solely to classic string functions. 
-Choose the one that best fits your needs and the complexity of your use case.
+      -- Extract the last non-NULL eanlocation from the path
+      TO_NUMBER(                                             
+         SUBSTR(                                            
+            LTRIM(sys_connect_by_path(sor.eanlocation, '|'), '|'),   -- Removes leading delimiter from the path
+            INSTR(                                           
+               LTRIM(sys_connect_by_path(sor.eanlocation, '|'), '|') || '|', -- concatenated with a trailing '|'
+               '|',                                        -- Delimiter to search for in INSTR
+               -1                                          -- Start searching from the end of the string (last occurrence)
+            ) + 1,                                         -- INSTR end.  +1 to move past the last delimiter
+         )                                                 -- SUBSTR end
+      ) --  TO_NUMBER end
+      AS inheritedLocationNumberId,
+	  
