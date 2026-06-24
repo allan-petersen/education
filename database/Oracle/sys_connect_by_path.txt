@@ -11,22 +11,22 @@ AS inheritedLocationNumberId,
 
 
 -- Extract the first non-NULL eanlocation from the path
-rtrim(
-   substr(                                      
-      -- Remove any leading delimiter ('|')
+SELECT 
+   SUBSTR(                                      
 	  -- Build the hierarchical path of "eanlocation" values with '|' as the separator
-      ltrim(sys_connect_by_path(sor.eanlocation, '|') , '|'),
+      -- Remove any leading/traling delimiters)
+      RTRIM(LTRIM('||ABC||' , '|'), '|') || '|',
 	  0,
 	  -- Find the position of the first occurrence of the delimiter ('|')
-         instr(
-       	    -- Remove any leading '|' from the concatenated path and add a trailing '|' to ensure that there is always a trailing delimiter 
-            ltrim(sys_connect_by_path(sor.eanlocation, '|') || '|'  , '|'),
+         INSTR(
+       	    -- Remove any leading/traling delimiters.  Add a trailing '|' to ensure that there is always a trailing delimiter 
+            RTRIM(LTRIM('||ABC||'  , '|'),  '|' ) || '|' ,
 			'|',
 			1
-         ) -- END instr. Returns the position of first '|' delimiter
-   ) -- END substr
-, '|') -- END rtrim
-AS inheritedLocationNumberId,
+         ) -1 -- END INSTR. Returns the position of first '|' delimiter
+   ) -- END SUBSTR
+AS text
+FROM dual;
 
 
 
@@ -43,18 +43,22 @@ REGEXP_SUBSTR(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'),
 )
 AS inheritedLocationNumberId,
 
+SELECT
 -- Extract the last non-NULL eanlocation from the path
--- Extract the substring after the last delimiter ('|') from the hierarchical path built by SYS_CONNECT_BY_PATH
 SUBSTR(
-   -- Removes any leading '|' from the path
-   LTRIM(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'), '|'),
-   INSTR(LTRIM(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'), '|'),
+   -- Remove any leading/traling delimiters)
+   '|' || rtrim(ltrim('||A|B|C||'  , '|'),  '|' ),
+   -- Find the position of the last occurrence of the delimiter ('|')
+   INSTR(
+       -- Remove any leading/traling delimiters.  Add a leading '|' to ensure that there is always a leading delimiter 
+      '|' || rtrim(ltrim('||A|B|C||'  , '|'),  '|' ),
       '|', 
 	-1
    ) -- END INSTR. Locates the last occurrence of '|' starting from the end  
-   + 1-- Adjust the start position to the character immediately after the last '|'
+   + 1 -- Adjust the start position to the character immediately after the last '|'
 )
-AS inheritedLocationNumberId,
+AS text
+FROM dual;
 
 
 
