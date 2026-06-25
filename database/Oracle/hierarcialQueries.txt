@@ -478,3 +478,56 @@ in the CONNECT BY clause, every child node in the hierarchical “walk” is req
 
 Any solution that forces sor.locationInherited=1 at every step of the hierarchical path is acceptable.		   
 
+
+Examples
+========
+leafs_of_has_providerid_or_ancestor_has_loc_or_inherits_loc AS (
+      SELECT sor.soridentifier
+      FROM sor_organizationunit sor 
+      LEFT JOIN po_orgunitrelationship rel ON rel.orgunitchild = sor.organizationunit
+      WHERE rel.organizationdimension = (SELECT sorDimension FROM dimension)
+      AND (eanlocation IS NOT NULL OR eanlocationinherited = 1)
+	  -- AND CONNECT_BY_ISLEAF = 1  
+      START WITH sor.provideridentifier IN (077879)
+      CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+                 AND PRIOR rel.organizationdimension = rel.organizationdimension
+), 
+   
+giver 
+   
+SORIDENTIFIER
+673011000016005
+673001000016008
+14401000016001   
+
+eafs_of_has_providerid_or_ancestor_has_loc_or_inherits_loc AS (
+      SELECT sor.soridentifier
+      FROM sor_organizationunit sor 
+      LEFT JOIN po_orgunitrelationship rel ON rel.orgunitchild = sor.organizationunit
+      WHERE rel.organizationdimension = (SELECT sorDimension FROM dimension)
+      AND (eanlocation IS NOT NULL OR eanlocationinherited = 1)
+	  -- AND CONNECT_BY_ISLEAF = 1  
+      START WITH sor.provideridentifier IN (000086)
+      CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+                 AND PRIOR rel.organizationdimension = rel.organizationdimension
+), 
+
+giver
+SORIDENTIFIER
+62851000016006
+62831000016001
+62821000016003
+
+62861000016009
+62831000016001
+62821000016003
+
+62871000016004
+62831000016001
+62821000016003
+
+62841000016008
+62831000016001
+62821000016003
+
+da der er 4 sorIdentifiers med det yderNummer
