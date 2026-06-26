@@ -177,6 +177,12 @@ CONNECT BY PRIOR empno = mgr
 				 
 Examples
 ========
+Note: 
+A heirarcial query is limited both in the top and the buttom by using
+START WITH and the SELECT before CONNECT BY 
+The SELECT before CONNECT BY is also used by each iteration.
+
+
 -- Top down
  SELECT LEVEL, sor.sorIdentifier, sor.providerIdentifier, entityname 
        FROM po_orgunitrelationship rel
