@@ -537,3 +537,7 @@ SORIDENTIFIER
 62821000016003
 
 da der er 4 sorIdentifiers med det yderNummer
+
+PARTITION BY
+============
+In summary, GROUP BY groups and reduces the result set into a summarized format, whereas PARTITION BY provides a way to perform calculations across rows within the same group while still preserving the detailed rows in the result.
