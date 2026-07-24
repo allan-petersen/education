@@ -1,0 +1,12 @@
+
+loc <= 1 and clin <= 1
+
+Negated:
+
+loc > 1 or clin > 1
+
+Loc   Clin
+0     0
+0,1   >1
+>1    0,1
+>1    >1 
