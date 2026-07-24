@@ -1,0 +1,119 @@
+Difference Between "RANK" and "GROUP BY" in Oracle
+Both "RANK" and "GROUP BY" are used in Oracle SQL but serve very different purposes:
+
+GROUP BY
+========
+Purpose:  
+Used to aggregate data. It groups rows that have the same values in one or more columns into summary rows.
+
+Functionality:  
+Mainly used with aggregate functions such as SUM(), COUNT(), AVG(), MIN(), and MAX().
+Returns one row per group.
+
+Example Use-Case:  
+Summarizing sales by region:
+
+sql
+
+
+SELECT region, SUM(sales) AS total_sales
+    FROM orders
+    GROUP BY region;
+
+
+
+RANK
+====
+Purpose:  
+An analytic function that assigns a ranking value to each row within a partition of a result set.
+
+Functionality:  
+It computes a rank based on the order defined (using the ORDER BY clause) within a window (or partition) of rows.
+Does not reduce the number of rows – each row retains its identity with an additional ranking column.
+
+Variants:  
+There’s also DENSE_RANK and ROW_NUMBER, which are related but have slightly different behaviors in the presence of ties.
+
+Example Use-Case:  
+Ranking employees based on their salaries within each department:
+
+sql
+
+
+SELECT employee_id,
+           department_id,
+           salary,
+           RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank
+    FROM employees;
+	
+	
+	
+Key Differences
+===============
+Aggregation vs. Analytics:  
+
+
+GROUP BY aggregates data and reduces the result set to one row per group.  
+RANK is an analytic function that adds a ranking column to each row without aggregating them.
+
+Row Output:  
+
+
+GROUP BY: Fewer rows (one per group).  
+RANK: Same number of rows as the original dataset, with an additional computed rank.
+
+Usage Context:  
+
+
+Use GROUP BY when you need summary statistics across groups.  
+Use RANK (or other window functions) when you need to compute a row’s relative standing within a group while retaining the detail of individual rows.
+
+Understanding these differences helps in choosing the right approach based on whether you need to aggregate data or simply order it within partitions.
+
+
+PARTITION BY
+============
+What Does "PARTITION BY" Do?
+The PARTITION BY clause is used with analytic (or window) functions in SQL (including Oracle) to divide the result set into distinct groups or "partitions". The analytic function then performs its calculation separately within each partition.
+
+Key Points
+Division of Data:
+PARTITION BY segments the data into subsets based on the values of one or more columns.
+
+
+Independent Calculation:
+The window function (like ROW_NUMBER(), RANK(), SUM(), etc.) is applied independently within each partition. This means that the function's result restarts for each partition.
+
+
+Contrast with GROUP BY:
+Unlike GROUP BY, which aggregates rows and reduces the number of rows returned, PARTITION BY does not collapse the result set. It simply computes additional columns (e.g., rank numbers or running totals) for each row within its partition.
+
+
+Example Usage
+Imagine you have a table called Employees with columns EmployeeID, Department, and Salary, and you want to rank employees by salary within their department. You could write:
+
+sql
+
+
+SELECT
+  EmployeeID,
+  Department,
+  Salary,
+  RANK() OVER (PARTITION BY Department ORDER BY Salary DESC) AS SalaryRank
+FROM Employees;
+Explanation of the Query
+PARTITION BY Department:
+This divides the data into groups where each group has the same Department value.
+
+
+ORDER BY Salary DESC:
+Within each partition (i.e., each department), this orders the employees by Salary in descending order.
+
+
+RANK() Function:
+It assigns a rank to each row within the partition. The highest salary in each department gets rank 1, the next highest rank 2, and so on.
+
+
+Summary
+The PARTITION BY clause in Oracle SQL is a powerful tool to enable complex computations over specific groups of your data without reducing the overall result set. It is especially useful when you want to calculate metrics that need to reset or restart for different segments (or partitions) of your data.
+
