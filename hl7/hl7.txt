@@ -1,0 +1,13 @@
+The Terser notation 
+STF-2(0)-1
+STF-2(0)-2
+STF-2(0)-3 
+Refer to first, second and third components within repetition 0. 
+
+STF-2(0)-1
+STF-2(1)-1
+STF-2(2)-1
+Refer first component of repetition 1,2 and 3.
+
+Repetiton seperator: ~ (single field with multiple values)
+Component seperator: ^ (data field into several pieces)
