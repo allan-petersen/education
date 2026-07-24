@@ -65,3 +65,7 @@ CRC - Class-Responsibility-Collaboration
      * @throws ArithmeticException                                if numeric values cannot be safely converted to {@code int}
      * @throws org.springframework.web.client.RestClientException if the underlying REST call fails
      */
+	 
+	 /**
+	 * For more information, see <a href="https://www.example.com">Example Website</a>.
+	 */
