@@ -117,3 +117,79 @@ It assigns a rank to each row within the partition. The highest salary in each d
 Summary
 The PARTITION BY clause in Oracle SQL is a powerful tool to enable complex computations over specific groups of your data without reducing the overall result set. It is especially useful when you want to calculate metrics that need to reset or restart for different segments (or partitions) of your data.
 
+
+Alternative solution
+====================
+ latest_clinic AS (
+      SELECT MIN(clinicSorId) KEEP (DENSE_RANK FIRST ORDER BY updated DESC, clinicSorId) AS latestUpdatedClinic,
+         MAX(childProviderIdentifier) AS providerIdentifier
+         FROM (
+		    SELECT clinicSorId, childProviderIdentifier, updated FROM clinic_base
+         ) t
+         GROUP BY childProviderIdentifier
+   ),
+   
+Explanation of the MIN Function with KEEP Clause
+In the provided Oracle statement, the expression
+
+  MIN(clinicSorId) KEEP (DENSE_RANK FIRST ORDER BY updated DESC, clinicSorId)
+
+does the following:
+
+Aggregate Function:
+The MIN function is used as an aggregate function. Since the query groups the data by childProviderIdentifier (see GROUP BY childProviderIdentifier), an aggregate function is needed to return a single value per group.
+
+
+KEEP Clause with DENSE_RANK:
+The KEEP (DENSE_RANK FIRST ORDER BY …) clause tells Oracle to consider rows in a specific order within each group and then pick the value of clinicSorId from the row(s) that come first in that ordering.
+
+
+The ordering is defined as: ORDER BY updated DESC, clinicSorId.
+
+
+This means rows are first ordered by the updated column in descending order (so the most recent updated row is first).
+If there are ties (i.e., multiple rows with the same latest updated value), they are then ordered by clinicSorId.
+
+MIN is then applied on the clinicSorId values of these "first" ranked rows.
+
+
+Essentially, this returns the smallest clinicSorId among the rows that have the latest update timestamp.
+
+
+Is MIN Required?
+Yes, MIN is required in this context because:
+
+
+You need an aggregate function to condense multiple rows (per group) into a single result.
+The KEEP clause is used with an aggregate function to conditionally select a value from a subset of rows based on the specified ordering.
+In this case, MIN() is the aggregate function that makes sense—it ensures that if there are ties (multiple rows with the same latest updated value), you get the smallest clinicSorId among them.
+
+In summary, the MIN function in this statement is used (together with the KEEP clause) to pick the clinicSorId from the row with the most recent update (and with the lowest clinicSorId in case of ties) for each childProviderIdentifier group. Because of the need for an aggregate function in a grouped query — and to work with the KEEP clause — MIN is indeed required.   
+
+FIRST:
+
+Explanation of "FIRST" in the Query
+In this query, the keyword "FIRST" is not used to return only one row overall. Instead, it works in conjunction with the KEEP clause to instruct Oracle to consider only the row(s) that are ranked first according to the specified ordering within each group.
+
+How It Works
+KEEP with DENSE_RANK FIRST:
+The expression
+MIN(clinicSorId) KEEP (DENSE_RANK FIRST ORDER BY updated DESC, clinicSorId)
+tells Oracle to:
+
+
+Order the Rows:
+First order the rows within each group (grouped by childProviderIdentifier) based on:
+
+
+updated DESC (most recent updates first)
+clinicSorId (to break ties if updated values are the same)
+
+Select the "First" Ranked Row(s):
+Identify the row(s) that come first according to that ordering. The keyword "FIRST" here indicates that only the value(s) from the top-ranked row(s) should be retained for the subsequent aggregate.
+
+
+Apply the Aggregate Function:
+The MIN function is then applied, but it only considers the clinicSorId(s) from these first-ranked rows. Often, if more than one row qualifies (in the case of a tie), MIN helps select the smallest one.
+
+
