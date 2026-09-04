@@ -1,0 +1,465 @@
+--- municipal_units include all municipal units which has EAN or child with EAN
+--- units with enddate are excluded if the are ended before now-365
+--- regional units outside epic added
+--OBS! specialtycodes er nu sorteret, modsat det oprindelige udtræk
+WITH specialtycodes AS (SELECT sor.soridentifier,
+                               LISTAGG(c.shortname, ',') WITHIN GROUP (ORDER BY c.shortname ASC) AS specialtycodes
+                        FROM sor_organizationunit sor
+                                 JOIN sor_orgunit_clinicalspecialty soc ON soc.sororganizationunit = sor.id
+                                 JOIN sor_clinicalspecialty sc ON sc.id = soc.sorclinicalspecialty
+                                 JOIN cl_classid c ON c.systemid = sc.code_systemid AND c.id = sc.code_classificationid
+                        GROUP BY sor.soridentifier),
+     has_shak_or_child_with_shak AS (SELECT DISTINCT sor.soridentifier
+                                     FROM po_orgunitrelationship rel
+                                              LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+                                     WHERE rel.organizationdimension =
+                                           (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+                                     START WITH sor.soridentifier IN (SELECT soridentifier
+                                                                      FROM sor_organizationunit
+                                                                      WHERE shakidentifier IS NOT NULL)
+                                     CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+                                            AND PRIOR rel.organizationdimension = rel.organizationdimension),
+     -- ID27 enheder af typen Hospital, Overafdeling eller Afdeling
+     has_id27_or_child_with_id27 AS (SELECT DISTINCT sor.soridentifier, sor.entityname
+                                     FROM po_orgunitrelationship rel
+                                              LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+                                     WHERE rel.organizationdimension =
+                                           (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+                                     START WITH sor.soridentifier IN
+                                                (SELECT soridentifier
+                                                 FROM sor_organizationunit
+                                                 WHERE sor.organisational_level_classificationid IN
+                                                       (SELECT id
+                                                        FROM cl_classid
+                                                        WHERE systemid = sor.organisational_level_systemid
+                                                          AND shortname in ('22232009', '568281000005108', '284548004'))) --Hospital, Overafdeling eller Afdeling
+                                     CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+                                            AND PRIOR rel.organizationdimension = rel.organizationdimension),
+     has_provideridentifier AS (SELECT sor.soridentifier
+                                FROM sor_organizationunit sor
+                                WHERE sor.provideridentifier IS NOT NULL),
+     has_ean_or_child_with_ean AS (SELECT DISTINCT sor.soridentifier
+                                   FROM po_orgunitrelationship rel
+                                            LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+                                   WHERE rel.organizationdimension =
+                                         (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+                                   START WITH sor.soridentifier IN
+                                              (SELECT soridentifier
+                                               FROM sor_organizationunit
+                                               WHERE (eanlocation IS NOT NULL))
+                                   CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+                                          AND PRIOR rel.organizationdimension = rel.organizationdimension),
+     has_ean_or_inherits_ean AS (SELECT soridentifier
+                                 FROM sor_organizationunit
+                                 WHERE eanlocation IS NOT NULL
+                                 UNION
+                                 SELECT soridentifier
+                                 FROM (SELECT CONNECT_BY_ROOT sor.soridentifier soridentifier,
+                                              -- Extract the first non-NULL eanlocation from the path
+                                              REGEXP_SUBSTR(
+                                                      SYS_CONNECT_BY_PATH(sor.eanlocation, '__'),
+                                                      '[^_]+', -- Match any sequence of non-underscore characters
+                                                      1, -- Start from the first character of the path
+                                                      1 -- Extract only the first match (non-NULL eanlocation)
+                                              ) AS                              first_non_null_eanlocation
+                                       FROM po_orgunitrelationship rel
+                                                LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+                                       WHERE rel.organizationdimension = (SELECT id
+                                                                          FROM po_orgdimension
+                                                                          WHERE name = 'SOROrgDimension')
+                                       START WITH sor.soridentifier IN
+                                                  (SELECT soridentifier
+                                                   FROM sor_organizationunit
+                                                   WHERE eanlocationinherited = '1')
+                                       CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+                                              AND PRIOR rel.organizationdimension = rel.organizationdimension
+                                              AND PRIOR sor.eanlocation IS NULL         -- Continue only if the parent eanlocation is NULL
+                                              AND PRIOR sor.eanlocationinherited <> '0' -- Stop recursion if the parent eanlocationinherited is '0'
+                                              AND PRIOR sor.eanlocationinherited IS NOT NULL)
+                                 WHERE first_non_null_eanlocation IS NOT NULL),
+     municipal_units AS (SELECT DISTINCT sor.soridentifier, sor.enddate
+                         FROM po_orgunitrelationship rel
+                                  LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+                         WHERE
+                             rel.organizationdimension = (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+                           AND (sor.enddate > sysdate - 365 or sor.enddate is null)
+                         START WITH sor.soridentifier IN (SELECT soridentifier
+                                                          FROM sor_organizationunit sor
+                                                                   LEFT JOIN cl_classid c
+                                                                             ON c.id = sor.sortype_classificationid AND
+                                                                                c.systemid = sor.sortype_systemid
+                                                          WHERE c.shortname = '547211000005108') --kommuner
+                         CONNECT BY PRIOR rel.orgunitchild = rel.orgunitparent
+                                AND PRIOR rel.organizationdimension = rel.organizationdimension),
+     --Regionale enheder med region h og region sj sorteret fra
+     regional_units_external AS (SELECT DISTINCT sor.soridentifier, sor.entityname, sor.enddate
+                                 FROM po_orgunitrelationship rel
+                                          LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+                                 WHERE rel.organizationdimension =
+                                       (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+                                   AND (sor.enddate > sysdate - 365 or sor.enddate is null)
+                                 START WITH sor.soridentifier IN (SELECT soridentifier
+                                                                  FROM sor_organizationunit sor
+                                                                           LEFT JOIN cl_classid c ON c.id =
+                                                                                                     sor.sortype_classificationid AND
+                                                                                                     c.systemid =
+                                                                                                     sor.sortype_systemid
+                                                                  WHERE c.shortname = '550881000005103' --regioner
+                                                                    AND soridentifier NOT IN (6111000016004, 6091000016007))
+                                 CONNECT BY PRIOR rel.orgunitchild = rel.orgunitparent
+                                        AND PRIOR rel.organizationdimension = rel.organizationdimension),
+     --Regionale enheder (begge interne regioner) der ikke er i SP
+     regional_units_internal_non_epic AS (SELECT soridentifier, entityname, enddate
+                                          FROM (SELECT DISTINCT sor.soridentifier, sor.entityname, sor.enddate
+                                                FROM po_orgunitrelationship rel
+                                                         LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+                                                WHERE rel.organizationdimension =
+                                                      (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+                                                START WITH sor.soridentifier IN (SELECT soridentifier
+                                                                                 FROM sor_organizationunit sor
+                                                                                          LEFT JOIN cl_classid c
+                                                                                                    ON c.id =
+                                                                                                       sor.sortype_classificationid AND
+                                                                                                       c.systemid =
+                                                                                                       sor.sortype_systemid
+                                                                                 WHERE c.shortname = '550881000005103' --regioner
+                                                                                   AND soridentifier IN (6111000016004, 6091000016007))
+                                                CONNECT BY PRIOR rel.orgunitchild = rel.orgunitparent
+                                                       -- todo sor_geographicallocalisation is not needed for regional_units_internal and should be removed
+                                                       AND PRIOR rel.organizationdimension = rel.organizationdimension)
+                                          WHERE soridentifier NOT IN (
+                                              --S272-FacilityExport-INTERNAL-RH-SQL.txt
+                                              SELECT sef.soridentifier
+                                              FROM spo_epicfacility sef
+                                                       LEFT JOIN sor_organizationunit s ON s.soridentifier = sef.soridentifier
+                                                       LEFT JOIN sor_geographicallocalisation g
+                                                                 ON g.geographicallocalisationidentifier = s.geographicallocalisationid
+                                              WHERE NOT (unitcode IN ('11', '12', '25', '26', '85')
+                                                  OR SUBSTR(unitcode, DECODE(SUBSTR(unitcode, 1, 1), '(', 2, 1), 4) IN
+                                                     (SELECT unitcodeprefix
+                                                      FROM spo_hospital
+                                                      WHERE regioncode = '1085')
+                                                  ))
+                                            AND soridentifier NOT IN (
+                                              --S272-FacilityExport-INTERNAL-RSJ-SQL.txt
+                                              SELECT sef.soridentifier
+                                              FROM spo_epicfacility sef
+                                                       LEFT JOIN sor_organizationunit s ON s.soridentifier = sef.soridentifier
+                                                       LEFT JOIN sor_geographicallocalisation g
+                                                                 ON g.geographicallocalisationidentifier = s.geographicallocalisationid
+                                              WHERE (unitcode = '85'
+                                                  OR SUBSTR(unitcode, 1, 4) IN
+                                                     (SELECT unitcodeprefix
+                                                      FROM spo_hospital
+                                                      WHERE regioncode = '1085')
+                                                        ))
+                                            AND (enddate > sysdate - 365 or enddate is null)),
+     --Private enheder med Hospice Sjælland, Epilepsihospitalet Filadelfia, Hospicegården Filadelfia og Svanevig Hospice sorteret fra
+     private_units AS (SELECT DISTINCT sor.soridentifier, sor.entityname, sor.enddate
+                       FROM po_orgunitrelationship rel
+                                LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+                       WHERE rel.organizationdimension = (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+                         AND (sor.enddate > sysdate - 365 or sor.enddate is null)
+                       START WITH sor.soridentifier IN (SELECT soridentifier
+                                                        FROM sor_organizationunit sor
+                                                                 LEFT JOIN cl_classid c
+                                                                           ON c.id = sor.sortype_classificationid AND
+                                                                              c.systemid = sor.sortype_systemid
+                                                        WHERE c.shortname = '550891000005100' --private
+                                                          AND soridentifier NOT IN
+                                                              (297071000016000, 297511000016000, 351661000016006,
+                                                               351701000016002))
+                       CONNECT BY PRIOR rel.orgunitchild = rel.orgunitparent
+                              AND PRIOR rel.organizationdimension = rel.organizationdimension),
+     farmacy_units AS (SELECT sor.soridentifier
+                       FROM sor_organizationunit sor
+                                LEFT JOIN cl_classid c
+                                          ON c.id = sor.sortype_classificationid AND c.systemid = sor.sortype_systemid
+                       WHERE c.shortname = '264372000'
+                         AND (sor.enddate is null or sor.enddate > sysdate - 365)),      --apoteker
+     has_specific_types AS (SELECT soridentifier
+                            FROM sor_organizationunit sor
+                                     JOIN cl_classid c
+                                          ON c.id = sor.sortype_classificationid AND c.systemid = sor.sortype_systemid
+                            WHERE c.shortname in (
+                                                  '550411000005105', -- Anden sundhedsinstitution
+                                                  '554221000005108', -- Bosted
+                                                  '546811000005109',--  Genoptræningsenhed
+                                                  '550631000005103',--  Jordemoderklinik
+                                                  '42665001',        -- Plejehjem
+                                                  '554211000005102', -- præhospitalsenhed
+                                                  '550671000005100', -- Speciallægepraksis
+                                                  '550691000005104') -- Tandplejeklinik
+                              AND (sor.enddate is null or sor.enddate > sysdate - 365)),
+     --Statslige enheder men kun for Grønland og Færøerne
+     state_units AS (SELECT DISTINCT sor.soridentifier, sor.enddate
+                     FROM po_orgunitrelationship rel
+                              LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+                     WHERE rel.organizationdimension = (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+                       AND (sor.enddate > sysdate - 365 or sor.enddate is null)
+                     START WITH sor.soridentifier IN (7161000016004, 7151000016002)
+                     CONNECT BY PRIOR rel.orgunitchild = rel.orgunitparent
+                            AND PRIOR rel.organizationdimension = rel.organizationdimension),
+-- lookup as ((select '290661000016003' soridentifier from dual)
+--              UNION
+--            (select '290671000016008' soridentifier from dual)
+--              UNION
+--            (select '290681000016005' soridentifier from dual)
+--              UNION
+--            (select '290691000016007' soridentifier from dual)
+--     ), --til test af enkelt enhed
+     lookup AS (
+         --- municipal
+         (SELECT soridentifier FROM municipal_units INTERSECT SELECT soridentifier FROM has_ean_or_child_with_ean)
+         --- regional external dvs medtager ikke enheder i region H + SJ hverken SP eller ikke SP enhder
+         UNION
+         ((SELECT soridentifier
+           FROM regional_units_external
+           INTERSECT
+           SELECT soridentifier
+           FROM has_shak_or_child_with_shak)
+          UNION
+          (SELECT soridentifier
+           FROM regional_units_external
+           INTERSECT
+           SELECT soridentifier
+           FROM has_id27_or_child_with_id27)
+          UNION
+          (SELECT soridentifier
+           FROM regional_units_external
+           INTERSECT
+           SELECT soridentifier
+           FROM has_ean_or_inherits_ean)
+          --- regional non epic internal med EAN/nedarvet EAN (f.eks SKOVVÆNGET)
+          UNION
+          (SELECT soridentifier
+           FROM regional_units_internal_non_epic
+           INTERSECT
+           SELECT soridentifier
+           FROM has_ean_or_inherits_ean))
+         MINUS
+         (SELECT soridentifier from has_provideridentifier)
+         --- private
+         UNION
+         ((SELECT soridentifier FROM private_units INTERSECT SELECT soridentifier FROM has_shak_or_child_with_shak)
+          UNION
+          (SELECT soridentifier FROM private_units INTERSECT SELECT soridentifier FROM has_id27_or_child_with_id27)
+          UNION
+          --- private with specific types
+          (SELECT soridentifier
+           FROM private_units
+           INTERSECT
+           SELECT soridentifier
+           FROM has_specific_types
+           INTERSECT
+           SELECT soridentifier
+           FROM has_ean_or_inherits_ean)
+          --- fjerner enheder med provideridentifier fra private
+          MINUS
+          (SELECT soridentifier from has_provideridentifier))
+         --- farmacy
+         UNION
+         (SELECT soridentifier FROM farmacy_units)
+         --- state
+         UNION
+         (SELECT soridentifier FROM state_units INTERSECT SELECT soridentifier FROM has_shak_or_child_with_shak)
+         UNION
+         (SELECT soridentifier FROM state_units INTERSECT SELECT soridentifier FROM has_ean_or_inherits_ean)
+         UNION
+         (SELECT soridentifier FROM state_units INTERSECT SELECT soridentifier FROM has_id27_or_child_with_id27)),
+--
+     results AS (SELECT REVERSE(sys_connect_by_path(REVERSE(sor.entityname), '\\'))                path,
+                        --Egen postaladdress, eller første fundet op ad i træet
+                        NVL(CONNECT_BY_ROOT sor.postaladdress,
+                            TO_NUMBER(RTRIM(SUBSTR(LTRIM(SYS_CONNECT_BY_PATH(sor.postaladdress, '|'), '|'),
+                                                   0,
+                                                   INSTR(LTRIM(SYS_CONNECT_BY_PATH(sor.postaladdress, '|') || '|', '|'),
+                                                         '|', 1)), '|')))                          postaladdress_id,
+                        --Egen virtualaddress, eller første fundet op ad i træet
+                        NVL(CONNECT_BY_ROOT sor.virtualaddress,
+                            TO_NUMBER(RTRIM(SUBSTR(LTRIM(SYS_CONNECT_BY_PATH(sor.virtualaddress, '|'), '|'),
+                                                   0, INSTR(
+                                                           LTRIM(SYS_CONNECT_BY_PATH(sor.virtualaddress, '|') || '|', '|'),
+                                                           '|', 1)), '|')))                        virtualaddress_id,
+                        --Hvis der skal arves lokationsnummer, så finder vi det første op af i træet, ellers angives eget lokationsnummer (kompatibilitet med gammelt udtræk)
+                        --OBS! Der er en specifik situation hvor det nye udtræk opfører sig anderledes end det oprindelige.
+                        --Hvis enhed skal arve, men forældren er sat til ikke at arve, og bedste forældren har et lokationsnummer f.eks. sor-id 398791000016007
+                        --/398791000016007:inherit=1, ean=null/398781000016005:inherit=0, ean=null/398771000016008:inherit=null, ean=NNN
+                        --Her vil det nye udtræk få bedsteforælderens lokationsnummer, mens det oprindelige ikke ville.
+                        --Man kan diskutere hvilken fortolkning der er korrekt, men den gamle håndtering ville gøre opslaget mere komplekst.
+                        --Dette gælder for 3 lukkede enheder 398791000016007, 398801000016006 og 398811000016008
+                        CASE CONNECT_BY_ROOT sor.eanlocationinherited
+                            WHEN '1' THEN TO_NUMBER(RTRIM(
+                                    SUBSTR(LTRIM(SYS_CONNECT_BY_PATH(sor.eanlocation, '|'), '|'), 0,
+                                           INSTR(LTRIM(SYS_CONNECT_BY_PATH(sor.eanlocation, '|') || '|', '|'), '|', 1)),
+                                    '|'))
+                            ELSE CONNECT_BY_ROOT sor.eanlocation
+                            END                                                                    inheritedeanlocationnumber_id,
+                        CONNECT_BY_ROOT sor.soridentifier                                       AS soridentifier,
+                        CONNECT_BY_ROOT o.masterorgid                                           AS masterorgid,
+                        CONNECT_BY_ROOT sor.entityname                                          AS sororganizationunitname,
+                        --subcategory - private/regional/kommunal/statslig -
+                        DECODE(c.shortname,
+                               '550881000005103', 'External - regional hospital facility',
+                               '550891000005100', 'External - private hospital facility',
+                               '547211000005108', 'External - municipality',
+                               '398070004', 'External - national')                              AS subcategory,
+                        DECODE(LENGTH(RTRIM(CONNECT_BY_ROOT sor.shakidentifier, '.'))
+                            , '4', 'HOSPITAL'
+                            , '6', 'HEADDEPARTMENT'
+                            , '7', 'DEPARTMENT'
+                            , DECODE(CONNECT_BY_ROOT c.shortname, '264372000', 'APOTEK', NULL)) AS hospitalorgtype,
+                        --regioncode - regionskode hvis enhed ligger under en region -
+                        DECODE(sor.soridentifier,
+                               6111000016004, '084', --Region Hovedstaden
+                               6071000016008, '081', --Region Nordjylland
+                               6101000016001, '083', --Region Syddanmark
+                               6081000016005, '082', --Region Midtjylland
+                               6091000016007, '085', --Region Sjælland
+                               NULL)                                                            AS regioncode,
+                        --hospitalcode - 4 første cifre af den nærmeste SHAK kode op ad i hierarkiet-
+                        SUBSTR(NVL(CONNECT_BY_ROOT sor.shakidentifier,
+                                   RTRIM(SUBSTR(LTRIM(SYS_CONNECT_BY_PATH(sor.shakidentifier, '|'), '|'),
+                                                0, INSTR(LTRIM(SYS_CONNECT_BY_PATH(sor.shakidentifier, '|'), '|'), '|',
+                                                         1)), '|')), 1, 4)                      AS hospitalcode,
+                        RTRIM(CONNECT_BY_ROOT sor.shakidentifier, '.')                          AS shakidentifier,
+                        CONNECT_BY_ROOT sor.eanlocation                                         AS eanlocationnumber_id,
+                        --municipalitycode, kommunekode hvis enhed ligger under en kommune -
+                        DECODE(sor.entityname,
+                               'Københavns Kommune', '101', 'Holbæk Kommune', '316', 'Horsens Kommune', '615',
+                               'Frederiksberg Kommune', '147', 'Faxe Kommune',
+                               '320', 'Kolding Kommune', '621', 'Ballerup Kommune', '151', 'Kalundborg Kommune', '326',
+                               'Vejle Kommune', '630', 'Brøndby Kommune',
+                               '153', 'Ringsted Kommune', '329', 'Herning Kommune', '657', 'Dragør Kommune', '155',
+                               'Slagelse Kommune', '330', 'Holstebro Kommune',
+                               '661', 'Gentofte Kommune', '157', 'Stevns Kommune', '336', 'Lemvig Kommune', '665',
+                               'Gladsaxe Kommune', '159', 'Sorø Kommune', '340',
+                               'Struer Kommune', '671', 'Glostrup Kommune', '161', 'Lejre Kommune', '350',
+                               'Syddjurs Kommune', '706', 'Herlev Kommune', '163',
+                               'Lolland Kommune', '360', 'Norddjurs Kommune', '707', 'Albertslund Kommune', '165',
+                               'Næstved Kommune', '370', 'Favrskov Kommune',
+                               '710', 'Hvidovre Kommune', '167', 'Guldborgsund Kommune', '376', 'Odder Kommune', '727',
+                               'Høje-Taastrup Kommune', '169',
+                               'Vordingborg Kommune', '390', 'Randers Kommune', '730', 'Lyngby-Taarbæk Kommune', '173',
+                               'Bornholms Regionskommune', '400',
+                               'Silkeborg Kommune', '740', 'Rødovre Kommune', '175', 'Middelfart Kommune', '410',
+                               'Samsø Kommune', '741', 'Ishøj Kommune', '183',
+                               'Assens Kommune', '420', 'Skanderborg Kommune', '746', 'Tårnby Kommune', '185',
+                               'Faaborg-Midtfyn Kommune', '430', 'Aarhus Kommune',
+                               '751', 'Vallensbæk Kommune', '187', 'Kerteminde Kommune', '440', 'Ikast-Brande Kommune',
+                               '756', 'Furesø Kommune', '190',
+                               'Nyborg Kommune', '450', 'Ringkøbing-Skjern Kommune', '760', 'Allerød Kommune', '201',
+                               'Odense Kommune', '461', 'Hedensted Kommune',
+                               '766', 'Fredensborg Kommune', '210', 'Svendborg Kommune', '479', 'Morsø Kommune', '773',
+                               'Helsingør Kommune', '217',
+                               'Nordfyns Kommune', '480', 'Skive Kommune', '779', 'Hillerød Kommune', '219',
+                               'Langeland Kommune', '482', 'Thisted Kommune', '787',
+                               'Hørsholm Kommune', '223', 'Ærø Kommune', '492', 'Viborg Kommune', '791',
+                               'Rudersdal Kommune', '230', 'Haderslev Kommune', '510',
+                               'Brønderslev Kommune', '810', 'Egedal Kommune', '240', 'Billund Kommune', '530',
+                               'Frederikshavn Kommune', '813',
+                               'Frederikssund Kommune', '250', 'Sønderborg Kommune', '540', 'Vesthimmerlands Kommune',
+                               '820', 'Greve Kommune', '253',
+                               'Tønder Kommune', '550', 'Læsø Kommune', '825', 'Køge Kommune', '259', 'Esbjerg Kommune',
+                               '561', 'Rebild Kommune', '840',
+                               'Halsnæs Kommune', '260', 'Fanø Kommune', '563', 'Mariagerfjord Kommune', '846',
+                               'Roskilde Kommune', '265', 'Varde Kommune', '573',
+                               'Jammerbugt Kommune', '849', 'Solrød Kommune', '269', 'Vejen Kommune', '575',
+                               'Aalborg Kommune', '851', 'Gribskov Kommune', '270',
+                               'Aabenraa Kommune', '580', 'Hjørring Kommune', '860', 'Odsherred Kommune', '306',
+                               'Fredericia Kommune', '607',
+                               NULL)                                                            AS municipalitycode,
+                        CONNECT_BY_ROOT sor.sorfirstfromdate                                    AS startdate,
+                        CONNECT_BY_ROOT sor.enddate                                             AS enddate,
+                        CONNECT_BY_ROOT sor_parent.soridentifier                                AS parentsoridentifier,
+                        CONNECT_BY_ROOT o_parent.masterorgid                                    AS parentmasterorgid,
+                        --OBS! updated er nu baseret udelukkende på data fra sor_organizationunit, hvilket giver mere korrekte og opdaterede data, men de kan være
+                        --forskellige fra det oprindelige udtræk
+                        GREATEST(CONNECT_BY_ROOT sor.sorupdatedat, CONNECT_BY_ROOT o.updated,
+                                 CONNECT_BY_ROOT sor.updated)                                   AS updated,
+                        CONNECT_BY_ROOT s.specialtycodes                                        AS specialitycodes,
+                        CONNECT_BY_ROOT mainspec.shortname                                      AS shakspeciality,
+                        CONNECT_BY_ROOT sor.sortype_classificationid                            AS sortype_classificationid,
+                        CONNECT_BY_ROOT sor.sortype_systemid                                    AS sortype_systemid,
+                        CONNECT_BY_ROOT sor.geographicallocalisationid                          AS geographicallocalisationid,
+                        CONNECT_BY_ROOT id27c.description                                          id27_description,
+                        CONNECT_BY_ROOT id27c.shortname                                            id27_shortname,
+                        CONNECT_BY_ROOT sor.providerIdentifier                                  AS providerIdentifier
+                 FROM po_orgunitrelationship rel
+                          LEFT JOIN sor_organizationunit sor ON sor.organizationunit = rel.orgunitchild
+                          LEFT JOIN sor_organizationunit sor_parent ON sor_parent.organizationunit = rel.orgunitparent
+                          LEFT JOIN po_orgunit o ON o.id = sor.organizationunit
+                          LEFT JOIN po_orgunit o_parent ON o_parent.id = sor_parent.organizationunit
+                          LEFT JOIN cl_classid c
+                                    ON c.id = sor.sortype_classificationid AND c.systemid = sor.sortype_systemid
+                          LEFT JOIN shak_orgunit shak ON shak.shakcode = sor.shakidentifier
+                          LEFT JOIN cl_classid mainspec ON mainspec.id = shak.mainspec_classificationid AND
+                                                           mainspec.systemid = mainspec_systemid
+                          LEFT JOIN specialtycodes s ON s.soridentifier = sor.soridentifier
+                          LEFT JOIN cl_classid id27c ON id27c.id = sor.organisational_level_classificationid AND
+                                                        id27c.systemid = sor.organisational_level_systemid
+                 WHERE rel.organizationdimension = (SELECT id FROM po_orgdimension WHERE name = 'SOROrgDimension')
+                   AND connect_by_isleaf = 1
+                 START WITH sor.soridentifier IN (SELECT soridentifier FROM lookup)
+                 CONNECT BY PRIOR rel.orgunitparent = rel.orgunitchild
+                        AND PRIOR rel.organizationdimension = rel.organizationdimension)
+SELECT SUBSTR(r.path, 1, LENGTH(r.path) - 2)                                                                   path,
+       r.id27_description,
+       r.id27_shortname,
+       r.soridentifier,
+       r.masterorgid,
+       r.sororganizationunitname,
+       r.subcategory,
+       CASE -- Hvis der allerede er en hospitalorgtype kode, anvendes denne ellers anvendes en af de aftalte konstanter udfra id27_shortname
+           WHEN r.hospitalorgtype IS NOT NULL THEN r.hospitalorgtype
+           WHEN r.hospitalorgtype IS NULL AND r.id27_shortname = 22232009 THEN 'HOSPITAL' --Hospital
+           WHEN r.hospitalorgtype IS NULL AND r.id27_shortname = 568281000005108 THEN 'HEADDEPARTMENT' --Overafdeling
+           WHEN r.hospitalorgtype IS NULL AND r.id27_shortname = 284548004 THEN 'DEPARTMENT' --Afdeling
+           ELSE NULL
+           END       AS                                                                                        hospitalorgtype,
+       v.phonenumber                                                                                           phonenumber,
+       v.faxnumber                                                                                             faxnumber,
+       RTRIM(p.streetname || ' ' || p.streetbuilding || ' ' || p.stairway || ' ' || p.floor || ' ' || p.suite) address,
+       p.postdistrictname                                                                                      postaldistrict,
+       ''            AS                                                                                        state,
+       p.postcode    AS                                                                                        postcode,
+       ''            AS                                                                                        revenuelocation,
+       ''            AS                                                                                        adtparent,
+       ''            AS                                                                                        adtunittype,
+       r.regioncode,
+       CASE -- Hvis der allerede er en SHAK hospitals kode, saa anvendes denne, ellers anvendes den aftalte konstant
+           WHEN r.hospitalcode IS NOT NULL THEN r.hospitalcode
+           WHEN r.hospitalcode IS NULL AND r.id27_shortname IS NOT NULL THEN 'X999'
+           ELSE NULL
+           END       AS                                                                                        hospitalcode,
+       CASE -- Hvis der allerede er en SHAK kode, anvendes denne ellers anvendes en af de aftalte konstanter
+           WHEN r.shakidentifier IS NOT NULL THEN r.shakidentifier
+           WHEN r.shakidentifier IS NULL AND r.id27_shortname = 22232009 THEN 'X999' --Hospital
+           WHEN r.shakidentifier IS NULL AND r.id27_shortname = 568281000005108 THEN 'X99999' --Overafdeling
+           WHEN r.shakidentifier IS NULL AND r.id27_shortname = 284548004 THEN 'X999999' --Afdeling
+           ELSE NULL
+           END       AS                                                                                        shakidentifier,
+       e.locationcode                                                                                          eanlocationnumber,
+       e_inherit.locationcode                                                                                  inheritedeanlocationnumber,
+       r.municipalitycode,
+       r.startdate,
+       r.enddate,
+       r.parentsoridentifier,
+       r.parentmasterorgid,
+       r.updated     AS                                                                                        updated,
+       r.specialitycodes,
+       r.shakspeciality,
+       g.geographicallocalisationname,
+       c.description AS                                                                                        sorEntityTypeName,
+       c.shortname   AS                                                                                        sorEntityTypeIdentifier,
+       r.providerIdentifier
+FROM results r
+         LEFT JOIN po_postaladdress p ON p.id = r.postaladdress_id
+         LEFT JOIN sor_virtualaddress v ON v.id = r.virtualaddress_id
+         LEFT JOIN sor_eanlocation e ON e.id = r.eanlocationnumber_id
+         LEFT JOIN sor_eanlocation e_inherit ON e_inherit.id = r.inheritedeanlocationnumber_id
+         LEFT JOIN sor_geographicallocalisation g ON g.geographicallocalisationidentifier = r.geographicallocalisationid
+         LEFT JOIN cl_classid c ON c.id = r.sortype_classificationid AND c.systemid = r.sortype_systemid
+--enheder uden sortype_classificationid sorteres fra, da de er gamle lukkede enheder der kun støjer
+WHERE r.sortype_classificationid IS NOT NULL
+ORDER BY NLSSORT(path, 'NLS_SORT=BINARY'), soridentifier
