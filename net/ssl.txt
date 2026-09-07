@@ -1,0 +1,33 @@
+    private TestRestTemplate getRestTemplate() throws Exception {
+        // Build an SSLContext that accepts any certificate
+        SSLContext sslContext = new SSLContextBuilder()
+                .loadTrustMaterial(null, (TrustStrategy) (X509Certificate[] chain, String authType) -> true)
+                .build();
+        // Allow all hostnames
+        SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+        // Create an HttpClient that uses the above factory
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setSSLSocketFactory(csf)
+                .build();
+        // Create a request factory with our HttpClient
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        // Build and return TestRestTemplate which uses our custom request factory
+        return new TestRestTemplate(new RestTemplateBuilder().requestFactory(() -> requestFactory));
+    }
+	
+Custom SSLContext:
+We configure an SSLContext that trusts all certificates. The TrustStrategy lambda returns true for any certificate, effectively disabling trust checks.
+
+
+NoopHostnameVerifier:
+This hostname verifier disables the check that the certificate matches the hostname (in our case “localhost”).
+
+
+HttpComponentsClientHttpRequestFactory:
+The custom HttpClient (with our relaxed SSL setup) is wrapped in this request factory.
+
+
+TestRestTemplate:
+We then build a TestRestTemplate using the custom RestTemplateBuilder that uses our request factory.
+
+	
