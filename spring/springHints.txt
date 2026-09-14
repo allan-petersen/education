@@ -45,3 +45,39 @@ In summary, by providing the repeatable annotation type, its container, and the 
 
 
 getBean insyantierer en bean, hvis den ikke findes. Brug getBeanDefition, hvis instantiering ikke ønskes.
+
+Testing servlets
+================
+@SpringBootTest
+@AutoConfigureMockMvc
+public class MyServletIntegrationTest {
+    @Autowired
+    private MockMvc mockMvc;
+    @BeforeEach
+    void setUp() {
+        // Any setup code goes here (if required)
+    }
+    @Test
+    public void testMyServlet() throws Exception {
+        mockMvc.perform(get("/myservlet"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Hello from MyServlet"));
+    }
+}
+
+public class MyServletUnitTest {
+    private MyServlet myServlet;
+    @BeforeEach
+    public void setUp() {
+        myServlet = new MyServlet();
+    }
+    @Test
+    public void testDoGet() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/myservlet");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        // Directly call the servlet method
+        myServlet.doGet(request, response);
+        // Verify the response content
+        assertEquals("Hello from MyServlet", response.getContentAsString());
+    }
+}
