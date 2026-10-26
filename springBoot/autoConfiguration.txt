@@ -1,0 +1,4 @@
+Husk.
+
+AutoConfigurations creates Beans
+Beans can have properites like ConfigurationProperties
