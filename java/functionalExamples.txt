@@ -63,3 +63,49 @@ JUnit
             assertTrue(tokens.get(5).value().contains("Caused by: java.lang.Exception: Original cause"));
         });
     }
+	
+	
+	Funtional Interface
+	===================
+	
+	  @Override
+    public void interceptedSend(String routeId, String routeGroup, String endpointURI, Exchange exchange) {
+        if (routeFilter.matches(routeId, routeGroup)) {
+            exchange.setProperty(Exchange.INTERCEPTED_ENDPOINT, endpointURI);
+            invokeListenersSafely(routeId, routeGroup, "onEndpointSend", listener ->
+                    listener.onEndpointSend(routeId, routeGroup, endpointURI, exchange));
+        }
+    }
+
+    @Override
+    public void routeEventStart(String routeId, String routeGroup) {
+        if (routeFilter.matches(routeId, routeGroup)) {
+            invokeListenersSafely(routeId, routeGroup, "onRouteStart", listener ->
+                    listener.onRouteStart(routeId, routeGroup));
+        }
+    }
+					
+	private void invokeListenersSafely(String routeId, String routeGroup, String methodName, ListenerInvocation invocation) {
+        for (InterceptListener listener : listeners) {
+            if (listener.matches(routeId, routeGroup)) {
+                try {
+                    ((InterceptInvocation) () -> invocation.invoke(listener)).invoke();
+                } catch (Throwable t) {
+                    LOG.warn("InterceptListener {} failed to execute '{}': {}. Continuing with remaining listeners.",
+                            listener.getClass().getSimpleName(),
+                            methodName,
+                            t.getMessage());
+                }
+            }
+        }
+    }
+
+    @FunctionalInterface
+    private interface ListenerInvocation {
+        void invoke(InterceptListener listener) throws Throwable;
+    }
+
+    @FunctionalInterface
+    private interface InterceptInvocation {
+        void invoke() throws Throwable;
+    }
