@@ -16,7 +16,7 @@ Cmd
 certutil -hashfile "C:\path\to\file" SHA256
 
 Bash
-shasum -/path/to/file
+sha256sum -/path/to/file
 
 3. Checksum
 ===========
