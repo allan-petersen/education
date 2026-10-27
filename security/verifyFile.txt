@@ -1,0 +1,73 @@
+1. File size
+============
+
+Powershell
+(Get-Item "C:\path\to\file").Length
+
+Bash
+wc -c < /path/to/file
+
+2. SHA
+======
+Powershell
+Get-FileHash "C:\path\to\file" -Algorithm SHA256
+
+Cmd
+certutil -hashfile "C:\path\to\file" SHA256
+
+Bash
+shasum -/path/to/file
+
+3. Checksum
+===========
+Verify CRC-32 using Python
+
+import zlib
+
+filename = "path/to/file"
+
+with open(filename, "rb") as f:
+    checksum = zlib.crc32(f.read()) & 0xffffffff
+
+print(checksum)
+print("Match:", checksum == 3390853630)
+
+4. Important
+============
+A matching SHA-256 is the strongest of these checks for confirming that your file matches the expected contents, assuming the reference hash is trustworthy. 
+The file size and CRC-32 provide additional checks.
+The file size and CRC-32 provide additional checks.
+
+5. Using Python
+===============
+verify_file.py
+
+import os
+import hashlib
+import zlib
+
+filename = "path/to/file"
+
+expected_size = 6038615
+expected_crc32 = 3390853630
+expected_sha256 = (
+    "e3600a5a56cf174232731f0874cf9f9cb4a6b0334"
+    "a68fae9b585dc40ab244b05"
+)
+
+sha256 = hashlib.sha256()
+crc32 = 0
+
+with open(filename, "rb") as f:
+    for chunk in iter(lambda: f.read(1024 * 1024), b""):
+        sha256.update(chunk)
+        crc32 = zlib.crc32(chunk, crc32)
+
+actual_size = os.path.getsize(filename)
+actual_sha256 = sha256.hexdigest()
+actual_crc32 = crc32 & 0xffffffff
+
+print("Size:", actual_size, "Match:", actual_size == expected_size)
+print("CRC-32:", actual_crc32, "Match:", actual_crc32 == expected_crc32)
+print("SHA-256:", actual_sha256)
+print("SHA-256 match:", actual_sha256 == expected_sha256)
