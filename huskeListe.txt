@@ -1,0 +1,60 @@
+﻿S103-DRP2Epic: Kommer der et svar, når DPR er nede eller giver status kode -9? Se SLG 5534438 post #7.
+
+S401-Epic2PRO: QfddServiceTest1.testGetExternalQfddDocumentNew virker ikke på byggeserver
+
+S020-SPO2Epic: Ydere med flere lokationer (INC3196998 yder 506877).
+
+Oprydning i epic_visit, epic_visit_his og epic_forloebselement
+	Fjern alle rækker ældre end en vis dato - undtagen 1 for et giver cpr nummer.
+
+	select distinct cpr from table
+	loop cpr
+	   select epic_vist where cpr = [CPR] and regionCode = 1084 and updated < [DATE] order by updated desc;
+	   loop region 1084
+	      skip first row
+		  delete the rest of the rows
+	   end loop -- region 1084
+	   select epic_vist where cpr = [CPR] and regionCode = 1085 and updated < [DATE] order by updated desc;
+	   loop region 1085
+	      skip first row
+		  delete the rest of the rows
+	   end loop -- region 1085
+	   commit
+    end loop -- cpr
+
+
+
+S200-ADTReceiver: Finishedtomasterorgid i epic_visit og epic_visit_his indeholder i dag en dato. Værdien bør væare en masterOrgId, når den er udfyldt.
+S200-ADTReceiver: Rettelse A40 - A28 on the source patient
+	Concerning the A40 messages.
+    Currently it is for the target patient only, that an A28 message is sent before the A40, if no target patient treatment relation already exists.
+    We might introduce this for the source patient as well at some point, but until now we have not seen any issues concerning this.
+    // TargetSendA28 = regionsCodesSendA28BeforeA40.removeAll(targetRegionCodes)
+    // SourceSendA28 = regionsCodesSendA28BeforeA40.removeAll(sourceRegionCodes)
+	Start med at lave en JUnit test, der kan vise, om der er et problem.
+
+S200-ADTReceiver: Dokumentation. Aftale grundlag med BRD uddrag samt feltliste. Kopier gammle ADT og PDQ BRD'er ud. BRD relation tegning. ZDK-7 og ZDK-8.
+S200-ADTReceiver: Dokumentation. Middle ActiveMQ. Husk maximum redeliveries = -1 på middle active mQ. Integrationen kører nu på sppint11.sp.local. Husk, der køres nu på queue.
+S200-ADTReceiver: Dokumentation. Opdater BRD. Husk beskrivelse omkring A45 og flyt af alle visits (inklusiv kontakter). Meddtages kun for en vis periode?	
+S200-ADTReceiver: Beskriv alle transfer scenarier. Nyt hospital, ny afdeling, nyt afsnit
+S200-ADTReceiver: Måske - Oprydning i message_handler tabel (visits)
+S200-ADTReceiver: Ønsker vi voided HARS in vores 3. part systemer. Problemet med ikke at sende dem er, at de kan unvoides. I mellemtiden kan de være flyttet til en anden patient. Se SLG 4257734
+
+S813-HelpLine2Epic. Skriv mail vedrørende nye destinationer ind på Confluence.
+
+4065-ADT2LabkaNodweb: Omlægning af tabeller fra nwapp til camel (senere. Tal med Steen B.). 
+4065-ADT2LabkaNodweb: Sagen skal opdateres med en db rettelse på nwapp skemaet
+
+MasterOrgId for service area "Self-owned institutions" in the PersonInfo service
+
+
+
+Epic problem-stillinger
+=======================
+Vi køber et nyt 3. part system, der anvender SOR. SOR sendes ikke ud. Kan vi køre rent SOR? Kan alt oprettes i SOR?
+Skal outPatient visits lukkes?
+
+
+Allan - diverse
+===============
+Læs Camel doc på apache.camel.org
