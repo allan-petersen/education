@@ -1,4 +1,14 @@
-﻿S103-DRP2Epic: Kommer der et svar, når DPR er nede eller giver status kode -9? Se SLG 5534438 post #7.
+﻿S023-Provider2Epic
+==================
+1. TST. Checkduplicates og Incident request på soft delete.
+2. SOR_SER unique. Opret constraint. 1001 fejl til Workqueue og mail.
+3. S020 JUnit tests.
+4. Deploy S023-Provider2Epic og gensend specialer.
+
+
+
+
+S103-DRP2Epic: Kommer der et svar, når DPR er nede eller giver status kode -9? Se SLG 5534438 post #7.
 
 S401-Epic2PRO: QfddServiceTest1.testGetExternalQfddDocumentNew virker ikke på byggeserver
 
