@@ -3,8 +3,6 @@
 1. TST. Checkduplicates og Incident request på soft delete.
 2. SOR_SER unique. Opret constraint. 1001 fejl til Workqueue og mail.
 3. S020 JUnit tests.
-4. Deploy S023-Provider2Epic og gensend specialer.
-
 
 
 
