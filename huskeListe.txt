@@ -1,4 +1,9 @@
-﻿S023-Provider2Epic
+﻿S060-Appointment2NSP
+====================
+1. Nyt cvr nummer
+2. Fjern lokalt certifikat
+
+S023-Provider2Epic
 ==================
 1. TST. Checkduplicates og Incident request på soft delete.
 2. SOR_SER unique. Opret constraint. 1001 fejl til Workqueue og mail.
