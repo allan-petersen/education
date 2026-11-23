@@ -14,3 +14,7 @@ F8 step over
 F7 step into
 
 Alt F8. Evaluate expression
+
+Restart
+=======
+Tast // og skriv restart i pop up winduet.
