@@ -2,6 +2,12 @@
 ====================
 1. Nyt cvr nummer
 2. Fjern lokalt certifikat
+3. Test. Opret SIU. Skift masterOrgId med A08.
+4. Keystorename.
+5. Sensitive afsnit.
+6. Skal database skiftes
+7. Nye masterOrgiIds i test filer?
+8. TODOS
 
 S023-Provider2Epic
 ==================
