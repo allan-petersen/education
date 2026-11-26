@@ -1,13 +1,20 @@
 ﻿S060-Appointment2NSP
 ====================
-1. Nyt cvr nummer
-2. Fjern lokalt certifikat
-3. Test. Opret SIU. Skift masterOrgId med A08.
-4. Keystorename.
-5. Sensitive afsnit.
-6. Skal database skiftes
-7. Nye masterOrgiIds i test filer?
-8. TODOS
+1.  OK. Nyt cvr nummer
+2.  OK. Fjern lokalt certifikat
+3.  OK. Keystorename
+4.  OK. Sensitive afsnit
+5.  OK. Skal database skiftes
+6.  OK. IntegrationTests
+7.  Ret custodian. Borgervænget 7 i resultater - FØR TEST
+9.  Test. Opret ADT. Skift masterOrgId med A08 - FØR TEST
+10. Test. Opret SIU. Skift masterOrgId med A08 - FØR TEST
+11. Test. sensitive afsnit
+12. Region Øst certifikatet
+12. TODOS
+13. Nye masterOrgiIds i test filer?
+14. Lokal kørsel af all tests låser database
+15. XDS warnings i S060 log
 
 S023-Provider2Epic
 ==================
