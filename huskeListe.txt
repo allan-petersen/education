@@ -6,15 +6,16 @@
 4.  OK. Sensitive afsnit
 5.  OK. Skal database skiftes
 6.  OK. IntegrationTests
-7.  Ret custodian. Borgervænget 7 i resultater - FØR TEST
-9.  Test. Opret ADT. Skift masterOrgId med A08 - FØR TEST
-10. Test. Opret SIU. Skift masterOrgId med A08 - FØR TEST
-11. Test. sensitive afsnit
-12. Region Øst certifikatet
-12. TODOS
-13. Nye masterOrgiIds i test filer?
-14. Lokal kørsel af all tests låser database
-15. XDS warnings i S060 log
+7.  OK. Ret custodian. Borgervænget 7 i resultater
+8.  OK. Region Øst certifikatet
+9   Test. Opret SIU i Øst
+10.  Test. Opret ADT. Skift masterOrgId med A08 - FØR TEST
+11. Test. Opret SIU. Skift masterOrgId med A08 - FØR TEST
+12. Test. sensitive afsnit
+13. TODOS
+14. Nye masterOrgiIds i test filer?
+15. Lokal kørsel af all tests låser database. Check mock "use real service"
+16. XDS warnings i S060 log
 
 S023-Provider2Epic
 ==================
@@ -27,7 +28,51 @@ S023-Provider2Epic
 
 S103-DRP2Epic: Kommer der et svar, når DPR er nede eller giver status kode -9? Se SLG 5534438 post #7.
 
-S401-Epic2PRO: QfddServiceTest1.testGetExternalQfddDocumentNew virker ikke på byggeserver
+S401-Epic2PRO
+=============
+Dette er ikke en fejl, du har lavet, men jeg synes at vi skal tilrette nedenstående.
+Det er vist noget rod, jeg har lavet engang.
+Formålet er, at setup filerne kommer til at ligne dem for de andre integrationer.
+1. I filen dk/regionh/integration/epic2pro/bean/CredentialVaultFactory.java
+Ret 
+  return new FileBasedCredentialVault(properties, new File(KEY_STORE_DIR
+                + Config.getString("epic2pro.keystore.file")), Config
+                .getString("epic2pro.keystore.password"));
+				
+til 
+ return new FileBasedCredentialVault(properties,
+                new File(LogUtil.getIKHome() + File.separator + Config.getString("epic2pro.keystore.file")), Config.getString("epic2pro.keystore.password"));				
+				
+				
+2.I filen dk/regionh/integration/appointment2nsp/route/MainRoute.java
+Ret
+// Add certificate health view
+        CertificateHealthView.addCertificatesFromKeyStore(
+                LogUtil.getIKHome() + File.separator + "setup" + File.separator + Config.getString("epic2pro.keystore.file"),
+                Config.getString("epic2pro.keystore.password"));				
+til
+ // Add certificate health view
+        CertificateHealthView.addCertificatesFromKeyStore(
+                LogUtil.getIKHome() + File.separator + Config.getString("epic2pro.keystore.file"),
+                Config.getString("epic2pro.keystore.password"));				
+3. I filen env/local/setup/S401-Epic2PRO-var.properties				
+sæt epic2pro.keystore.file=setup/S401-Epic2PRO-test.p12
+4. I filen env/test/setup/S401-Epic2PRO-var.properties				
+sæt epic2pro.keystore.file=keys/S401-Epic2PRO-test.p12
+5. I filen env/preprod/setup/S401-Epic2PRO-var.properties				
+sæt epic2pro.keystore.file=keys/S401-Epic2PRO-test.p12
+6. I filen env/prod/setup/S401-Epic2PRO-var.properties				
+sæt epic2pro.keystore.file=keys/S401-Epic2PRO-Prod.p12
+7. Fjern disse filer:
+./local/setup/FOCES_udloebet.p12
+./test/setup/S401-Epic2PRO-test.p12
+./local/keys/S401-Epic2PRO-test.p12
+8. Filen ./local/setup/S401-Epic2PRO-test.p12 skal erstattes med det nye DRO certifikat, hvis den ikke allerede er det.
+9. Test, at der er hul igennem i local og test.
+I S060 aftaler har jeg problemer med, at Java 8 ikke kan læse det nye Region Øst certifikat.
+
+10. QfddServiceTest1.testGetExternalQfddDocumentNew virker ikke på byggeserver
+
 
 S020-SPO2Epic: Ydere med flere lokationer (INC3196998 yder 506877).
 
